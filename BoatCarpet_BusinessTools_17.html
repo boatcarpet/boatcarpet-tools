@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoatCarpet.com - Business Tools</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#e8eef4;padding:20px;}
+.tabs{display:flex;gap:4px;max-width:960px;margin:0 auto;}
+.tab{padding:10px 22px;background:#c5d5e4;border-radius:8px 8px 0 0;font-size:13px;font-weight:bold;color:#1F6AA5;cursor:pointer;border:none;font-family:Arial,sans-serif;}
+.tab.active{background:#fff;}
+.panel{display:none;max-width:960px;margin:0 auto;background:#fff;border-radius:0 10px 10px 10px;box-shadow:0 2px 16px rgba(0,0,0,0.10);padding:28px;}
+.panel.active{display:block;}
+h2{color:#1F6AA5;font-size:17px;margin-bottom:4px;}
+p.sub{color:#666;font-size:13px;margin-bottom:20px;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+.field label{display:block;font-size:11px;font-weight:bold;color:#444;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid #ccd6e0;border-radius:6px;font-size:13px;font-family:Arial,sans-serif;color:#222;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#1F6AA5;box-shadow:0 0 0 3px rgba(31,106,165,0.12);}
+.field textarea{height:72px;resize:vertical;}
+.btn-row{display:flex;gap:10px;margin-top:20px;}
+.btn{padding:10px 22px;border:none;border-radius:6px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;}
+.btn-primary{background:#1F6AA5;color:#fff;}
+.btn-primary:hover{background:#185a8e;}
+.btn-clear{background:#e8eef4;color:#1F6AA5;border:1px solid #1F6AA5;}
+.btn-clear:hover{background:#d0dce8;}
+.success-msg{display:none;margin-top:16px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:6px;padding:12px 16px;font-size:13px;color:#2e7d32;line-height:1.7;}
+.success-msg strong{display:block;font-size:13px;margin-bottom:3px;}
+.divider{border:none;border-top:1px solid #e8eef4;margin:20px 0;}
+.tracker-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.stat{background:#f2f7fc;border-radius:8px;padding:12px;text-align:center;}
+.stat .num{font-size:24px;font-weight:bold;color:#1F6AA5;}
+.stat .lbl{font-size:10px;color:#777;margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead tr{background:#1F6AA5;color:#fff;}
+thead th{padding:9px 10px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}
+tbody tr{border-bottom:1px solid #eef2f6;}
+tbody tr:hover{background:#f7fbff;}
+tbody td{padding:8px 10px;vertical-align:middle;}
+.edit-sel{font-size:11px;padding:3px 6px;border:1px solid #ccd6e0;border-radius:4px;background:#fff;color:#333;font-family:Arial,sans-serif;}
+.del-btn{background:none;border:none;color:#cc0000;cursor:pointer;font-size:14px;padding:2px 5px;}
+.del-btn:hover{background:#fce4ec;border-radius:4px;}
+.note-input{font-size:11px;padding:3px 7px;border:1px solid #ccd6e0;border-radius:4px;width:120px;font-family:Arial,sans-serif;}
+.date-input{font-size:11px;padding:3px 7px;border:1px solid #ccd6e0;border-radius:4px;width:108px;font-family:Arial,sans-serif;}
+.remind-btn{background:#1F6AA5;color:#fff;border:none;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;white-space:nowrap;font-family:Arial,sans-serif;}
+.remind-btn:hover{background:#185a8e;}
+.checkin-btn{background:#2e7d32;color:#fff;border:none;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;white-space:nowrap;font-family:Arial,sans-serif;margin-top:3px;}
+.checkin-btn:hover{background:#1b5e20;}
+.overdue-row{background:#fff8f8 !important;}
+.overdue-row td:first-child{border-left:3px solid #cc0000;}
+.due-today-row{background:#fffde7 !important;}
+.due-today-row td:first-child{border-left:3px solid #f9a825;}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;}
+.modal-box{background:#fff;border-radius:10px;padding:28px;max-width:680px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,0.25);}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.modal-header h3{color:#1F6AA5;font-size:16px;margin:0;}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:#888;line-height:1;}
+.modal-close:hover{color:#333;}
+.xls-btn{background:#217346;color:#fff;border:none;border-radius:5px;padding:7px 14px;font-size:12px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;}
+.xls-btn:hover{background:#1a5c37;}
+.empty-state{text-align:center;padding:36px;color:#999;font-size:13px;}
+.section-head{font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:0.8px;border-bottom:2px solid #1F6AA5;padding-bottom:4px;margin:20px 0 14px;}
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('email',this)">&#9993; Email Generator</button>
+  <button class="tab" onclick="showTab('quote',this)">&#128196; Quote Generator</button>
+  <button class="tab" onclick="showTab('emailtracker',this)">&#128203; Email Tracker</button>
+  <button class="tab" onclick="showTab('quotetracker',this)">&#128200; Quote Tracker</button>
+</div>
+
+<!-- ═══════════ EMAIL GENERATOR ═══════════ -->
+<div class="panel active" id="tab-email">
+  <h2>&#9993; Custom Carpet Email Generator</h2>
+  <p class="sub">For boats where no pre-cut template exists. Opens a ready-to-send email in a new window.</p>
+
+  <!-- PASTE INQUIRY BUTTON -->
+  <div style="background:#f2f7fc;border:1.5px dashed #1F6AA5;border-radius:8px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div>
+      <div style="font-size:13px;font-weight:bold;color:#1F6AA5;margin-bottom:3px;">&#128203; Got an inquiry email?</div>
+      <div style="font-size:12px;color:#666;">Copy the email body in Outlook, then click Paste &amp; Auto-Fill to populate all fields automatically.</div>
+    </div>
+    <button class="btn btn-primary" onclick="openPasteModal()" style="white-space:nowrap;padding:10px 18px;font-size:13px;">&#128203; Paste &amp; Auto-Fill</button>
+  </div>
+
+  <!-- PASTE MODAL -->
+  <div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;font-family:Arial,sans-serif;">
+    <div style="background:#fff;border-radius:12px;padding:28px 32px;max-width:560px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+      <div style="font-size:17px;font-weight:bold;color:#1F6AA5;margin-bottom:6px;">&#128203; Paste Inquiry Email</div>
+      <div style="font-size:13px;color:#555;margin-bottom:14px;line-height:1.6;">In Outlook, open the inquiry email, press <strong>Ctrl+A</strong> to select all, then <strong>Ctrl+C</strong> to copy. Then click in the box below and press <strong>Ctrl+V</strong> to paste.</div>
+      <textarea id="pasteArea" style="width:100%;height:200px;padding:10px 12px;border:1.5px solid #ccd6e0;border-radius:7px;font-size:13px;font-family:Arial,sans-serif;resize:vertical;color:#222;" placeholder="Paste the inquiry email here..."></textarea>
+      <div id="parseError" style="display:none;margin-top:8px;background:#fef2f2;border:1px solid #f0a8a8;border-radius:6px;padding:8px 12px;font-size:12px;color:#cc0000;"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+        <button onclick="closePasteModal()" style="background:#e8eef4;color:#1F6AA5;border:1px solid #1F6AA5;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;">Cancel</button>
+        <button onclick="parseAndFill()" style="background:#1F6AA5;color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;">&#10003; Auto-Fill Fields</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field"><label>First Name *</label><input type="text" id="custName" placeholder="e.g. Chris"></div>
+    <div class="field"><label>Last Name</label><input type="text" id="custLast" placeholder="e.g. King"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Email</label><input type="email" id="custEmail" placeholder="e.g. cking@email.com"></div>
+    <div class="field"><label>Phone</label><input type="tel" id="custPhone" placeholder="e.g. (240) 216-8956"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Boat Description *</label><input type="text" id="boatDesc" placeholder="e.g. Bayliner 642 Overnighter"></div>
+    <div class="field"><label>Email Date</label><input type="text" id="emailDate"></div>
+  </div>
+  <div class="field" style="margin-bottom:16px;">
+    <label>Size Hint (optional)</label>
+    <input type="text" id="sizeHint" placeholder="e.g. approx. 8-9 ft long x 6-7 ft wide">
+  </div>
+  <div class="field" style="margin-bottom:16px;">
+    <label>Customer Comments / Questions (appears in email)</label>
+    <textarea id="custComments" placeholder="e.g. I am looking for Desert Stone color. Does the carpet come with snaps installed?"></textarea>
+  </div>
+  <div class="field"><label>Internal Notes (not shown in email)</label><textarea id="custNotes" placeholder="Internal notes about this inquiry..."></textarea></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="generateEmail()">Generate Email</button>
+    <button class="btn btn-clear" onclick="clearEmailForm()">Clear</button>
+  </div>
+  <div class="success-msg" id="emailSuccess">
+    <strong>&#10003; Email opened in a new window and saved to the Email Tracker!</strong>
+    In the new window: press Ctrl+A to select all, Ctrl+C to copy, then paste into Gmail or Outlook. Or use File &rarr; Save As to save the .html file.
+  </div>
+</div>
+
+<!-- ═══════════ QUOTE GENERATOR ═══════════ -->
+<div class="panel" id="tab-quote">
+  <h2>&#128196; Quote Generator</h2>
+  <p class="sub">For boats where a pre-cut pattern exists. Generates a full professional quote with photos and pricing.</p>
+
+  <!-- PASTE INQUIRY BUTTON -->
+  <div style="background:#f2f7fc;border:1.5px dashed #1F6AA5;border-radius:8px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div>
+      <div style="font-size:13px;font-weight:bold;color:#1F6AA5;margin-bottom:3px;">&#128203; Got an inquiry email?</div>
+      <div style="font-size:12px;color:#666;">Copy the email body in Outlook, then click Paste &amp; Auto-Fill to populate all customer fields automatically.</div>
+    </div>
+    <button class="btn btn-primary" onclick="openPasteModal('quote')" style="white-space:nowrap;padding:10px 18px;font-size:13px;">&#128203; Paste &amp; Auto-Fill</button>
+  </div>
+
+  <div class="section-head">Customer Information</div>
+  <div class="row">
+    <div class="field"><label>First Name *</label><input type="text" id="qFirst" placeholder="e.g. James"></div>
+    <div class="field"><label>Last Name</label><input type="text" id="qLast" placeholder="e.g. Conklin"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Email</label><input type="email" id="qEmail" placeholder="e.g. james@email.com"></div>
+    <div class="field"><label>Phone</label><input type="tel" id="qPhone" placeholder="e.g. (937) 470-8146"></div>
+  </div>
+
+  <div class="section-head">Boat Information</div>
+  <div class="row3">
+    <div class="field"><label>Year *</label><input type="text" id="qYear" placeholder="e.g. 2000"></div>
+    <div class="field"><label>Make *</label><input type="text" id="qMake" placeholder="e.g. Four Winns"></div>
+    <div class="field"><label>Model *</label><input type="text" id="qModel" placeholder="e.g. Horizon 200"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Quote Date</label><input type="text" id="quoteDate"></div>
+  </div>
+
+  <div class="section-head">Material &amp; Color</div>
+  <input type="hidden" id="qColor" value="Grey Berber">
+
+  <!-- Material tabs -->
+  <div style="display:flex;gap:0;margin-bottom:16px;border-radius:7px;overflow:hidden;border:1.5px solid #ccd6e0;">
+    <button type="button" class="mat-sel-tab active" data-mat="berber" onclick="selectMat(this)" style="flex:1;padding:9px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:bold;background:#1F6AA5;color:#fff;border:none;border-right:1.5px solid #ccd6e0;font-family:Arial,sans-serif;">Snap-In Berber<span style="display:block;font-size:10px;font-weight:400;opacity:0.75;">Carpet</span></button>
+    <button type="button" class="mat-sel-tab" data-mat="basketweave" onclick="selectMat(this)" style="flex:1;padding:9px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:bold;background:#fff;color:#555;border:none;border-right:1.5px solid #ccd6e0;font-family:Arial,sans-serif;">Basketweave<span style="display:block;font-size:10px;font-weight:400;opacity:0.75;">DuraVinyl</span></button>
+    <button type="button" class="mat-sel-tab" data-mat="patterned" onclick="selectMat(this)" style="flex:1;padding:9px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:bold;background:#fff;color:#555;border:none;border-right:1.5px solid #ccd6e0;font-family:Arial,sans-serif;">Patterned<span style="display:block;font-size:10px;font-weight:400;opacity:0.75;">DuraVinyl</span></button>
+    <button type="button" class="mat-sel-tab" data-mat="striped" onclick="selectMat(this)" style="flex:1;padding:9px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:bold;background:#fff;color:#555;border:none;border-right:1.5px solid #ccd6e0;font-family:Arial,sans-serif;">Striped/Teak<span style="display:block;font-size:10px;font-weight:400;opacity:0.75;">DuraVinyl</span></button>
+    <button type="button" class="mat-sel-tab" data-mat="custom" onclick="selectMat(this)" style="flex:1;padding:9px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:bold;background:#fff;color:#555;border:none;font-family:Arial,sans-serif;">Custom<span style="display:block;font-size:10px;font-weight:400;opacity:0.75;">Type color</span></button>
+  </div>
+
+  <!-- Berber swatches -->
+  <div id="swatches-berber" class="mat-swatch-panel" style="display:block;">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <div class="qswatch" data-color="Gray — Snap-In Berber Carpet" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;">
+        <div style="width:40px;height:40px;border-radius:50%;background:#8a8a82;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div>
+        <span style="font-size:10px;color:#666;">Gray</span>
+      </div>
+      <div class="qswatch" data-color="Oatmeal — Snap-In Berber Carpet" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;">
+        <div style="width:40px;height:40px;border-radius:50%;background:#c8b89a;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div>
+        <span style="font-size:10px;color:#666;">Oatmeal</span>
+      </div>
+    </div>
+    <p style="font-size:11px;color:#888;">Only 2 colors available for Berber Snap-In.</p>
+  </div>
+
+  <!-- Basketweave swatches -->
+  <div id="swatches-basketweave" class="mat-swatch-panel" style="display:none;">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <div class="qswatch" data-color="Acorn — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#9B7a24;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Acorn</span></div>
+      <div class="qswatch" data-color="Smoke — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#7a7a7a;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Smoke</span></div>
+      <div class="qswatch" data-color="Stormy — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#4a5460;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Stormy</span></div>
+      <div class="qswatch" data-color="Ivory — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#e8e0cc;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Ivory</span></div>
+      <div class="qswatch" data-color="Vanilla — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#e4d9b8;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Vanilla</span></div>
+      <div class="qswatch" data-color="Driftwood — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#a08060;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Driftwood</span></div>
+      <div class="qswatch" data-color="Beige — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#c8b090;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Beige</span></div>
+      <div class="qswatch" data-color="Tundra — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#b0a898;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Tundra</span></div>
+      <div class="qswatch" data-color="Sandalwood — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#b89070;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Sandalwood</span></div>
+      <div class="qswatch" data-color="Almond — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#d4b888;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Almond</span></div>
+      <div class="qswatch" data-color="Tumbleweed — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#c0a070;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Tumbleweed</span></div>
+      <div class="qswatch" data-color="Windstone — DuraVinyl Basketweave" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#9a8878;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Windstone</span></div>
+    </div>
+  </div>
+
+  <!-- Patterned swatches -->
+  <div id="swatches-patterned" class="mat-swatch-panel" style="display:none;">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <div class="qswatch" data-color="Rainforest — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#5a6848;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Rainforest</span></div>
+      <div class="qswatch" data-color="Bisque — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#d4c4a0;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Bisque</span></div>
+      <div class="qswatch" data-color="Ventura Sand — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#c8b888;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Ventura Sand</span></div>
+      <div class="qswatch" data-color="Sandcastle — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#c4a870;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Sandcastle</span></div>
+      <div class="qswatch" data-color="Cadence — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#a09888;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Cadence</span></div>
+      <div class="qswatch" data-color="Pebble — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#988878;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Pebble</span></div>
+      <div class="qswatch" data-color="Khaki — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#b0a070;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Khaki</span></div>
+      <div class="qswatch" data-color="Moonrock — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#908880;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Moonrock</span></div>
+      <div class="qswatch" data-color="Pearl Stone — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#c8c0b0;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Pearl Stone</span></div>
+      <div class="qswatch" data-color="Ash Grey — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#909090;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Ash Grey</span></div>
+      <div class="qswatch" data-color="Harmony — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#a8a090;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Harmony</span></div>
+      <div class="qswatch" data-color="Ocean Tide — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#607080;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Ocean Tide</span></div>
+      <div class="qswatch" data-color="Silver Mist — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#a8b0b8;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Silver Mist</span></div>
+      <div class="qswatch" data-color="Charcoal — DuraVinyl Patterned" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#404040;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Charcoal</span></div>
+    </div>
+  </div>
+
+  <!-- Striped swatches -->
+  <div id="swatches-striped" class="mat-swatch-panel" style="display:none;">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <div class="qswatch" data-color="Espresso — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#2a1a10;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Espresso</span></div>
+      <div class="qswatch" data-color="Teak Camel — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#b89060;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Teak Camel</span></div>
+      <div class="qswatch" data-color="Teak Chestnut — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#7a4820;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Teak Chestnut</span></div>
+      <div class="qswatch" data-color="Teak Cloudburst — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#5a6068;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Teak Cloudburst</span></div>
+      <div class="qswatch" data-color="Teak Ivory Tower — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#ddd0b0;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Ivory Tower</span></div>
+      <div class="qswatch" data-color="Teak Mocha — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#6a4830;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Teak Mocha</span></div>
+      <div class="qswatch" data-color="Teak Pewter — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#787870;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Teak Pewter</span></div>
+      <div class="qswatch" data-color="Teak Taupe — DuraVinyl Striped" onclick="selectQColor(this)" style="cursor:pointer;text-align:center;"><div style="width:40px;height:40px;border-radius:50%;background:#9a8870;border:2.5px solid transparent;box-shadow:0 1px 4px rgba(0,0,0,0.2);margin:0 auto 4px;"></div><span style="font-size:10px;color:#666;">Teak Taupe</span></div>
+    </div>
+  </div>
+
+  <!-- Custom color input -->
+  <div id="swatches-custom" class="mat-swatch-panel" style="display:none;">
+    <div class="field">
+      <label>Type Color Name</label>
+      <input type="text" id="qColorCustom" placeholder="e.g. Desert Stone, Navy Blue..." oninput="document.getElementById('qColor').value=this.value; document.getElementById('qColorDisplay').style.display='none';">
+    </div>
+  </div>
+
+  <!-- Selected color display -->
+  <div id="qColorDisplay" style="display:none;margin-top:12px;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:6px;padding:10px 14px;display:none;align-items:center;gap:12px;">
+    <div id="qColorSwatch" style="width:32px;height:32px;border-radius:50%;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.2);"></div>
+    <div>
+      <strong id="qColorName" style="font-size:13px;color:#1F6AA5;display:block;"></strong>
+      <span id="qColorMat" style="font-size:11px;color:#777;"></span>
+    </div>
+    <span onclick="clearQColor()" style="margin-left:auto;font-size:12px;color:#888;cursor:pointer;text-decoration:underline;">Change</span>
+  </div>
+
+
+
+  <div class="section-head">Pricing</div>
+  <div class="row">
+    <div class="field">
+      <label>Supplier *</label>
+      <select id="qSource" onchange="updatePricePreview()">
+        <option value="cmc">Custom Marine Carpet (cost / 0.75 + $75)</option>
+        <option value="matworks" selected>Matworks (cost x 0.8 / 0.75 + $75)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Supplier Cost ($) *</label>
+      <input type="number" id="qCost" placeholder="e.g. 696.00" oninput="updatePricePreview()" step="0.01">
+      <div id="pricePreview" style="font-size:12px;color:#1F6AA5;font-weight:bold;margin-top:5px;"></div>
+    </div>
+  </div>
+
+  <div class="section-head">Quote Options</div>
+  <div class="row">
+    <div class="field">
+      <label>Snaps Included?</label>
+      <select id="qSnaps">
+        <option value="yes">Yes - included with set</option>
+        <option value="separate">Provided separately</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Carpet Photos (optional)</label>
+      <div style="font-size:11px;color:#666;margin-bottom:6px;">Upload pattern and color images below</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="field">
+      <label>Pattern / Cut Layout Photo</label>
+      <input type="file" id="qPatternFile" accept="image/*" onchange="previewPhoto('qPatternFile','qPatternPreview')">
+      <div id="qPatternPreview" style="margin-top:6px;"></div>
+    </div>
+    <div class="field">
+      <label>Color Swatch Photo</label>
+      <input type="file" id="qColorFile" accept="image/*" onchange="previewPhoto('qColorFile','qColorPreview')">
+      <div id="qColorPreview" style="margin-top:6px;"></div>
+    </div>
+  </div>
+  <div class="field" style="margin-bottom:16px;">
+    <label>Customer Question (optional)</label>
+    <input type="text" id="qQuestion" placeholder="e.g. Does the carpet come with snaps installed?">
+  </div>
+  <div class="field" style="margin-bottom:16px;">
+    <label>Template Note (optional)</label>
+    <input type="text" id="qTemplateNote" placeholder="e.g. Closest available template is 2001-2003 model year">
+  </div>
+  <div class="field"><label>Internal Notes</label><textarea id="qNotes" placeholder="Internal notes about this quote..."></textarea></div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="generateQuote()">Generate Quote</button>
+    <button class="btn btn-clear" onclick="clearQuoteForm()">Clear</button>
+  </div>
+  <div class="success-msg" id="quoteSuccess">
+    <strong>&#10003; Quote opened in a new window and saved to the Quote Tracker!</strong>
+    In the new window: press Ctrl+A to select all, Ctrl+C to copy, then paste into Gmail or Outlook. Or use File &rarr; Save As to save the .html file.
+  </div>
+</div>
+
+<!-- ═══════════ EMAIL TRACKER ═══════════ -->
+<div class="panel" id="tab-emailtracker">
+  <div class="tracker-bar">
+    <h2>&#128203; Email Tracker</h2>
+    <button class="xls-btn" onclick="exportEmailCSV()">&#8659; Export CSV</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="num" id="es-total">0</div><div class="lbl">Total</div></div>
+    <div class="stat"><div class="num" id="es-sent">0</div><div class="lbl">Sent</div></div>
+    <div class="stat"><div class="num" id="es-responded">0</div><div class="lbl">Responded</div></div>
+    <div class="stat"><div class="num" id="es-ordered">0</div><div class="lbl">Ordered</div></div>
+    <div class="stat" style="border:2px solid #ffcccc;"><div class="num" id="es-overdue" style="color:#cc0000;">0</div><div class="lbl" style="color:#cc0000;">Overdue Follow-Up</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Date</th><th>Customer</th><th>Email</th><th>Phone</th><th>Boat</th><th>Status</th><th>Follow-Up Date</th><th>Notes</th><th></th></tr></thead>
+    <tbody id="emailTrackerBody"></tbody>
+  </table>
+</div>
+
+<!-- ═══════════ QUOTE TRACKER ═══════════ -->
+<div class="panel" id="tab-quotetracker">
+  <div class="tracker-bar">
+    <h2>&#128200; Quote Tracker</h2>
+    <button class="xls-btn" onclick="exportQuoteCSV()">&#8659; Export CSV</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="num" id="qs-total">0</div><div class="lbl">Total Quotes</div></div>
+    <div class="stat"><div class="num" id="qs-sent">0</div><div class="lbl">Sent</div></div>
+    <div class="stat"><div class="num" id="qs-accepted">0</div><div class="lbl">Accepted</div></div>
+    <div class="stat"><div class="num" id="qs-revenue">$0.00</div><div class="lbl">Accepted Revenue</div></div>
+    <div class="stat" style="border:2px solid #ffcccc;"><div class="num" id="qs-overdue" style="color:#cc0000;">0</div><div class="lbl" style="color:#cc0000;">Overdue Follow-Up</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Date</th><th>Customer</th><th>Email</th><th>Phone</th><th>Boat</th><th>Price</th><th>Status</th><th>Follow-Up Date</th><th>Notes</th><th></th></tr></thead>
+    <tbody id="quoteTrackerBody"></tbody>
+  </table>
+</div>
+
+<!-- Follow-Up Alert Modal -->
+<div class="modal-overlay" id="followUpModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>&#9993; Follow-Up Reminders Due</h3>
+      <button class="modal-close" onclick="closeFollowUpModal()">&#10005;</button>
+    </div>
+    <p style="font-size:13px;color:#555;margin-bottom:16px;">The following quotes need a follow-up email. Click <strong>Send Email</strong> to open a pre-written email in your mail client — it will be automatically logged.</p>
+    <div id="followUpModalBody"></div>
+    <div style="text-align:right;margin-top:16px;">
+      <button onclick="closeFollowUpModal()" style="background:#e8eef4;color:#1F6AA5;border:1px solid #1F6AA5;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjqTO30Xze1rQQln6enGOWg-O8_RzJVRIGxrplAOV3-GuNA5zuuyzCCBmDsSWtwLINbA/exec';
+var LOGO = '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jxf3VJnZg/J1N+nyf6Wre6X25t2n9NX+zUlS4++BK10xYOKNjmFrW+vDxE/NbDbTSEeitPvtEda6sa6d03eOZwnmAMY+Sjra6GWF0ceiXSydOfqS4ZhVTT1Mc82qqjsy9Vtb0Q6hERYZ6oIiIAiIgCIiAIiIDVavtTr5pi42dkwhdVwOiEhbkNz44UJfR7r/ALSU/wDDH+pWCRXabEJ6VqtiWyL0QzK7CKSucj523VNN1T2K+/R7r/tJT/wx/qT6Pdf9pKf+GP8AUrBIrPxus+b0QpftfDfk9V/JX36Pdf8AaSn/AIY/1J9Huv8AtJT/AMMf6lYJE+N1nzeiD9r4b8nqv5IS0jshW2PU1uu779BM2knbKYxTkF2PDOVNqIqVTVy1TkdKt1Q06HDqeharIEsi67qvuERFWLoREQBERAEREAREQBERAEREAREQBERAFGW5uzdk15qmC/3C53Cmnhp2QBkBZwkNc5wPNpOfiKk1FJFM+J2Zi2UimhjmblkS6HyNvAxrB+aAF9RFGShERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAEREAREQBERAf//Z';
+var uploadedPatternImg = '';
+var uploadedColorImg = '';
+
+// ── DATE HELPERS ──
+function today() {
+  return new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+}
+function todayISO() {
+  return new Date().toLocaleDateString('en-US', {year:'numeric', month:'2-digit', day:'2-digit'});
+}
+function addDays(date, days) {
+  var d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+// ── GOOGLE SHEETS STORAGE ──
+function loadFromSheets(type, callback) {
+  // Check both old key format (bcEmails/bcQuotes) and new format (bc_emails/bc_quotes)
+  var oldKey = type === 'emails' ? 'bcEmails' : 'bcQuotes';
+  var newKey = 'bc_' + type;
+
+  // Try new key first, fall back to old key
+  var cached = localStorage.getItem(newKey);
+  if (!cached) {
+    cached = localStorage.getItem(oldKey);
+    if (cached) {
+      // Migrate old key to new key
+      localStorage.setItem(newKey, cached);
+    }
+  }
+
+  if (cached) {
+    try { callback(JSON.parse(cached)); } catch(e) { callback([]); }
+  }
+
+  // Only attempt Google Sheets sync if hosted on a server (not local file)
+  if (window.location.protocol === 'file:') {
+    if (!cached) callback([]);
+    return;
+  }
+  fetch(SCRIPT_URL + '?action=load&type=' + type)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (Array.isArray(data) && data.length > 0) {
+        localStorage.setItem(newKey, JSON.stringify(data));
+        callback(data);
+      }
+    })
+    .catch(function() { if (!cached) callback([]); });
+}
+
+function saveToSheets(type, records) {
+  var newKey = 'bc_' + type;
+  var oldKey = type === 'emails' ? 'bcEmails' : 'bcQuotes';
+  var json = JSON.stringify(records);
+  localStorage.setItem(newKey, json);
+  localStorage.setItem(oldKey, json); // keep old key in sync too
+  // Only sync to Google Sheets if hosted on a server
+  if (window.location.protocol === 'file:') return;
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({action:'save', type:type, records:records})
+  }).catch(function() {});
+}
+
+function loadEmails(callback) { loadFromSheets('emails', callback); }
+function saveEmails(list) { saveToSheets('emails', list); }
+function loadQuotes(callback) { loadFromSheets('quotes', callback); }
+function saveQuotes(list) { saveToSheets('quotes', list); }
+
+// ── TAB SWITCHING ──
+function showTab(id, el) {
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'emailtracker') renderEmailTracker();
+  if (id === 'quotetracker') renderQuoteTracker();
+}
+
+// ── PHOTO PREVIEW ──
+function previewPhoto(inputId, previewId) {
+  var file = document.getElementById(inputId).files[0];
+  var preview = document.getElementById(previewId);
+  if (!file) { preview.innerHTML = ''; return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    if (inputId === 'qPatternFile') uploadedPatternImg = e.target.result;
+    else uploadedColorImg = e.target.result;
+    preview.innerHTML = '<img src="' + e.target.result + '" style="max-height:80px;border-radius:4px;border:1px solid #ccd6e0;">';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── PRICE CALC ──
+function calcPrice(cost, source) {
+  if (source === 'cmc') return ((parseFloat(cost) / 0.75) + 75).toFixed(2);
+  return ((parseFloat(cost) * 0.8 / 0.75) + 75).toFixed(2);
+}
+function updatePricePreview() {
+  var cost = parseFloat(document.getElementById('qCost').value) || 0;
+  var src = document.getElementById('qSource').value;
+  document.getElementById('pricePreview').textContent = cost > 0 ? 'Calculated price: $' + calcPrice(cost, src) : '';
+}
+
+// ── OPEN IN WINDOW ──
+function openInWindow(html) {
+  var w = window.open('', '_blank', 'width=820,height=920,scrollbars=yes,resizable=yes');
+  if (w) { w.document.open(); w.document.write(html); w.document.close(); return true; }
+  alert('Popup was blocked. Please allow popups for this page and try again.');
+  return false;
+}
+function showSuccess(id) {
+  var msg = document.getElementById(id);
+  msg.style.display = 'block';
+  setTimeout(function() { msg.style.display = 'none'; }, 8000);
+}
+
+// ── EMAIL BUILDER ──
+function buildEmail(name, boat, date, hint, comments) {
+  var st = hint ? hint + ' \u2014 your photos will confirm exact dimensions.' : 'Please photograph the full length and width of each section from directly above.';
+  var commentsBlock = comments ? '<tr><td style="padding:10px 32px 0;"><div style="background:#fff9e6;border:1px solid #f0d060;border-radius:6px;padding:10px 14px;font-size:13px;color:#555;"><strong style="color:#996600;">Your Question/Comment:</strong> ' + comments + '</div></td></tr>' : '';
+  var opts = '';
+  var options = [
+    ['Option 1 \u2014 Send your old carpet', 'Pull up your existing carpet and ship it to us. We will use it as a direct template for an exact match \u2014 the most accurate method available.'],
+    ['Option 2 \u2014 DIY plastic template', 'Using 4-mil polyethylene plastic, lay it over your cockpit floor and trace the shape with a permanent marker. Note the bow direction, mark which side is up, and trace around any hatch doors, cleats, or hardware bases. Then ship the tracing to us.'],
+    ['Option 3 \u2014 Photo measurements', 'Place a yardstick in the cockpit and photograph each section from directly above, showing the full length and width. ' + st]
+  ];
+  options.forEach(function(r) {
+    opts += '<tr><td style="padding:0 32px 10px;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f2f7fc;border-left:5px solid #1F6AA5;border-radius:0 6px 6px 0;"><tr><td style="padding:14px 18px;"><div style="font-weight:bold;color:#1F6AA5;font-size:13.5px;margin-bottom:5px;">' + r[0] + '</div><div style="font-size:13px;color:#333;line-height:1.6;">' + r[1] + '</div></td></tr></table></td></tr>';
+  });
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Custom Snap-In Carpet</title></head>'
+    + '<body style="margin:0;padding:0;background:#e8eef4;font-family:Arial,sans-serif;">'
+    + '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#e8eef4;padding:30px 0;"><tr><td align="center">'
+    + '<table width="620" cellpadding="0" cellspacing="0" border="0" style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">'
+    + '<tr><td style="background:#1F6AA5;padding:22px 32px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+    + '<td width="180"><div style="background:#fff;border-radius:6px;padding:8px 12px;display:inline-block;"><img src="data:image/png;base64,' + LOGO + '" height="42" style="display:block;" alt="BoatCarpet.com"></div></td>'
+    + '<td align="right"><div style="color:#fff;font-size:20px;font-weight:bold;">Custom Snap-In Carpet</div><div style="color:#c8e0f5;font-size:13px;margin-top:4px;">We will build it to fit your boat perfectly</div></td>'
+    + '</tr></table></td></tr>'
+    + '<tr><td style="padding:20px 32px 0;"><div style="color:#999;font-size:12px;">' + date + '</div></td></tr>'
+    + '<tr><td style="padding:12px 32px 0;"><p style="margin:0;font-size:14px;line-height:1.7;color:#222;">Hi <strong>' + name + '</strong>, thank you for reaching out to BoatCarpet.com! We searched our pattern library for your <strong>' + boat + '</strong> and while we do not have a pre-cut template on file, we can absolutely build a <strong>custom snap-in carpet set</strong> to fit your boat perfectly \u2014 snaps included!</p></td></tr>'
+    + commentsBlock
+    + '<tr><td style="padding:22px 32px 10px;"><div style="font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid #1F6AA5;padding-bottom:5px;">Choose one of these three options to get started</div></td></tr>'
+    + opts
+    + '<tr><td style="padding:8px 32px 16px;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1F6AA5;border-radius:8px;"><tr><td style="padding:18px 22px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="color:#fff;font-size:13.5px;line-height:1.6;"><strong>Need a template kit?</strong> Order our DIY Template Kit online \u2014 includes plastic sheeting and full instructions.</td><td width="160" align="right" style="padding-left:16px;"><a href="https://boatcarpet.com/product/snap-in-boat-carpet-diy-template-kit/" style="display:inline-block;background:#fff;color:#1F6AA5;font-weight:bold;font-size:13px;padding:11px 18px;border-radius:5px;text-decoration:none;white-space:nowrap;">Order template kit</a></td></tr></table></td></tr></table></td></tr>'
+    + '<tr><td style="padding:0 32px 10px;"><div style="font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid #1F6AA5;padding-bottom:5px;">What happens next</div></td></tr>'
+    + '<tr><td style="padding:0 32px 20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+    + '<td width="25%" align="center" style="background:#f2f7fc;padding:14px 8px;border-radius:6px 0 0 6px;border-right:2px solid #fff;"><div style="font-size:22px;">&#128230;</div><div style="font-weight:bold;color:#1F6AA5;font-size:12px;margin-top:5px;">Send template</div><div style="color:#777;font-size:11px;margin-top:3px;">Old carpet or tracing</div></td>'
+    + '<td width="25%" align="center" style="background:#f2f7fc;padding:14px 8px;border-right:2px solid #fff;"><div style="font-size:22px;">&#128203;</div><div style="font-weight:bold;color:#1F6AA5;font-size:12px;margin-top:5px;">We quote you</div><div style="color:#777;font-size:11px;margin-top:3px;">Within 3\u20135 business days</div></td>'
+    + '<td width="25%" align="center" style="background:#f2f7fc;padding:14px 8px;border-right:2px solid #fff;"><div style="font-size:22px;">&#9986;</div><div style="font-weight:bold;color:#1F6AA5;font-size:12px;margin-top:5px;">We cut and build</div><div style="color:#777;font-size:11px;margin-top:3px;">~4 weeks after approval</div></td>'
+    + '<td width="25%" align="center" style="background:#f2f7fc;padding:14px 8px;border-radius:0 6px 6px 0;"><div style="font-size:22px;">&#128674;</div><div style="font-weight:bold;color:#1F6AA5;font-size:12px;margin-top:5px;">Ships to you</div><div style="color:#777;font-size:11px;margin-top:3px;">Ready to snap in!</div></td>'
+    + '</tr></table></td></tr>'
+    + '<tr><td style="padding:0 32px 20px;"><p style="margin:0;font-size:13.5px;line-height:1.7;color:#333;">We look forward to helping refresh your <strong>' + boat + '</strong>. Please reply or give us a call \u2014 we are happy to help every step of the way!</p></td></tr>'
+    + '<tr><td style="padding:0 32px 24px;border-top:1px solid #dde8f0;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;"><tr>'
+    + '<td><div style="font-weight:bold;color:#1F6AA5;font-size:15px;">The BoatCarpet.com Team</div><div style="color:#777;font-size:12px;margin-top:3px;">Custom Marine Flooring Specialists</div></td>'
+    + '<td align="right" style="font-size:12.5px;color:#444;line-height:2;">&#128222; <a href="tel:8882830704" style="color:#1F6AA5;text-decoration:none;">888.283.0704</a><br>&#127760; <a href="https://boatcarpet.com" style="color:#1F6AA5;text-decoration:none;">www.boatcarpet.com</a></td>'
+    + '</tr></table></td></tr>'
+    + '<tr><td style="background:#1F6AA5;padding:14px 32px;text-align:center;"><span style="color:#c8e0f5;font-size:11px;">BoatCarpet.com \u2014 Custom Snap-In Marine Carpet \u2014 <a href="https://boatcarpet.com" style="color:#fff;text-decoration:none;">www.boatcarpet.com</a></span></td></tr>'
+    + '</table></td></tr></table></body></html>';
+}
+
+// ── QUOTE BUILDER ──
+function buildQuote(q) {
+  var price = q.price;
+  var snapsNote = q.snapsIncluded === 'yes'
+    ? 'Yes \u2014 snaps are provided with the set for easy DIY installation.'
+    : 'Snaps are provided separately to be installed on the boat.';
+  var patternBlock = '';
+  if (uploadedPatternImg || uploadedColorImg) {
+    patternBlock = '<tr><td style="padding:0 32px 10px;"><div style="font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid #1F6AA5;padding-bottom:5px;margin-bottom:14px;">Carpet Pattern and Color Reference</div><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>';
+    if (uploadedPatternImg) {
+      patternBlock += '<td width="' + (uploadedColorImg ? '48%' : '96%') + '" style="border:1px solid #dde;border-radius:8px;text-align:center;padding:10px;"><img src="' + uploadedPatternImg + '" style="max-width:100%;max-height:220px;object-fit:contain;" alt="Pattern"><div style="font-size:12px;font-weight:bold;color:#333;margin-top:8px;">Cut Pattern</div></td>';
+    }
+    if (uploadedPatternImg && uploadedColorImg) patternBlock += '<td width="4%"></td>';
+    if (uploadedColorImg) {
+      patternBlock += '<td width="' + (uploadedPatternImg ? '48%' : '96%') + '" style="border:1px solid #dde;border-radius:8px;text-align:center;padding:10px;"><img src="' + uploadedColorImg + '" style="max-width:100%;max-height:220px;object-fit:contain;" alt="Color"><div style="font-size:12px;font-weight:bold;color:#333;margin-top:8px;">' + q.color + ' \u2014 Color Reference</div></td>';
+    }
+    patternBlock += '</tr></table></td></tr>';
+  }
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Marine Carpet Quote</title></head>'
+    + '<body style="margin:0;padding:0;background:#e8eef4;font-family:Arial,sans-serif;">'
+    + '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#e8eef4;padding:30px 0;"><tr><td align="center">'
+    + '<table width="660" cellpadding="0" cellspacing="0" border="0" style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.12);">'
+    + '<tr><td style="background:#1F6AA5;padding:22px 32px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+    + '<td width="200"><div style="background:#fff;border-radius:6px;padding:8px 12px;display:inline-block;"><img src="data:image/png;base64,' + LOGO + '" height="42" style="display:block;" alt="BoatCarpet.com"></div></td>'
+    + '<td align="right"><div style="color:#fff;font-size:20px;font-weight:bold;">&#9875; Marine Carpet Quote</div><div style="color:#c8e0f5;font-size:13px;margin-top:4px;">Snap-In Boat Carpet Replacement</div></td>'
+    + '</tr></table></td></tr>'
+    + '<tr><td style="background:#f7fbff;border-bottom:1px solid #dde8f0;padding:10px 32px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-size:12px;color:#777;">Quote Date: ' + q.date + '</td><td align="right" style="font-size:12px;color:#777;">Valid: 30 Days</td></tr></table></td></tr>'
+    + '<tr><td style="padding:20px 32px 0;"><div style="font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid #1F6AA5;padding-bottom:5px;margin-bottom:14px;">Customer Information</div>'
+    + '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+    + '<td width="50%" style="font-size:13px;line-height:2;"><strong>Name:</strong> ' + q.firstName + ' ' + q.lastName + '<br><strong>Phone:</strong> ' + q.phone + '<br><strong>Email:</strong> ' + q.email + '</td>'
+    + '<td width="50%" style="font-size:13px;line-height:2;"><strong>Boat Year:</strong> ' + q.year + '<br><strong>Boat Make:</strong> ' + q.make + '<br><strong>Model:</strong> ' + q.model + '</td>'
+    + '</tr></table>'
+    + (q.question ? '<div style="background:#fff9e6;border:1px solid #f0d060;border-radius:6px;padding:10px 14px;margin-top:12px;font-size:13px;color:#555;"><strong style="color:#996600;">Customer Question:</strong> ' + q.question + '</div>' : '')
+    + '</td></tr>'
+    + '<tr><td style="padding:10px 32px 0;"><div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:6px;padding:10px 14px;font-size:13px;"><strong style="color:#1a6b1a;">&#10004; Snaps:</strong> ' + snapsNote + '</div></td></tr>'
+    + '<tr><td style="padding:18px 32px 0;"><div style="font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid #1F6AA5;padding-bottom:5px;margin-bottom:14px;">Product Details</div>'
+    + '<div style="background:#d6e8f5;border-radius:6px;padding:16px 20px;"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'
+    + '<td width="50%" style="font-size:13px;line-height:2.1;"><strong>Product:</strong> Snap-In Cockpit Carpet Set<br><strong>Color:</strong> ' + q.color + '<br><strong>Fits:</strong> ' + q.year + ' ' + q.make + ' ' + q.model + '</td>'
+    + '<td width="50%" style="font-size:13px;line-height:2.1;"><strong>Material:</strong> Marine-Grade Berber<br><strong>UV Rating:</strong> UV Stable, Fade Resistant<br><strong>Warranty:</strong> 8-Year on Carpet and Backing</td>'
+    + '</tr></table></div></td></tr>'
+    + patternBlock
+    + '<tr><td style="padding:18px 32px 0;"><div style="font-size:11px;font-weight:bold;color:#1F6AA5;text-transform:uppercase;letter-spacing:1.2px;border-bottom:2px solid #1F6AA5;padding-bottom:5px;margin-bottom:14px;">Pricing Summary</div>'
+    + '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">'
+    + '<tr style="background:#1F6AA5;color:#fff;"><td style="padding:9px 14px;font-weight:bold;font-size:12px;text-transform:uppercase;">Item</td><td style="padding:9px 14px;text-align:right;font-weight:bold;font-size:12px;text-transform:uppercase;">Amount</td></tr>'
+    + '<tr><td style="padding:10px 14px;border-bottom:1px solid #e0e8f0;">Snap-In Cockpit Carpet Set \u2014 ' + q.color + ' (' + q.year + ' ' + q.make + ' ' + q.model + ')</td><td style="padding:10px 14px;text-align:right;border-bottom:1px solid #e0e8f0;">$' + price + '</td></tr>'
+    + '<tr style="background:#f7fbff;"><td style="padding:10px 14px;border-bottom:1px solid #e0e8f0;font-style:italic;color:#555;">Snap Hardware Set</td><td style="padding:10px 14px;text-align:right;border-bottom:1px solid #e0e8f0;font-style:italic;color:#555;">Included</td></tr>'
+    + '<tr style="background:#d6e8f5;"><td style="padding:12px 14px;font-weight:bold;font-size:15px;color:#1F6AA5;">Total Quote Price</td><td style="padding:12px 14px;text-align:right;font-weight:bold;font-size:15px;color:#1F6AA5;">$' + price + '</td></tr>'
+    + '</table></td></tr>'
+    + '<tr><td style="padding:10px 32px 20px;font-size:12px;color:#777;font-style:italic;line-height:1.8;">* Shipping costs not included. Final rate confirmed at time of order.<br>* Price valid for 30 days from quote date.' + (q.templateNote ? '<br>* ' + q.templateNote : '') + '</td></tr>'
+    + '<tr><td style="padding:0 32px 22px;border-top:1px solid #dde8f0;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;"><tr>'
+    + '<td><div style="font-weight:bold;color:#1F6AA5;font-size:15px;">The BoatCarpet.com Team</div><div style="color:#777;font-size:12px;margin-top:3px;">Custom Marine Flooring Specialists</div></td>'
+    + '<td align="right" style="font-size:12.5px;color:#444;line-height:2;">&#128222; <a href="tel:8882830704" style="color:#1F6AA5;text-decoration:none;">888.283.0704</a><br>&#127760; <a href="https://boatcarpet.com" style="color:#1F6AA5;text-decoration:none;">www.boatcarpet.com</a></td>'
+    + '</tr></table></td></tr>'
+    + '<tr><td style="background:#1F6AA5;padding:14px 32px;text-align:center;"><span style="color:#c8e0f5;font-size:11px;">BoatCarpet.com \u2014 Custom Snap-In Marine Carpet \u2014 <a href="https://boatcarpet.com" style="color:#fff;text-decoration:none;">www.boatcarpet.com</a></span></td></tr>'
+    + '</table></td></tr></table></body></html>';
+}
+
+// ── EMAIL GENERATOR ──
+function generateEmail() {
+  var name = document.getElementById('custName').value.trim();
+  var last = document.getElementById('custLast').value.trim();
+  var email = document.getElementById('custEmail').value.trim();
+  var phone = document.getElementById('custPhone').value.trim();
+  var boat = document.getElementById('boatDesc').value.trim();
+  var date = document.getElementById('emailDate').value.trim() || today();
+  var hint = document.getElementById('sizeHint').value.trim();
+  var comments = document.getElementById('custComments').value.trim();
+  var notes = document.getElementById('custNotes').value.trim();
+  if (!name || !boat) { alert('Please enter the customer first name and boat description.'); return; }
+  if (!openInWindow(buildEmail(name, boat, date, hint, comments))) return;
+  loadEmails(function(list) {
+    list.unshift({id: Date.now(), date: todayISO(), first: name, last: last, email: email, phone: phone, boat: boat, status: 'Sent', followup: '', notes: notes});
+    saveEmails(list);
+  });
+  showSuccess('emailSuccess');
+}
+function clearEmailForm() {
+  ['custName','custLast','custEmail','custPhone','boatDesc','sizeHint','custComments','custNotes'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('emailDate').value = today();
+  document.getElementById('emailSuccess').style.display = 'none';
+}
+
+// ── QUOTE GENERATOR ──
+function generateQuote() {
+  var q = {
+    firstName: document.getElementById('qFirst').value.trim(),
+    lastName: document.getElementById('qLast').value.trim(),
+    email: document.getElementById('qEmail').value.trim(),
+    phone: document.getElementById('qPhone').value.trim(),
+    year: document.getElementById('qYear').value.trim(),
+    make: document.getElementById('qMake').value.trim(),
+    model: document.getElementById('qModel').value.trim(),
+    color: document.getElementById('qColor').value.trim() || 'Grey Berber',
+    date: document.getElementById('quoteDate').value.trim() || today(),
+    question: document.getElementById('qQuestion').value.trim(),
+    templateNote: document.getElementById('qTemplateNote').value.trim(),
+    snapsIncluded: document.getElementById('qSnaps').value,
+    notes: document.getElementById('qNotes').value.trim()
+  };
+  var cost = parseFloat(document.getElementById('qCost').value);
+  var src = document.getElementById('qSource').value;
+  if (!q.firstName || !q.year || !q.make || !q.model) { alert('Please fill in customer name, boat year, make and model.'); return; }
+  if (!cost || cost <= 0) { alert('Please enter the supplier cost.'); return; }
+  q.price = calcPrice(cost, src);
+  if (!openInWindow(buildQuote(q))) return;
+  loadQuotes(function(list) {
+    list.unshift({id: Date.now(), date: todayISO(), firstName: q.firstName, lastName: q.lastName, email: q.email, phone: q.phone, year: q.year, make: q.make, model: q.model, color: q.color, price: q.price, status: 'Sent', followup: addDays(new Date(), 7), followupCount: 0, notes: q.notes});
+    saveQuotes(list);
+  });
+  showSuccess('quoteSuccess');
+}
+function clearQuoteForm() {
+  ['qFirst','qLast','qEmail','qPhone','qYear','qMake','qModel','qColor','qCost','qQuestion','qTemplateNote','qNotes'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('quoteDate').value = today();
+  document.getElementById('qSource').value = 'matworks';
+  document.getElementById('qSnaps').value = 'yes';
+  document.getElementById('qPatternPreview').innerHTML = '';
+  document.getElementById('qColorPreview').innerHTML = '';
+  uploadedPatternImg = ''; uploadedColorImg = '';
+  document.getElementById('pricePreview').textContent = '';
+  document.getElementById('quoteSuccess').style.display = 'none';
+}
+
+// ── EMAIL TRACKER ──
+function renderEmailTracker() {
+  loadEmails(function(list) {
+    var todayStr = new Date().toISOString().slice(0, 10);
+    var overdue = 0;
+    document.getElementById('es-total').textContent = list.length;
+    document.getElementById('es-sent').textContent = list.filter(function(c) { return c.status === 'Sent'; }).length;
+    document.getElementById('es-responded').textContent = list.filter(function(c) { return c.status === 'Responded'; }).length;
+    document.getElementById('es-ordered').textContent = list.filter(function(c) { return c.status === 'Ordered'; }).length;
+    var body = document.getElementById('emailTrackerBody');
+    if (!list.length) {
+      body.innerHTML = '<tr><td colspan="9" class="empty-state">No emails yet \u2014 generate an email and it will appear here automatically.</td></tr>';
+      document.getElementById('es-overdue').textContent = 0;
+      return;
+    }
+    body.innerHTML = list.map(function(c) {
+      var fu = c.followup || '';
+      var rowCls = '';
+      if (fu && fu <= todayStr && fu !== todayStr) { rowCls = 'overdue-row'; overdue++; }
+      else if (fu && fu === todayStr) rowCls = 'due-today-row';
+      var boat = (c.boat || '').replace(/'/g, '');
+      var fname = (c.first || '').replace(/'/g, '');
+      // Pre-written follow-up email via mailto
+      var fuSubj = encodeURIComponent('Following Up on Your Snap-In Carpet Inquiry \u2014 ' + (c.boat||''));
+      var fuBody = encodeURIComponent('Hi ' + (c.first||'') + ',\n\nJust wanted to follow up on your inquiry about snap-in carpet for your ' + (c.boat||'your boat') + '. We would love to help you get your boat looking great!\n\nPlease reply to this email or call us at 888.283.0704 and we will be happy to assist.\n\nThank you,\nBoatCarpet.com Team\n888.283.0704\nwww.boatcarpet.com');
+      var ciSubj = encodeURIComponent('Checking In \u2014 Snap-In Carpet for Your ' + (c.boat||''));
+      var ciBody = encodeURIComponent('Hi ' + (c.first||'') + ',\n\nJust checking in to see if you had any questions about the snap-in carpet options for your ' + (c.boat||'your boat') + '. We are here to help anytime!\n\nFeel free to reply or call us at 888.283.0704.\n\nThank you,\nBoatCarpet.com Team\n888.283.0704\nwww.boatcarpet.com');
+      return '<tr class="' + rowCls + '">'
+        + '<td style="white-space:nowrap;color:#555;font-size:11px;">' + (c.date||'') + '</td>'
+        + '<td style="font-size:12px;"><strong>' + (c.first||'') + ' ' + (c.last||'') + '</strong></td>'
+        + '<td style="font-size:11px;"><a href="mailto:' + (c.email||'') + '?subject=' + fuSubj + '&body=' + fuBody + '" style="color:#1F6AA5;" title="Click to open email">' + (c.email||'') + '</a></td>'
+        + '<td style="font-size:11px;">' + (c.phone||'') + '</td>'
+        + '<td style="font-size:11px;">' + (c.boat||'') + '</td>'
+        + '<td><select class="edit-sel" onchange="updateEmailStatus(' + c.id + ',this.value)">'
+          + '<option' + (c.status==='Sent'?' selected':'') + '>Sent</option>'
+          + '<option' + (c.status==='Responded'?' selected':'') + '>Responded</option>'
+          + '<option' + (c.status==='Ordered'?' selected':'') + '>Ordered</option>'
+          + '<option' + (c.status==='Closed'?' selected':'') + '>Closed</option>'
+        + '</select></td>'
+        + '<td><input type="date" class="date-input" value="' + fu + '" onchange="updateEmailFollowup(' + c.id + ',this.value)" title="Set follow-up date"></td>'
+        + '<td><input class="note-input" value="' + (c.notes||'').replace(/"/g,'&quot;') + '" onblur="updateEmailNote(' + c.id + ',this.value)" placeholder="Add note..."></td>'
+        + '<td style="white-space:nowrap;text-align:center;">'
+          + '<a href="mailto:' + (c.email||'') + '?subject=' + fuSubj + '&body=' + fuBody + '" style="display:block;background:#1F6AA5;color:#fff;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:bold;text-decoration:none;margin-bottom:3px;text-align:center;" title="Send follow-up email">&#9993; Follow-Up</a>'
+          + '<a href="mailto:' + (c.email||'') + '?subject=' + ciSubj + '&body=' + ciBody + '" style="display:block;background:#2e7d32;color:#fff;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:bold;text-decoration:none;margin-bottom:3px;text-align:center;" title="Send check-in email">&#10003; Check-In</a>'
+          + '<button style="background:#f57c00;color:#fff;border:none;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;margin-bottom:3px;width:100%;font-family:Arial,sans-serif;" onclick="editEmail(' + c.id + ')" title="Edit">&#9998; Edit</button>'
+          + '<button class="del-btn" onclick="deleteEmail(' + c.id + ')" title="Remove" style="width:100%;">\u2715 Remove</button>'
+        + '</td></tr>';
+    }).join('');
+    document.getElementById('es-overdue').textContent = overdue;
+  });
+}
+function updateEmailStatus(id, val) { loadEmails(function(l) { l.forEach(function(c) { if (c.id===id) c.status=val; }); saveEmails(l); renderEmailTracker(); }); }
+function updateEmailNote(id, val) { loadEmails(function(l) { l.forEach(function(c) { if (c.id===id) c.notes=val; }); saveEmails(l); }); }
+function updateEmailFollowup(id, val) { loadEmails(function(l) { l.forEach(function(c) { if (c.id===id) c.followup=val; }); saveEmails(l); renderEmailTracker(); }); }
+function deleteEmail(id) { if (!confirm('Remove this customer?')) return; loadEmails(function(list) { saveEmails(list.filter(function(c) { return c.id!==id; })); renderEmailTracker(); }); }
+function editEmail(id) {
+  loadEmails(function(list) {
+    var c = list.filter(function(x) { return x.id===id; })[0];
+    if (!c) return;
+    showTab('email', document.querySelectorAll('.tab')[0]);
+    document.getElementById('custName').value = c.first || '';
+    document.getElementById('custLast').value = c.last || '';
+    document.getElementById('custEmail').value = c.email || '';
+    document.getElementById('custPhone').value = c.phone || '';
+    document.getElementById('boatDesc').value = c.boat || '';
+    document.getElementById('emailDate').value = today();
+    document.getElementById('custNotes').value = c.notes || '';
+    document.getElementById('custComments').value = '';
+    window.scrollTo(0, 0);
+  });
+}
+
+// ── QUOTE TRACKER ──
+function renderQuoteTracker() {
+  loadQuotes(function(list) {
+    var todayStr = new Date().toISOString().slice(0, 10);
+    var overdue = 0;
+    document.getElementById('qs-total').textContent = list.length;
+    document.getElementById('qs-sent').textContent = list.filter(function(c) { return c.status==='Sent'; }).length;
+    document.getElementById('qs-accepted').textContent = list.filter(function(c) { return c.status==='Accepted'; }).length;
+    document.getElementById('qs-revenue').textContent = '$' + list.filter(function(c) { return c.status==='Accepted'; }).reduce(function(a,c) { return a + parseFloat(c.price||0); }, 0).toFixed(2);
+    var body = document.getElementById('quoteTrackerBody');
+    if (!list.length) {
+      body.innerHTML = '<tr><td colspan="10" class="empty-state">No quotes yet \u2014 generate a quote and it will appear here automatically.</td></tr>';
+      document.getElementById('qs-overdue').textContent = 0;
+      return;
+    }
+    body.innerHTML = list.map(function(c) {
+      var fu = c.followup || '';
+      var rowCls = '';
+      if (fu && fu < todayStr && c.status !== 'Accepted' && c.status !== 'Declined') { rowCls = 'overdue-row'; overdue++; }
+      else if (fu && fu === todayStr && c.status !== 'Accepted' && c.status !== 'Declined') rowCls = 'due-today-row';
+      var fn = (c.firstName || c.first || '');
+      var ln = (c.lastName || c.last || '');
+      var boatDesc = ((c.year||'') + ' ' + (c.make||'') + ' ' + (c.model||'')).trim() || c.boat || '';
+      var price = c.price || '0.00';
+      var fuSubj = encodeURIComponent('Following Up on Your Carpet Quote \u2014 ' + boatDesc);
+      var fuBody = encodeURIComponent('Hi ' + fn + ',\n\nJust following up on the snap-in carpet quote we sent for your ' + boatDesc + '. Your quote is $' + price + ' and is valid for 30 days.\n\nWe would love to get your boat looking great! Please reply or call us at 888.283.0704 with any questions.\n\nThank you,\nBoatCarpet.com Team\n888.283.0704\nwww.boatcarpet.com');
+      var ciSubj = encodeURIComponent('Any Questions About Your Carpet Quote? \u2014 ' + boatDesc);
+      var ciBody = encodeURIComponent('Hi ' + fn + ',\n\nJust checking in to see if you had any questions about your carpet quote of $' + price + ' for your ' + boatDesc + '.\n\nWe are happy to answer any questions \u2014 just reply or call 888.283.0704 anytime.\n\nThank you,\nBoatCarpet.com Team\n888.283.0704\nwww.boatcarpet.com');
+      return '<tr class="' + rowCls + '">'
+        + '<td style="white-space:nowrap;color:#555;font-size:11px;">' + (c.date||'') + '</td>'
+        + '<td style="font-size:12px;"><strong>' + fn + ' ' + ln + '</strong></td>'
+        + '<td style="font-size:11px;"><a href="mailto:' + (c.email||'') + '?subject=' + fuSubj + '&body=' + fuBody + '" style="color:#1F6AA5;" title="Click to send follow-up">' + (c.email||'') + '</a></td>'
+        + '<td style="font-size:11px;">' + (c.phone||'') + '</td>'
+        + '<td style="font-size:11px;">' + boatDesc + '</td>'
+        + '<td style="font-weight:bold;color:#1F6AA5;font-size:12px;">$' + price + '</td>'
+        + '<td><select class="edit-sel" onchange="updateQuoteStatus(' + c.id + ',this.value)">'
+          + '<option' + (c.status==='Sent'?' selected':'') + '>Sent</option>'
+          + '<option' + (c.status==='Accepted'?' selected':'') + '>Accepted</option>'
+          + '<option' + (c.status==='Declined'?' selected':'') + '>Declined</option>'
+          + '<option' + (c.status==='Expired'?' selected':'') + '>Expired</option>'
+        + '</select></td>'
+        + '<td><input type="date" class="date-input" value="' + fu + '" onchange="updateQuoteFollowup(' + c.id + ',this.value)" title="Set follow-up date"></td>'
+        + '<td><input class="note-input" value="' + (c.notes||'').replace(/"/g,'&quot;') + '" onblur="updateQuoteNote(' + c.id + ',this.value)" placeholder="Add note..."></td>'
+        + '<td style="white-space:nowrap;text-align:center;">'
+          + '<a href="mailto:' + (c.email||'') + '?subject=' + fuSubj + '&body=' + fuBody + '" style="display:block;background:#1F6AA5;color:#fff;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:bold;text-decoration:none;margin-bottom:3px;text-align:center;">&#9993; Follow-Up</a>'
+          + '<a href="mailto:' + (c.email||'') + '?subject=' + ciSubj + '&body=' + ciBody + '" style="display:block;background:#2e7d32;color:#fff;border-radius:4px;padding:3px 8px;font-size:11px;font-weight:bold;text-decoration:none;margin-bottom:3px;text-align:center;">&#10003; Check-In</a>'
+          + '<button style="background:#f57c00;color:#fff;border:none;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer;margin-bottom:3px;width:100%;font-family:Arial,sans-serif;" onclick="editQuote(' + c.id + ')">&#9998; Edit</button>'
+          + '<button class="del-btn" onclick="deleteQuote(' + c.id + ')" style="width:100%;">\u2715 Remove</button>'
+        + '</td></tr>';
+    }).join('');
+    document.getElementById('qs-overdue').textContent = overdue;
+  });
+}
+function updateQuoteStatus(id, val) {
+  loadQuotes(function(l) {
+    l.forEach(function(c) {
+      if (c.id===id) {
+        c.status = val;
+        // Clear follow-up when resolved
+        if (val==='Accepted' || val==='Declined' || val==='Closed' || val==='Expired') {
+          c.followup = '';
+          c.followupCount = 2;
+        }
+        // Auto-set 7-day follow-up when newly sent
+        if (val==='Sent' && !c.followup) {
+          c.followup = addDays(new Date(), 7);
+          c.followupCount = 0;
+        }
+      }
+    });
+    saveQuotes(l); renderQuoteTracker();
+  });
+}
+function updateQuoteNote(id, val) { loadQuotes(function(l) { l.forEach(function(c) { if (c.id===id) c.notes=val; }); saveQuotes(l); }); }
+function updateQuoteFollowup(id, val) { loadQuotes(function(l) { l.forEach(function(c) { if (c.id===id) c.followup=val; }); saveQuotes(l); renderQuoteTracker(); }); }
+function deleteQuote(id) { if (!confirm('Remove this quote?')) return; loadQuotes(function(list) { saveQuotes(list.filter(function(c) { return c.id!==id; })); renderQuoteTracker(); }); }
+function editQuote(id) {
+  loadQuotes(function(list) {
+    var c = list.filter(function(x) { return x.id===id; })[0];
+    if (!c) return;
+    showTab('quote', document.querySelectorAll('.tab')[1]);
+    document.getElementById('qFirst').value = c.firstName || c.first || '';
+    document.getElementById('qLast').value = c.lastName || c.last || '';
+    document.getElementById('qEmail').value = c.email || '';
+    document.getElementById('qPhone').value = c.phone || '';
+    document.getElementById('qYear').value = c.year || '';
+    document.getElementById('qMake').value = c.make || '';
+    document.getElementById('qModel').value = c.model || '';
+    document.getElementById('qColor').value = c.color || '';
+    document.getElementById('quoteDate').value = today();
+    document.getElementById('qNotes').value = c.notes || '';
+    uploadedPatternImg = ''; uploadedColorImg = '';
+    document.getElementById('qPatternPreview').innerHTML = '';
+    document.getElementById('qColorPreview').innerHTML = '';
+    updatePricePreview();
+    window.scrollTo(0, 0);
+  });
+}
+
+// ── FOLLOW-UP ALERTS ──
+function checkFollowUpAlerts() {
+  loadQuotes(function(list) {
+    var todayStr = new Date().toISOString().slice(0, 10);
+    var due = list.filter(function(c) {
+      if (c.status==='Accepted' || c.status==='Declined' || c.status==='Expired') return false;
+      if (!c.followup) return false;
+      return c.followup <= todayStr;
+    });
+    if (!due.length) return;
+    var rows = due.map(function(c) {
+      var fn = c.firstName || c.first || '';
+      var boatDesc = ((c.year||'') + ' ' + (c.make||'') + ' ' + (c.model||'')).trim() || c.boat || '';
+      var followupNum = (parseInt(c.followupCount)||0) + 1;
+      var label = followupNum === 1 ? '1-Week Follow-Up' : '2-Week Follow-Up';
+      var subj = encodeURIComponent('Following Up on Your Carpet Quote \u2014 ' + boatDesc);
+      var body = encodeURIComponent('Hi ' + fn + ',\n\nJust following up on the snap-in carpet quote we sent for your ' + boatDesc + '. Your quote is $' + c.price + ' and we would love to help you get your boat looking great!\n\nPlease reply or call us at 888.283.0704.\n\nThank you,\nBoatCarpet.com Team');
+      return '<div style="background:#f7fbff;border:1px solid #dde8f0;border-radius:6px;padding:12px 14px;margin-bottom:10px;">'
+        + '<div style="font-weight:bold;color:#1F6AA5;font-size:14px;">' + fn + ' ' + (c.lastName||c.last||'') + '</div>'
+        + '<div style="font-size:12px;color:#555;margin:2px 0;">' + boatDesc + ' \u2014 $' + c.price + '</div>'
+        + '<div style="display:flex;gap:8px;margin-top:8px;">'
+        + '<a href="mailto:' + c.email + '?subject=' + subj + '&body=' + body + '" onclick="markFollowupSent(' + c.id + ')" style="background:#1F6AA5;color:#fff;border-radius:4px;padding:6px 14px;font-size:12px;font-weight:bold;text-decoration:none;display:inline-block;">&#9993; Send ' + label + '</a>'
+        + '<button onclick="snoozeFollowup(' + c.id + ')" style="background:#e8eef4;color:#1F6AA5;border:1px solid #1F6AA5;border-radius:4px;padding:6px 14px;font-size:12px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;">Snooze 2 Days</button>'
+        + '</div></div>';
+    }).join('');
+    var modal = document.createElement('div');
+    modal.id = 'fu-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;';
+    modal.innerHTML = '<div style="background:#fff;border-radius:10px;padding:28px 32px;max-width:560px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2);max-height:80vh;overflow-y:auto;">'
+      + '<div style="font-size:18px;font-weight:bold;color:#cc0000;margin-bottom:6px;">&#9888; Follow-Up Reminders Due</div>'
+      + '<div style="font-size:13px;color:#555;margin-bottom:18px;">Click a button to open your email client with a pre-written message.</div>'
+      + rows
+      + '<div style="text-align:right;margin-top:16px;"><button onclick="document.body.removeChild(document.getElementById(\'fu-modal\'))" style="background:#cc0000;color:#fff;border:none;border-radius:5px;padding:8px 20px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;">Close</button></div>'
+      + '</div>';
+    document.body.appendChild(modal);
+  });
+}
+function markFollowupSent(id) {
+  loadQuotes(function(list) {
+    list.forEach(function(c) {
+      if (c.id===id) {
+        c.followupCount = (parseInt(c.followupCount)||0) + 1;
+        if (c.followupCount === 1) {
+          // First follow-up sent at 7 days — set next for 14 days (7 more days)
+          c.followup = addDays(new Date(), 7);
+        } else {
+          // Second follow-up sent at 14 days — no more auto reminders
+          c.followup = '';
+        }
+      }
+    });
+    saveQuotes(list); renderQuoteTracker();
+    var modal = document.getElementById('fu-modal');
+    if (modal) document.body.removeChild(modal);
+  });
+}
+function snoozeFollowup(id) {
+  loadQuotes(function(list) {
+    list.forEach(function(c) { if (c.id===id) c.followup = addDays(new Date(), 2); });
+    saveQuotes(list); renderQuoteTracker();
+    var modal = document.getElementById('fu-modal');
+    if (modal) document.body.removeChild(modal);
+  });
+}
+
+// ── REMINDER EMAILS ──
+function sendEmailReminder(email, first, boat) {
+  var subj = encodeURIComponent('Following Up on Your Snap-In Carpet Inquiry \u2014 ' + boat);
+  var body = encodeURIComponent('Hi ' + first + ',\n\nJust wanted to follow up on your inquiry about snap-in carpet for your ' + boat + '. We would love to help!\n\nPlease reply or call 888.283.0704.\n\nThank you,\nBoatCarpet.com Team\nwww.boatcarpet.com');
+  window.open('mailto:' + email + '?subject=' + subj + '&body=' + body);
+}
+function sendEmailCheckin(email, first, boat) {
+  var subj = encodeURIComponent('Checking In \u2014 Snap-In Carpet for Your ' + boat);
+  var body = encodeURIComponent('Hi ' + first + ',\n\nJust checking in to see if you had any questions about the snap-in carpet options for your ' + boat + '.\n\nFeel free to reply or call 888.283.0704.\n\nThank you,\nBoatCarpet.com Team\nwww.boatcarpet.com');
+  window.open('mailto:' + email + '?subject=' + subj + '&body=' + body);
+}
+function sendQuoteReminder(email, first, boat, price) {
+  var subj = encodeURIComponent('Following Up on Your Carpet Quote \u2014 ' + boat);
+  var body = encodeURIComponent('Hi ' + first + ',\n\nJust following up on the snap-in carpet quote for your ' + boat + '. Your quote is $' + price + ' and is valid for 30 days.\n\nPlease reply or call 888.283.0704.\n\nThank you,\nBoatCarpet.com Team\nwww.boatcarpet.com');
+  window.open('mailto:' + email + '?subject=' + subj + '&body=' + body);
+}
+function sendQuoteCheckin(email, first, boat, price) {
+  var subj = encodeURIComponent('Any Questions About Your Carpet Quote? \u2014 ' + boat);
+  var body = encodeURIComponent('Hi ' + first + ',\n\nJust checking in to see if you had any questions about your carpet quote of $' + price + ' for your ' + boat + '.\n\nCall or reply anytime \u2014 888.283.0704.\n\nThank you,\nBoatCarpet.com Team\nwww.boatcarpet.com');
+  window.open('mailto:' + email + '?subject=' + subj + '&body=' + body);
+}
+
+// ── CSV EXPORT ──
+function downloadCSV(rows, name) {
+  var csv = rows.map(function(r) { return r.map(function(v) { return '"' + (v||'').toString().replace(/"/g,'""') + '"'; }).join(','); }).join('\n');
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+function exportEmailCSV() {
+  loadEmails(function(list) {
+    var rows = [['Date','First','Last','Email','Phone','Boat','Status','Follow-Up Date','Notes']];
+    list.forEach(function(c) { rows.push([c.date,c.first,c.last,c.email,c.phone,c.boat,c.status,c.followup||'',c.notes]); });
+    downloadCSV(rows, 'BoatCarpet_Emails');
+  });
+}
+function exportQuoteCSV() {
+  loadQuotes(function(list) {
+    var rows = [['Date','First','Last','Email','Phone','Year','Make','Model','Color','Price','Status','Follow-Up Date','Notes']];
+    list.forEach(function(c) { rows.push([c.date,c.firstName||c.first,c.lastName||c.last,c.email,c.phone,c.year||'',c.make||'',c.model||'',c.color||'',c.price,c.status,c.followup||'',c.notes]); });
+    downloadCSV(rows, 'BoatCarpet_Quotes');
+  });
+}
+
+// ── PASTE & AUTO-FILL ──
+var pasteTarget = 'email'; // 'email' or 'quote'
+
+function openPasteModal(target) {
+  pasteTarget = target || 'email';
+  document.getElementById('pasteArea').value = '';
+  document.getElementById('parseError').style.display = 'none';
+  document.getElementById('pasteModal').style.display = 'flex';
+  setTimeout(function() { document.getElementById('pasteArea').focus(); }, 100);
+}
+
+function closePasteModal() {
+  document.getElementById('pasteModal').style.display = 'none';
+}
+
+function parseAndFill() {
+  var text = document.getElementById('pasteArea').value.trim();
+  if (!text) {
+    showParseError('Please paste the inquiry email text first.');
+    return;
+  }
+
+  // Extract fields using flexible pattern matching
+  function extract(patterns, txt) {
+    for (var i = 0; i < patterns.length; i++) {
+      var m = txt.match(patterns[i]);
+      if (m && m[1] && m[1].trim() && m[1].trim().toLowerCase() !== 'not listed') {
+        return m[1].trim();
+      }
+    }
+    return '';
+  }
+
+  // Name - handle "Your Name" label followed by name on next line
+  var fullName = extract([
+    /Your Name[\s\S]{0,10}?\n\s*([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)+)/,
+    /Name[\s\S]{0,5}?\n\s*([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)+)/,
+    /^([A-Z][a-z]+ [A-Z][a-z]+)/m
+  ], text);
+
+  var firstName = '', lastName = '';
+  if (fullName) {
+    var nameParts = fullName.trim().split(/\s+/);
+    firstName = nameParts[0] || '';
+    lastName = nameParts.slice(1).join(' ') || '';
+  }
+
+  // Phone
+  var phone = extract([
+    /Your Phone[\s\S]{0,10}?\n\s*([\(\d][\d\s\(\)\-\.]{6,18})/,
+    /Phone[\s\S]{0,5}?\n\s*([\(\d][\d\s\(\)\-\.]{6,18})/,
+    /(\(\d{3}\)\s*\d{3}[-.\s]\d{4})/,
+    /(\d{3}[-.\s]\d{3}[-.\s]\d{4})/
+  ], text);
+
+  // Email
+  var email = extract([
+    /Your Email Address[\s\S]{0,10}?\n\s*([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/,
+    /Email[\s\S]{0,5}?\n\s*([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/,
+    /([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/
+  ], text);
+
+  // Boat Year
+  var year = extract([
+    /Boat Year[\s\S]{0,10}?\n\s*(\d{4})/,
+    /Year[\s\S]{0,5}?\n\s*(\d{4})/,
+    /\b(19\d{2}|20\d{2})\b/
+  ], text);
+
+  // Boat Make — get the listed make first
+  var make = '';
+  var model = '';
+
+  // Check if make is "Not Listed" — then use the free-text field
+  var makeLineMatch = text.match(/Boat Make[\s\S]{0,10}?\n\s*([^\n]+)/);
+  var makeVal = makeLineMatch ? makeLineMatch[1].trim() : '';
+
+  if (makeVal && makeVal.toLowerCase() !== 'not listed') {
+    // Make is a known brand e.g. "Sea Ray"
+    make = makeVal;
+    // Model is in a brand-specific field e.g. "Sea Ray Model\n Not Listed"
+    // or in the free-text "not listed" field
+    var brandModelMatch = text.match(new RegExp(make.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\s+Model[\\s\\S]{0,10}?\\n\\s*([^\\n]+)'));
+    if (brandModelMatch && brandModelMatch[1].trim().toLowerCase() !== 'not listed') {
+      model = brandModelMatch[1].trim();
+    }
+    // If model was "Not Listed" check the free-text field for model info
+    if (!model) {
+      var freeText = text.match(/Not Listed\?[^\n]*\n\s*([^\n]+)/);
+      if (freeText && freeText[1].trim()) {
+        model = freeText[1].trim();
+      }
+    }
+  } else {
+    // Make is not listed — free-text field has "Make Model" or just make
+    var notListedMatch = text.match(/Not Listed\?[^\n]*\n\s*([^\n]+)/);
+    if (notListedMatch && notListedMatch[1].trim()) {
+      var combined = notListedMatch[1].trim();
+      // Try to split into make and model — first word is make, rest is model
+      var parts = combined.split(/\s+/);
+      make = parts[0] || combined;
+      model = parts.slice(1).join(' ') || '';
+    }
+  }
+
+  // Comments
+  var comments = extract([
+    /Your Comments\/Questions[\s\S]{0,10}?\n\s*([^\n]+(?:\n(?!Your |Boat )[^\n]+)*)/,
+    /Comments[\s\S]{0,5}?\n\s*([^\n]+)/
+  ], text);
+
+  // Build boat description for email generator
+  var boatDesc = [year, make, model].filter(Boolean).join(' ').trim();
+
+  // Check if we got enough info
+  if (!firstName && !email && !boatDesc) {
+    showParseError('Could not read the email format. Please make sure you copied the full email including all field labels, or fill in the fields manually.');
+    return;
+  }
+
+  // Fill the appropriate form
+  if (pasteTarget === 'quote') {
+    if (firstName) document.getElementById('qFirst').value = firstName;
+    if (lastName) document.getElementById('qLast').value = lastName;
+    if (email) document.getElementById('qEmail').value = email;
+    if (phone) document.getElementById('qPhone').value = phone;
+    if (year) document.getElementById('qYear').value = year;
+    if (make) document.getElementById('qMake').value = make;
+    if (model) document.getElementById('qModel').value = model;
+    if (comments) document.getElementById('qNotes').value = comments;
+  } else {
+    if (firstName) document.getElementById('custName').value = firstName;
+    if (lastName) document.getElementById('custLast').value = lastName;
+    if (email) document.getElementById('custEmail').value = email;
+    if (phone) document.getElementById('custPhone').value = phone;
+    if (boatDesc) document.getElementById('boatDesc').value = boatDesc;
+    if (comments) document.getElementById('custComments').value = comments;
+  }
+
+  closePasteModal();
+
+  // Show confirmation
+  var filled = [firstName, email, phone, boatDesc].filter(Boolean).length;
+  var msg = document.getElementById(pasteTarget === 'quote' ? 'quoteSuccess' : 'emailSuccess');
+  var confirmMsg = '<strong>\u2713 Auto-filled ' + filled + ' fields from your inquiry email!</strong> Please review and adjust if needed, then click Generate.';
+  msg.innerHTML = confirmMsg;
+  msg.style.display = 'block';
+  setTimeout(function() { msg.style.display = 'none'; }, 6000);
+}
+
+function showParseError(msg) {
+  var el = document.getElementById('parseError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+
+function selectMat(el) {
+  document.querySelectorAll('.mat-sel-tab').forEach(function(t) {
+    t.style.background = '#fff';
+    t.style.color = '#555';
+  });
+  el.style.background = '#1F6AA5';
+  el.style.color = '#fff';
+  document.querySelectorAll('.mat-swatch-panel').forEach(function(p) { p.style.display = 'none'; });
+  document.getElementById('swatches-' + el.dataset.mat).style.display = 'block';
+  clearQColor();
+}
+
+function selectQColor(el) {
+  document.querySelectorAll('.qswatch div').forEach(function(d) {
+    d.style.borderColor = 'transparent';
+    d.style.boxShadow = '0 1px 4px rgba(0,0,0,0.2)';
+  });
+  var circle = el.querySelector('div');
+  circle.style.borderColor = '#1F6AA5';
+  circle.style.boxShadow = '0 0 0 3px rgba(31,106,165,0.25)';
+  var colorVal = el.dataset.color;
+  document.getElementById('qColor').value = colorVal;
+  var parts = colorVal.split(' — ');
+  document.getElementById('qColorName').textContent = parts[0];
+  document.getElementById('qColorMat').textContent = parts[1] || '';
+  document.getElementById('qColorSwatch').style.background = circle.style.background;
+  var disp = document.getElementById('qColorDisplay');
+  disp.style.display = 'flex';
+}
+
+function clearQColor() {
+  document.querySelectorAll('.qswatch div').forEach(function(d) {
+    d.style.borderColor = 'transparent';
+    d.style.boxShadow = '0 1px 4px rgba(0,0,0,0.2)';
+  });
+  document.getElementById('qColor').value = '';
+  document.getElementById('qColorDisplay').style.display = 'none';
+  var custom = document.getElementById('qColorCustom');
+  if (custom) custom.value = '';
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('emailDate').value = today();
+  document.getElementById('quoteDate').value = today();
+  updatePricePreview();
+
+  // ── COMPREHENSIVE DATA MIGRATION ──
+  // Check every possible key name that may have been used in previous versions
+  var emailKeys = ['bcEmails', 'bc_emails', 'bc_email', 'emails', 'boatcarpet_emails'];
+  var quoteKeys = ['bcQuotes', 'bc_quotes', 'bc_quote', 'quotes', 'boatcarpet_quotes'];
+
+  function findData(keys) {
+    for (var i = 0; i < keys.length; i++) {
+      try {
+        var val = localStorage.getItem(keys[i]);
+        if (val && val.length > 2) {
+          var parsed = JSON.parse(val);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return { data: parsed, key: keys[i] };
+          }
+        }
+      } catch(e) {}
+    }
+    return null;
+  }
+
+  var emailResult = findData(emailKeys);
+  var quoteResult = findData(quoteKeys);
+
+  if (emailResult) {
+    localStorage.setItem('bc_emails', JSON.stringify(emailResult.data));
+    localStorage.setItem('bcEmails', JSON.stringify(emailResult.data));
+  }
+  if (quoteResult) {
+    localStorage.setItem('bc_quotes', JSON.stringify(quoteResult.data));
+    localStorage.setItem('bcQuotes', JSON.stringify(quoteResult.data));
+  }
+
+  // Show diagnostic banner if data found
+  var total = (emailResult ? emailResult.data.length : 0) + (quoteResult ? quoteResult.data.length : 0);
+  if (total === 0) {
+    // Show all localStorage keys to help diagnose
+    var allKeys = [];
+    for (var k = 0; k < localStorage.length; k++) {
+      allKeys.push(localStorage.key(k));
+    }
+    console.log('All localStorage keys:', allKeys.join(', '));
+    showDiagnostic(allKeys);
+  }
+
+  renderEmailTracker();
+  renderQuoteTracker();
+  setTimeout(checkFollowUpAlerts, 2000);
+});
+
+function showDiagnostic(allKeys) {
+  var div = document.createElement('div');
+  div.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#cc0000;color:#fff;padding:14px 18px;border-radius:8px;font-size:12px;z-index:9999;max-width:400px;font-family:Arial,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,0.3);';
+  var keyList = allKeys.length > 0 ? allKeys.join(', ') : 'NONE FOUND';
+  div.innerHTML = '<strong>No tracker data found!</strong><br>'
+    + 'localStorage keys in this browser: <em>' + keyList + '</em><br><br>'
+    + 'Your data may be in a different browser or was cleared. '
+    + 'Use <strong>Export CSV</strong> from the version that has data, then re-import.<br><br>'
+    + '<button onclick="this.parentElement.remove()" style="background:#fff;color:#cc0000;border:none;border-radius:4px;padding:5px 12px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;">Close</button>';
+  document.body.appendChild(div);
+}
+
+</script>
+</body>
+</html>
