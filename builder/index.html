@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.56]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.62.2]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -238,7 +238,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.56</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.62.2</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -266,12 +266,31 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
           <option>Hurricane</option><option>Lund</option><option>Maxum</option><option>Rinker</option><option>Sea Ray</option><option>Wellcraft</option>
           <option value="Other">Other / Not Listed</option>
         </select></div>
+      <div><label>Model</label>
+        <select id="model" onchange="updModelYears()"><option value="">— Model —</option></select>
+      </div>
       <div>
         <label>Year</label>
-        <select id="year" onchange="updYearModels()"><option value="">— Year —</option></select>
+        <select id="year" onchange="sniff()"><option value="">— Year —</option></select>
+        <div id="yr-help" style="display:none;font-size:11px;color:#666;margin-top:6px;font-style:italic;line-height:1.5;">Don't see your year? Many boats use the same pattern for multiple years — <a href="#" onclick="event.preventDefault();showYearHelp();" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">see how to verify</a> or call <a href="tel:8882830704" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">888.283.0704</a>.</div>
         <div id="yr-hint" style="display:none;font-size:10px;color:#b36f00;margin-top:4px;">&#9888; Years marked with &#9888; are outside the confirmed template range but may still fit — we verify before cutting.</div>
       </div>
-      <div><label>Model</label><select id="model" onchange="sniff()"><option value="">— Model —</option></select></div>
+    </div>
+    <!-- Trust message — hidden by default, expands when "see how to verify" link is clicked -->
+    <div id="year-help-msg" style="display:none;background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:18px 20px;margin-top:14px;margin-bottom:16px;">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div style="font-size:24px;flex-shrink:0;">&#9888;</div>
+        <div>
+          <div style="font-weight:700;color:#1a2e4a;font-size:14px;margin-bottom:8px;">Your boat may still fit this pattern</div>
+          <div style="font-size:13px;color:#444;line-height:1.6;">Many boat manufacturers use the same cockpit design for several years at a time, so even if your year isn't listed above, the pattern shown often still fits.</div>
+          <div style="font-weight:700;color:#1a2e4a;font-size:13px;margin:14px 0 6px;">Two ways to verify:</div>
+          <ol style="font-size:13px;color:#444;line-height:1.6;padding-left:20px;">
+            <li><strong>Compare visually</strong> — look at the pattern image to the right and compare to your boat's cockpit. If it looks right, it most likely is.</li>
+            <li><strong>Request exact measurements</strong> — we can send you the dimensions to verify the fit yourself before ordering.</li>
+          </ol>
+          <div style="font-size:13px;color:#444;line-height:1.6;margin-top:12px;">Reply to this page or call <a href="tel:8882830704" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">888.283.0704</a> and we'll send measurements right over.</div>
+        </div>
+      </div>
     </div>
     <!-- PATTERN CONFIRM FLOW — shown when year is outside confirmed range -->
   <div id="prob-warn" style="display:none;margin-bottom:16px;">
@@ -403,11 +422,11 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
     <div class="csec-hd">Berber Carpet</div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:12px">UV resistant, action-back, snap-in fit. Made in the USA.</p>
     <div class="berber-grid">
-      <div class="cc" id="co-o" onclick="selMat('Oatmeal','berber','#ada59a',17.50,'co-o')">
+      <div class="cc" id="co-o" onclick="selMat('Oatmeal','berber','#ada59a',17.50,'co-o','assets/swatches/oatmeal-berber.jpg')">
         <img src="assets/swatches/oatmeal-berber.jpg" alt="Oatmeal Berber">
         <div class="cc-body"><div><div class="cname">Oatmeal</div><div class="cdesc">Warm tan/cream · Classic</div></div><div class="cchk">✓</div></div>
       </div>
-      <div class="cc" id="co-g" onclick="selMat('Gray','berber','#64676c',17.50,'co-g')">
+      <div class="cc" id="co-g" onclick="selMat('Gray','berber','#64676c',17.50,'co-g','assets/swatches/gray-berber.jpg')">
         <img src="assets/swatches/gray-berber.jpg" alt="Gray Berber">
         <div class="cc-body"><div><div class="cname">Gray</div><div class="cdesc">Cool medium gray · Modern</div></div><div class="cchk">✓</div></div>
       </div>
@@ -560,8 +579,9 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <div class="sidebar">
   <h2>Your Custom Carpet</h2>
   <div id="sb-pattern-wrap" style="display:none;margin-bottom:14px;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);">
-    <div id="sb-pat-tint-wrap" style="position:relative;background:transparent;transition:background .25s;">
-      <img id="sb-pattern-img" src="" alt="Your pattern" style="width:100%;height:auto;display:block;position:relative;z-index:1;">
+    <div id="sb-pat-tint-wrap" style="position:relative;background:#fff;">
+      <canvas id="sb-pattern-canvas" style="width:100%;height:auto;display:block;"></canvas>
+      <img id="sb-pattern-img" src="" alt="" style="display:none;">
     </div>
     <div id="sb-pattern-lbl" style="font-size:10px;color:var(--muted);padding:5px 8px;background:#f8fafc;text-align:center;font-style:italic;"></div>
   </div>
@@ -580,66 +600,157 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <script>
 /* -- PRICING -- */
 const S_BERBER=17.50,S_VINYL=27.50,S_LABOR_SY=50,S_CMC_MULT=1.30,S_RET_MULT=1.30;
+
+/* ============================================================================
+   ADD-ONS SYSTEM
+   ----------------------------------------------------------------------------
+   One catalog table defines every add-on/upsell that exists. Each entry says
+   HOW it's priced (priceType) and WHAT markup applies (markup). Adding a new
+   add-on later = one new row here + a UI card. The pricing formula never changes.
+
+   priceType:
+     "flat"      -> rate is the whole charge, regardless of boat/quantity
+     "per_piece" -> rate x number-of-selected-pieces
+     "per_sqft"  -> rate x square footage
+     "per_sheet" -> rate x quantity (customer picks how many sheets/units)
+     "composite" -> RESERVED: add-on has its own sub-options each with a price
+                    (e.g. Flex Dek = sheet sizing + optional logo on top).
+                    Hook is here; the sub-option UI is built per-add-on later.
+
+   markup: recipe applied to the raw amount AFTER priceType is computed:
+     "none"        -> charge passes straight through (binding works this way today)
+     "cmc"         -> raw x S_CMC_MULT
+     "cmc_retail"  -> raw x S_CMC_MULT x S_RET_MULT  (same as the carpet itself)
+     "retail"      -> raw x S_RET_MULT
+
+   To change how an add-on is priced later, edit its row here. No code changes.
+   ========================================================================== */
+const ADDONS={
+  "binding":{
+    id:"binding",
+    name:"Custom Binding Color",
+    priceType:"flat",
+    rate:55,
+    markup:"none",          // binding upcharge is a flat pass-through today
+    note:"Non-standard binding color. Standard color-matched binding is included free."
+  }
+  /* --- FUTURE ADD-ONS: examples of how new ones slot in (not yet active) ---
+  ,"embroidery":{
+    id:"embroidery", name:"Embroidery", priceType:"per_piece",
+    rate:0, markup:"cmc_retail",          // rate + markup TBD when we standardize
+    note:"Embroidered logo/text per carpet piece."
+  }
+  ,"flexdek_platform":{
+    id:"flexdek_platform", name:"Flex Dek Swim Platform", priceType:"composite",
+    rate:0, markup:"cmc_retail",
+    note:"Flex Dek sold in sheets cut to size; optional pattern/logo on top. Composite pricing - sub-option UI built separately. Flex Dek may also sell as its own standalone product line."
+  }
+  */
+};
+
+/* Reusable, standalone pricing engine. Takes an ADDONS entry + a context object
+   ({pieces, sqft, qty}) and returns the final charge. Deliberately NOT welded to
+   the carpet builder - when Flex Dek becomes its own product, it reuses this. */
+function calcAddon(addon, ctx){
+  if(!addon) return 0;
+  ctx=ctx||{};
+  var raw=0;
+  switch(addon.priceType){
+    case "flat":      raw=addon.rate; break;
+    case "per_piece": raw=addon.rate*(ctx.pieces||0); break;
+    case "per_sqft":  raw=addon.rate*(ctx.sqft||0); break;
+    case "per_sheet": raw=addon.rate*(ctx.qty||0); break;
+    case "composite": raw=ctx.compositeTotal||0; break;  // sub-options summed elsewhere
+    default:          raw=0;
+  }
+  switch(addon.markup){
+    case "cmc":        return raw*S_CMC_MULT;
+    case "cmc_retail": return raw*S_CMC_MULT*S_RET_MULT;
+    case "retail":     return raw*S_RET_MULT;
+    case "none":
+    default:           return raw;
+  }
+}
+
+/* Sum every selected add-on on the current order. ctx is shared (pieces, sqft).
+   S.addons is a list of {id, qty?, compositeTotal?} - the chosen add-ons. */
+function calcAddonsTotal(ctx){
+  if(!S.addons||!S.addons.length) return 0;
+  var total=0;
+  S.addons.forEach(function(sel){
+    var def=ADDONS[sel.id];
+    if(!def) return;
+    var perCtx={pieces:ctx.pieces, sqft:ctx.sqft, qty:sel.qty, compositeTotal:sel.compositeTotal};
+    total+=calcAddon(def, perCtx);
+  });
+  return total;
+}
 const SEARAY_SRC="assets/searay.jpg";
 let photoURL=null;
 
 const PATTERN_IMGS = {
-  "Sea Ray|220 Sundeck": "patterns/sea-ray-220-sundeck.png",
-  "Sea Ray|240 Sundancer": "patterns/sea-ray-240-sundancer.png",
-  "Sea Ray|240 Sundeck": "patterns/sea-ray-240-sundeck.png",
-  "Sea Ray|260 Sundancer": "patterns/sea-ray-260-sundancer.png",
-  "Sea Ray|270 Sundeck": "patterns/sea-ray-270-sundeck.png",
-  "Sea Ray|320 Sundancer": "patterns/sea-ray-320-sundancer.png",
-  "Sea Ray|330 Sundancer": "patterns/sea-ray-330-sundancer.png",
-  "Sea Ray|340 Sundancer": "patterns/sea-ray-340-sundancer.png",
-  "Sea Ray|350 Sundancer": "patterns/sea-ray-350-sundancer.png",
-  "Sea Ray|400 Sundancer": "patterns/sea-ray-400-sundancer.png",
-  "Sea Ray|250 SLX": "patterns/sea-ray-250-slx.jpg",
-  "Chaparral|230 SSi": "patterns/chaparral-230-ssi.png",
-  "Chaparral|290 Signature": "patterns/chaparral-290-signature.png",
-  "Rinker|232 Captiva BR": "patterns/rinker-232-captiva-br.png",
-  "Rinker|270 FV": "patterns/rinker-270-fv.png",
-  "Rinker|350 FV": "patterns/rinker-350-fv.png",
-  "Hurricane|GS 170": "patterns/hurricane-gs-170.png",
-  "Maxum|2400 SCR": "patterns/maxum-2400-scr.png",
-  "Ebbtide|200 Campione": "patterns/ebbtide-200-campione.png",
-  "Baja|202 Islander": "patterns/baja-202-islander.png",
-  "Sea Ray|420 AC": "patterns/sea-ray-420-ac.png",
-  "Caravelle|192 Interceptor": "patterns/caravelle-192-interceptor.png",
-  "Bayliner|225": "patterns/bayliner-225.png",
-  "Four Winns|260 Horizon": "patterns/four-winns-260-horizon.png",
+  "Sea Ray|220 Sundeck": "patterns/sea-ray-220-sundeck.webp",
+  "Sea Ray|240 Sundancer": "patterns/sea-ray-240-sundancer.webp",
+  "Sea Ray|240 Sundeck": "patterns/sea-ray-240-sundeck.webp",
+  "Sea Ray|260 Sundancer": "patterns/sea-ray-260-sundancer.webp",
+  "Sea Ray|270 Sundeck": "patterns/sea-ray-270-sundeck.webp",
+  "Sea Ray|320 Sundancer": "patterns/sea-ray-320-sundancer.webp",
+  "Sea Ray|330 Sundancer": "patterns/sea-ray-330-sundancer.webp",
+  "Sea Ray|340 Sundancer": "patterns/sea-ray-340-sundancer.webp",
+  "Sea Ray|350 Sundancer": "patterns/sea-ray-350-sundancer.webp",
+  "Sea Ray|400 Sundancer": "patterns/sea-ray-400-sundancer.webp",
+  "Sea Ray|250 SLX": "patterns/sea-ray-250-slx.webp",
+  "Chaparral|230 SSi": "patterns/chaparral-230-ssi.webp",
+  "Chaparral|290 Signature": "patterns/chaparral-290-signature.webp",
+  "Rinker|232 Captiva BR": "patterns/rinker-232-captiva-br.webp",
+  "Rinker|270 FV": "patterns/rinker-270-fv.webp",
+  "Rinker|350 FV": "patterns/rinker-350-fv.webp",
+  "Hurricane|GS 170": "patterns/hurricane-gs-170.webp",
+  "Maxum|2400 SCR": "patterns/maxum-2400-scr.webp",
+  "Ebbtide|200 Campione": "patterns/ebbtide-200-campione.webp",
+  "Baja|202 Islander": "patterns/baja-202-islander.webp",
+  "Sea Ray|420 AC": "patterns/sea-ray-420-ac.webp",
+  "Caravelle|192 Interceptor": "patterns/caravelle-192-interceptor.webp",
+  "Bayliner|225": "patterns/bayliner-225.webp",
+  "Four Winns|260 Horizon": "patterns/four-winns-260-horizon.webp",
   "Chaparral|236 SSi": "patterns/chaparral-236-ssi.webp",
   "Chris-Craft|Launch 22": "patterns/chris-craft-launch-22.webp",
-  "Sea Ray|175 Sport":"patterns/sea-ray-175-sport.png",
-  "Sea Ray|180 Sport":"patterns/sea-ray-180-sport.png",
-  "Sea Ray|185 Sport":"patterns/sea-ray-185-sport.png",
-  "Sea Ray|190 Sport":"patterns/sea-ray-190-sport.png",
-  "Sea Ray|195 Sport":"patterns/sea-ray-195-sport.png",
-  "Sea Ray|200 Select":"patterns/sea-ray-200-select.png",
-  "Sea Ray|190 SPX":"patterns/sea-ray-190-spx.png",
-  "Sea Ray|SeaRayder F-14":"patterns/sea-ray-searayder-f-14.png",
-  "Sea Ray|SeaRayder F-16":"patterns/sea-ray-searayder-f-16.png"
+  "Sea Ray|175 Sport":"patterns/sea-ray-175-sport.webp",
+  "Sea Ray|180 Sport":"patterns/sea-ray-180-sport.webp",
+  "Sea Ray|185 Sport":"patterns/sea-ray-185-sport.webp",
+  "Sea Ray|190 Sport":"patterns/sea-ray-190-sport.webp",
+  "Sea Ray|195 Sport":"patterns/sea-ray-195-sport.webp",
+  "Sea Ray|200 Select":"patterns/sea-ray-200-select.webp",
+  "Sea Ray|190 SPX":"patterns/sea-ray-190-spx.webp",
+  "Sea Ray|SeaRayder F-14":"patterns/sea-ray-searayder-f-14.webp",
+  "Sea Ray|SeaRayder F-16":"patterns/sea-ray-searayder-f-16.webp"
 ,
-  "Sea Ray|260 Sundeck": "patterns/sea-ray-260-sundeck.png",
-  "Sea Ray|360 Sundancer": "patterns/sea-ray-360-sundancer.png",
-  "Sea Ray|370 Sundancer": "patterns/sea-ray-370-sundancer.png",
-  "Sea Ray|380 Sundancer": "patterns/sea-ray-380-sundancer.png",
-  "Sea Ray|390 Sundancer": "patterns/sea-ray-390-sundancer.png",
-  "Sea Ray|410 Sundancer": "patterns/sea-ray-410-sundancer.png"
+  "Sea Ray|260 Sundeck": "patterns/sea-ray-260-sundeck.webp",
+  "Sea Ray|360 Sundancer": "patterns/sea-ray-360-sundancer.webp",
+  "Sea Ray|370 Sundancer": "patterns/sea-ray-370-sundancer.webp",
+  "Sea Ray|380 Sundancer": "patterns/sea-ray-380-sundancer.webp",
+  "Sea Ray|390 Sundancer": "patterns/sea-ray-390-sundancer.webp",
+  "Sea Ray|410 Sundancer": "patterns/sea-ray-410-sundancer.webp"
 ,
-  "Chaparral|H2O 21 Sport": "patterns/chaparral-h2o-21-sport.png",
+  "Chaparral|H2O 21 Sport": "patterns/chaparral-h2o-21-sport.webp",
   "Caravelle|212 Interceptor": "patterns/caravelle-212-interceptor.webp",
-  "Four Winns|190 Horizon": "patterns/four-winns-190-horizon.jpg",
-  "Four Winns|210 Horizon": "patterns/four-winns-210-horizon.png",
-  "Rinker|282 BR": "patterns/rinker-282-br.png"
+  "Four Winns|190 Horizon": "patterns/four-winns-190-horizon.webp",
+  "Four Winns|210 Horizon": "patterns/four-winns-210-horizon.webp",
+  "Rinker|282 BR": "patterns/rinker-282-br.webp"
 ,
-  "Cobalt|292": "patterns/cobalt-292.png",
-  "Cobalt|A25": "patterns/cobalt-a25.jpg",
-  "Bryant|236": "patterns/bryant-236.jpg",
-  "Wellcraft|2600 Martinique": "patterns/wellcraft-2600-martinique.png",
-  "Cruisers Yachts|375 Aft Cabin": "patterns/cruisers-yachts-375-aft-cabin.png",
-  "Doral|Boca Grande 36": "patterns/doral-boca-grande-36.png",
+  "Cobalt|292": "patterns/cobalt-292.webp",
+  "Cobalt|A25": "patterns/cobalt-a25.webp",
+  "Bryant|236": "patterns/bryant-236.webp",
+  "Wellcraft|2600 Martinique": "patterns/wellcraft-2600-martinique.webp",
+  "Cruisers Yachts|375 Aft Cabin": "patterns/cruisers-yachts-375-aft-cabin.webp",
+  "Doral|Boca Grande 36": "patterns/doral-boca-grande-36.webp",
   "Lund|1775 Adventure": "patterns/lund-1775-adventure.webp"
+,
+  /* v9.59 - new CMC patterns batch 1 */
+  "Chris-Craft|200": "patterns/chris-craft-200.webp",
+  "Chaparral|200": "patterns/chaparral-200.webp",
+  "Chaparral|243 Sunesta": "patterns/chaparral-243-sunesta.webp",
+  "Chaparral|285 SSi": "patterns/chaparral-285-ssi.webp"
 };
 const PATTERN_FALLBACK={
   "Chaparral|186 SSi":"Chaparral|230 SSi",
@@ -653,7 +764,6 @@ const PATTERN_FALLBACK={
   "Chaparral|256 SSi":"Chaparral|230 SSi",
   "Chaparral|270 Signature":"Chaparral|290 Signature",
   "Chaparral|276 SSi":"Chaparral|230 SSi",
-  "Chaparral|285 SSi":"Chaparral|230 SSi",
   "Sea Ray|200 Sport":"Sea Ray|250 SLX",
   "Sea Ray|205 Sport":"Sea Ray|250 SLX",
   "Sea Ray|210 Sundeck":"Sea Ray|250 SLX",
@@ -733,6 +843,42 @@ const VINYL_PHOTOS = {
   "slate": "assets/swatches/vinyl-slate.jpg",
   "teak-ivory": "assets/swatches/vinyl-teak-ivory.jpg",
   "vanilla": "assets/swatches/vinyl-vanilla.jpg"
+};
+
+/* -- SWATCH TEXTURE - how it works (v9.62.2) --
+ * The pattern renderer texture-fills pieces using the swatch image path
+ * stored in S.swatchSrc. That path is set by selMat() at the moment a colour
+ * is picked - the colour card / vinyl grid passes its own swatch path in
+ * directly.
+ *
+ * An earlier approach (v9.62) tried to derive the swatch path from the colour
+ * NAME ("Oatmeal" -> "oatmeal" -> look up "oatmeal-berber"). That was fragile:
+ * the card name, the VINYL_COLORS id, and the swatch filename didn't all
+ * agree, so the lookup missed and pieces never filled. Passing the path
+ * explicitly removes the guesswork entirely - there is no map to keep in sync.
+ */
+/* -- PATTERN_PIECES (v9.62) -- PER-PIECE IMAGE FILES --
+ * For boats whose pattern has been SPLIT into separate per-piece image files
+ * by the offline splitter tool. Each entry maps "Make|Model" to an array of
+ * { id, img } where:
+ *   id  = the piece id, MUST match the piece ids in SVG_DEFS[...].pieces
+ *   img = path to that piece's standalone image file (same 1400px canvas as
+ *         the whole-pattern image, so the pieces stack into the full pattern)
+ *
+ * A boat that is NOT in this object falls back to whole-pattern coloring
+ * (today's behavior) - nothing breaks, the per-piece feature simply "lights
+ * up" for a boat once its pieces are added here.
+ *
+ * Currently empty: no boats split yet. Add entries as the splitter produces
+ * piece files. Example shape (commented out):
+ *
+ *   "Sea Ray|320 Sundancer": [
+ *     { id:"bow",     img:"patterns/pieces/sea-ray-320-sundancer__bow.webp" },
+ *     { id:"helm",    img:"patterns/pieces/sea-ray-320-sundancer__helm.webp" },
+ *     { id:"cockpit", img:"patterns/pieces/sea-ray-320-sundancer__cockpit.webp" }
+ *   ],
+ */
+const PATTERN_PIECES = {
 };
 
 
@@ -1790,7 +1936,7 @@ const SVG_DEFS={
 };
 
 const MD={
-  "Chaparral":{m:["186 SSi","196 SSi","200 SSi","204 SSi","210 SSi","215 SS","216 SSI","220 SSI","224 Sunesta","226 SSi","230 SSi","236 SSi","236 Sunesta","246 SSi","256 SSi","270 Signature","276 SSi","285 SSi","290 Signature","310 Signature","H2O 21 Sport"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
+  "Chaparral":{m:["186 SSi","196 SSi","200","200 SSi","204 SSi","210 SSi","215 SS","216 SSI","220 SSI","224 Sunesta","226 SSi","230 SSi","236 SSi","236 Sunesta","243 Sunesta","246 SSi","256 SSi","270 Signature","276 SSi","285 SSi","290 Signature","310 Signature","H2O 21 Sport"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
   "Sea Ray":{m:["SeaRayder F-14","SeaRayder F-16","175 Sport","180 Sport","185 Sport","185 Fish & Ski","190 Sport","190 SPX","195 Sport","200 Select","200 Sport","200 Sundeck","205 Sport","210 Sundeck","215 Weekender","220 Sundeck","225 Weekender","230 Select","240 Sundancer","240 Sundeck","250 SLX","260 Sundancer","260 Sundeck","270 Sundancer","270 Sundeck","270 SLX","280 Sundancer","290 Bow Rider","290 Sundancer","290 SLX","300 Sundancer","300 SLX","310 Sundancer","320 Sundancer","330 Sundancer","340 Sundancer","350 Sundancer","360 Sundancer","370 Aft Cabin","370 Sundancer","380 Sundancer","390 Sundancer","400 Express Cruiser","420 AC","400 Sundancer","410 Sundancer","450 Sundancer","460 Sundancer","480 Sundancer","540 Sundancer","560 Sedan Bridge"],y:(function(){var a=[];for(var i=0;i<36;i++)a.push((2025-i)+"");return a;})()},
   "Four Winns":{m:["180 Horizon","190 Horizon","200 Horizon","210 Horizon","220 Horizon","240 Horizon","260 Horizon","280 Horizon"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
   "Cobalt":{m:["190 BR","200","206","210","220","240","250","270","292","A25"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
@@ -1802,7 +1948,7 @@ const MD={
   "Baja":{y:["1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009"],m:["190 Islander","202 Islander","205 Islander","242 Islander","280 Islander"]},
   "Bayliner":{y:["2009"],m:["225"]},
   "Caravelle":{y:["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["192 Interceptor","212 Interceptor"]},
-  "Chris-Craft":{y:["2001","2002","2003","2004","2005"],m:["Launch 22"]}
+  "Chris-Craft":{y:["2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["200","Launch 22"]}
 ,
   "Bryant":{m:["236"],y:(function(){var a=[];for(var i=0;i<8;i++)a.push((2010-i)+"");return a;})()},
   "Cruisers Yachts":{m:["375 Aft Cabin"],y:(function(){var a=[];for(var i=0;i<7;i++)a.push((2008-i)+"");return a;})()},
@@ -1859,7 +2005,7 @@ const CMC_YEARS={
   "Sea Ray|260 Sundancer":[2003,2010],
   "Sea Ray|270 Sundeck":[2014,2021],
   "Sea Ray|320 Sundancer":[2003,2008],
-  "Sea Ray|330 Sundancer":[1995,2014],
+  "Sea Ray|330 Sundancer":[2015,2017],
   "Sea Ray|340 Sundancer":[1999,2003],
   "Sea Ray|350 Sundancer":[2008,2013],
   "Sea Ray|400 Sundancer":[1996,2002]
@@ -1884,6 +2030,12 @@ const CMC_YEARS={
   "Cruisers Yachts|375 Aft Cabin":[2004,2005],
   "Doral|Boca Grande 36":[2005,2008],
   "Lund|1775 Adventure":[2020,2026]
+,
+  /* v9.59 - new CMC patterns batch 1 */
+  "Chris-Craft|200":[2000,2010],
+  "Chaparral|200":[2001,2003],
+  "Chaparral|243 Sunesta":[2002,2002],
+  "Chaparral|285 SSi":[2000,2009]
 };
 
 const VENDOR_SOURCE={
@@ -1944,6 +2096,12 @@ const VENDOR_SOURCE={
   "Cruisers Yachts|375 Aft Cabin":"CMC",
   "Doral|Boca Grande 36":"CMC",
   "Lund|1775 Adventure":"CMC"
+,
+  /* v9.59 - new CMC patterns batch 1 */
+  "Chris-Craft|200":"CMC",
+  "Chaparral|200":"CMC",
+  "Chaparral|243 Sunesta":"CMC",
+  "Chaparral|285 SSi":"CMC"
 };
 
 
@@ -1963,7 +2121,7 @@ const BINDING_COLORS=[
 ];
 
 let S={make:"",year:"",model:"",sel:{},
-  "Caravelle":{y:["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["192 Interceptor","212 Interceptor"]},matType:"berber",color:"",colorHex:"",pricePerSY:17.50,zip:"",price:0,isProbable:false,binding:{custom:false,color:"",hex:"",upcharge:0},patternConfirmed:false,selectedVariantImg:null,selectedVariant:"",selectedVariantLabel:"",selectedVariantPieces:null,selectedVariantPieceDefs:null};
+  "Caravelle":{y:["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["192 Interceptor","212 Interceptor"]},matType:"berber",color:"",colorHex:"",swatchSrc:null,pricePerSY:17.50,zip:"",price:0,isProbable:false,binding:{custom:false,color:"",hex:"",upcharge:0},addons:[],patternConfirmed:false,selectedVariantImg:null,selectedVariant:"",selectedVariantLabel:"",selectedVariantPieces:null,selectedVariantPieceDefs:null};
 let curDef=null;
 
 /* -- AUTO FILL -- */
@@ -1998,22 +2156,72 @@ function autoFill(){
 
 function updModels(pY,pM){
   const mk=g("make").value;S.make=mk;
-  g("year").innerHTML='<option value=""> -  Year  - </option>';if(g("yr-hint"))g("yr-hint").style.display="none";
+  g("year").innerHTML='<option value=""> -  Year  - </option>';
   g("model").innerHTML='<option value=""> -  Model  - </option>';
-  if(!MD[mk])return;
-  MD[mk].y.slice().sort(function(a,b){return Number(b)-Number(a);}).forEach(function(y){const o=document.createElement("option");o.value=y;o.textContent=y;g("year").appendChild(o)});
-  if(pY)g("year").value=pY;updYearModels(pM);
-}
-function updYearModels(pM){
-  S.year=g("year").value;const mk=g("make").value,ms=g("model");
-  ms.innerHTML='<option value=""> -  Model  - </option>';
-  if(!MD[mk]||!S.year)return;
+  if(g("yr-help"))g("yr-help").style.display="none";
+  if(g("yr-hint"))g("yr-hint").style.display="none";
+  hideYearHelp();
+  if(!MD[mk]){sniff();return;}
+  /* Populate MODEL dropdown with confirmed vs probable groups */
   const conf=[],prob=[];
   MD[mk].m.forEach(function(m){(CMC_SET.has(mk+"|"+m)?conf:prob).push(m)});
+  const ms=g("model");
   if(conf.length){const og=document.createElement("optgroup");og.label="Confirmed patterns available";conf.forEach(function(m){const o=document.createElement("option");o.value=m;o.textContent=m;og.appendChild(o)});ms.appendChild(og)}
   if(prob.length){const og=document.createElement("optgroup");og.label="Likely compatible  -  we verify";prob.forEach(function(m){const o=document.createElement("option");o.value=m;o.textContent=m;og.appendChild(o)});ms.appendChild(og)}
-  if(pM){for(let o of ms.options)if(o.value.toLowerCase()===pM.toLowerCase()){ms.value=o.value;break}}
+  /* Pre-fill model if provided (autofill) */
+  if(pM){
+    for(let o of ms.options)if(o.value.toLowerCase()===pM.toLowerCase()){ms.value=o.value;break}
+    if(ms.value)updModelYears(pY);
+  } else {
+    sniff();
+  }
+}
+function updYearModels(pM){
+  /* Stub kept for autofill backward compatibility */
+  if(pM){
+    const ms=g("model");
+    for(let o of ms.options)if(o.value.toLowerCase()===pM.toLowerCase()){ms.value=o.value;updModelYears();break}
+  }
+}
+function updModelYears(pY){
+  const mk=g("make").value,md=g("model").value;
+  S.model=md;
+  const ys=g("year");
+  ys.innerHTML='<option value=""> -  Year  - </option>';
+  if(g("yr-help"))g("yr-help").style.display="none";
+  hideYearHelp();
+  if(!mk||!md){sniff();return;}
+  /* Look up year range for this make+model */
+  const key=mk+"|"+md;
+  const range=(typeof CMC_YEARS!=="undefined"&&CMC_YEARS[key])||null;
+  let years=[];
+  if(range&&range.length===2){
+    for(let y=range[1];y>=range[0];y--)years.push(String(y));
+  } else {
+    /* Fallback: full year range from MD */
+    if(MD[mk]&&MD[mk].y){
+      years=MD[mk].y.slice().sort(function(a,b){return Number(b)-Number(a);});
+    }
+  }
+  years.forEach(function(y){const o=document.createElement("option");o.value=y;o.textContent=y;ys.appendChild(o)});
+  /* Show short trust note */
+  if(g("yr-help"))g("yr-help").style.display="block";
+  /* Trigger sniff to show pattern image in sidebar even without Year */
   sniff();
+  /* Pre-fill year if provided (autofill) */
+  if(pY){
+    for(let o of ys.options)if(o.value===pY){ys.value=o.value;sniff();break}
+  }
+}
+function showYearHelp(){
+  const m=g("year-help-msg");
+  if(!m)return;
+  m.style.display="block";
+  setTimeout(function(){m.scrollIntoView({behavior:"smooth",block:"nearest"})},100);
+}
+function hideYearHelp(){
+  const m=g("year-help-msg");
+  if(m)m.style.display="none";
 }
 function sniff(){
   /* If make/model/year changed, reset pattern confirmation */
@@ -2299,10 +2507,15 @@ function clearAll(){
   buildPieceList();updateKitBadge();updSidebar();
 }
 
-function selMat(name,matType,hex,psy,cardId){
+function selMat(name,matType,hex,psy,cardId,swatchSrc){
   document.querySelectorAll(".cc,.vc").forEach(function(el){el.classList.remove("sel");});
   const card=g(cardId);if(card)card.classList.add("sel");
   S.color=name;S.matType=matType;S.colorHex=hex;S.pricePerSY=psy;
+  /* store the swatch image path directly off the card / vinyl data - this is
+     what the pattern renderer uses to texture-fill. Passing the path
+     explicitly avoids fragile name->id->path guessing (the v9.62 bug:
+     "Oatmeal" -> "oatmeal" missed the "oatmeal-berber" texture key). */
+  S.swatchSrc=swatchSrc||null;
   /* update all selected pieces with new color */
   ALL.forEach(function(id){
     if(!S.sel[id])return;
@@ -2312,15 +2525,15 @@ function selMat(name,matType,hex,psy,cardId){
   });
   updSidebar();
 }
-function selVinyl(name,hex,cardId){selMat(name,"vinyl",hex,27.50,cardId);}
+function selVinyl(name,hex,cardId,swatchSrc){selMat(name,"vinyl",hex,27.50,cardId,swatchSrc);}
 function buildVinylGrid(){
   const gr=g("vinylGrid");if(!gr)return;
   gr.innerHTML=VINYL_COLORS.map(function(c){
-    const hasPhoto=typeof VINYL_PHOTOS!=="undefined"&&VINYL_PHOTOS[c.id];
-    const swatch=hasPhoto
-      ?'<img src="'+VINYL_PHOTOS[c.id]+'" style="width:100%;height:65px;object-fit:cover;display:block"/>'
+    const photo=typeof VINYL_PHOTOS!=="undefined"?VINYL_PHOTOS[c.id]:null;
+    const swatch=photo
+      ?'<img src="'+photo+'" style="width:100%;height:65px;object-fit:cover;display:block"/>'
       :'<div class="vsw" style="background:'+c.hex+'"></div>';
-    return'<div class="vc" id="vc-'+c.id+'" onclick="selVinyl(this.dataset.n,this.dataset.h,this.id)" data-n="'+c.n+'" data-h="'+c.hex+'">'
+    return'<div class="vc" id="vc-'+c.id+'" onclick="selVinyl(this.dataset.n,this.dataset.h,this.id,this.dataset.sw)" data-n="'+c.n+'" data-h="'+c.hex+'" data-sw="'+(photo||"")+'">'
       +swatch
       +'<div class="vname">'+c.n+'</div>'
       +'<div class="vchk">\u2713</div></div>';
@@ -2347,11 +2560,14 @@ function toggleBinding(ev){
     tg.classList.add("active");
     gr.classList.add("show");
     S.binding.upcharge=55;
+    /* sync into the general add-ons system */
+    if(!S.addons.some(function(a){return a.id==="binding";})) S.addons.push({id:"binding"});
   }else{
     tg.classList.remove("active");
     gr.classList.remove("show");
     S.binding.upcharge=0;
     S.binding.color="";S.binding.hex="";
+    S.addons=S.addons.filter(function(a){return a.id!=="binding";});
     document.querySelectorAll(".bc").forEach(function(el){el.classList.remove("sel");});
   }
   updSidebar();
@@ -2403,12 +2619,12 @@ function updSidebar(){
     if(S.make&&S.model&&CMC_SET.has(S.make+"|"+S.model)){g("pattern-msg").style.display="flex";if(g("pattern-headline"))g("pattern-headline").textContent="We have the exact carpet patterns for your "+S.year+" "+S.make+" "+S.model+"."}
     else g("pattern-msg").style.display="none";
   }
-  /* -- Pattern image in sidebar -- */
+  /* -- Pattern image in sidebar (canvas-based color tinting) -- */
   const sbpw=g("sb-pattern-wrap");
   const sbpi=g("sb-pattern-img");
   const sbpl=g("sb-pattern-lbl");
-  const sbpt=g("sb-pat-tint-wrap");
-  if(sbpw&&sbpi&&S.make&&S.model){
+  const sbpc=g("sb-pattern-canvas");
+  if(sbpw&&sbpi&&sbpc&&S.make&&S.model){
     const k2=S.make+"|"+S.model;
     const fallbackKey2=typeof PATTERN_FALLBACK!=="undefined"?PATTERN_FALLBACK[k2]:null;
     /* Auto-select variant by year if applicable */
@@ -2425,18 +2641,336 @@ function updSidebar(){
     }
     const displayImg2=S.selectedVariantImg||autoVariantImg2||(typeof PATTERN_IMGS!=="undefined"?(PATTERN_IMGS[k2]||(fallbackKey2?PATTERN_IMGS[fallbackKey2]:null)):null);
     if(displayImg2){
-      sbpi.src=displayImg2;
       const isFb2=!PATTERN_IMGS[k2]&&!!displayImg2;
       if(sbpl)sbpl.textContent=isFb2?"Representative pattern  -  exact cuts may vary":S.year+" "+S.make+" "+S.model;
       sbpw.style.display="block";
-      /* Update color tint overlay - shows whole pattern in selected color */
-      if(sbpt)sbpt.style.background=S.colorHex||"transparent";
+      /* Load image and render to canvas (per-piece or whole-pattern, auto) */
+      renderPatternColored(sbpc);
     } else {
       sbpw.style.display="none";
     }
   } else if(sbpw){
     sbpw.style.display="none";
   }
+}
+
+/* -- PATTERN COLOR RENDERING (v9.62 - Option C per-piece) --
+ *
+ * Two paths, chosen automatically per boat:
+ *
+ *  PER-PIECE PATH - boat has an entry in PATTERN_PIECES (its pattern has been
+ *    split into separate piece image files by the offline splitter tool):
+ *      - each SELECTED piece is drawn and texture/color filled
+ *      - each UNSELECTED piece is drawn as outline only (no fill)
+ *      - every piece's outline stays visible regardless of selection
+ *      - piece images share the whole-pattern canvas so they stack correctly
+ *
+ *  WHOLE-PATTERN FALLBACK - boat is NOT in PATTERN_PIECES (not split yet):
+ *      - the entire pattern interior is filled (today's behavior)
+ *      - nothing breaks; the per-piece feature simply isn't active for this
+ *        boat until its pieces are added to PATTERN_PIECES
+ *
+ * Fill style:
+ *   - if the chosen color has a swatch texture -> tile the swatch image
+ *     inside the shape (matches the approved mockup)
+ *   - otherwise -> flat-color fill with S.colorHex
+ *
+ * The flood-fill interior detection is shared by both paths. Outline
+ * threshold is 180 (was 150) - many CMC patterns have faint thin lines and
+ * 150 left the interior leaking through; 180 seals reliably.
+ */
+const _patternCache={};
+
+/* Shared: given a loaded image already drawn on ctx at cw x ch, return a
+ * Uint8Array `interior` (1 = inside the carpet shape, fillable) and the
+ * raw pixel buffer. Throws on cross-origin getImageData failure. */
+function _computeInterior(ctx,cw,ch){
+  const imgData=ctx.getImageData(0,0,cw,ch);
+  const px=imgData.data;
+  const N=cw*ch;
+  /* outline mask - dark pixels are the line drawing (threshold 180) */
+  const outline=new Uint8Array(N);
+  for(let i=0;i<N;i++){
+    const off=i*4;
+    const lum=0.299*px[off]+0.587*px[off+1]+0.114*px[off+2];
+    if(lum<180)outline[i]=1;
+  }
+  /* dilate outline (8-neighborhood, 2 passes) to seal small line gaps */
+  const dilated=new Uint8Array(N);
+  for(let pass=0;pass<2;pass++){
+    const src=pass===0?outline:dilated.slice();
+    for(let y=0;y<ch;y++){
+      for(let x=0;x<cw;x++){
+        const i=y*cw+x;
+        if(src[i]){dilated[i]=1;continue;}
+        let hit=0;
+        for(let dy=-1;dy<=1&&!hit;dy++){
+          for(let dx=-1;dx<=1&&!hit;dx++){
+            if(dx===0&&dy===0)continue;
+            const nx=x+dx,ny=y+dy;
+            if(nx<0||ny<0||nx>=cw||ny>=ch)continue;
+            if(src[ny*cw+nx])hit=1;
+          }
+        }
+        if(hit)dilated[i]=1;
+      }
+    }
+  }
+  /* flood-fill "outside" from the 4 corners */
+  const outside=new Uint8Array(N);
+  const queue=new Int32Array(N);
+  let qhead=0,qtail=0;
+  const corners=[0,cw-1,(ch-1)*cw,ch*cw-1];
+  for(let c=0;c<4;c++){
+    const idx=corners[c];
+    if(!dilated[idx]&&!outside[idx]){outside[idx]=1;queue[qtail++]=idx;}
+  }
+  while(qhead<qtail){
+    const idx=queue[qhead++];
+    const x=idx%cw,y=(idx-x)/cw;
+    if(x>0){const ni=idx-1;if(!outside[ni]&&!dilated[ni]){outside[ni]=1;queue[qtail++]=ni;}}
+    if(x<cw-1){const ni=idx+1;if(!outside[ni]&&!dilated[ni]){outside[ni]=1;queue[qtail++]=ni;}}
+    if(y>0){const ni=idx-cw;if(!outside[ni]&&!dilated[ni]){outside[ni]=1;queue[qtail++]=ni;}}
+    if(y<ch-1){const ni=idx+cw;if(!outside[ni]&&!dilated[ni]){outside[ni]=1;queue[qtail++]=ni;}}
+  }
+  /* interior = not outline AND not outside */
+  const interior=new Uint8Array(N);
+  for(let i=0;i<N;i++){
+    if(!outline[i]&&!outside[i])interior[i]=1;
+  }
+  return {imgData:imgData, px:px, interior:interior, outline:outline, outside:outside};
+}
+
+/* Shared: fill the `interior` pixels of imgData. If texImg (a loaded swatch
+ * image) is supplied, tile it; otherwise flat-fill with hex. Background
+ * (outside) pixels forced white. Outline pixels left untouched. */
+function _fillInterior(imgData,interior,outline,outside,cw,ch,hex,texImg){
+  const px=imgData.data;
+  const N=cw*ch;
+  let texPx=null,tw=0,th=0;
+  if(texImg&&texImg.complete&&texImg.naturalWidth){
+    /* rasterize the swatch to a small offscreen buffer once */
+    const oc=document.createElement("canvas");
+    tw=texImg.naturalWidth;th=texImg.naturalHeight;
+    oc.width=tw;oc.height=th;
+    const octx=oc.getContext("2d");
+    octx.drawImage(texImg,0,0);
+    try{texPx=octx.getImageData(0,0,tw,th).data;}catch(e){texPx=null;}
+  }
+  let tr=255,tg=255,tb=255;
+  if(hex&&hex.length>=7){
+    tr=parseInt(hex.slice(1,3),16);
+    tg=parseInt(hex.slice(3,5),16);
+    tb=parseInt(hex.slice(5,7),16);
+  }
+  for(let i=0;i<N;i++){
+    if(outline[i])continue;          /* outline stays as-is */
+    const off=i*4;
+    if(outside[i]){                  /* background -> pure white */
+      px[off]=255;px[off+1]=255;px[off+2]=255;
+      continue;
+    }
+    if(!interior[i])continue;        /* not part of this fill region */
+    if(texPx){
+      const x=i%cw,y=(i-x)/cw;
+      const sx=x%tw,sy=y%th;
+      const toff=(sy*tw+sx)*4;
+      px[off]=texPx[toff];px[off+1]=texPx[toff+1];px[off+2]=texPx[toff+2];
+    } else {
+      px[off]=tr;px[off+1]=tg;px[off+2]=tb;
+    }
+  }
+}
+
+/* image loader with the OneDrive cache-buster retry + readable error box */
+function _loadPatternImage(src,canvas,onReady){
+  if(_patternCache[src]&&_patternCache[src].complete&&_patternCache[src].naturalWidth){
+    onReady(_patternCache[src]);
+    return;
+  }
+  const img=new Image();
+  /* crossOrigin "anonymous" is needed so canvas getImageData() works when the
+     pattern images are served from a real web server (e.g. GitHub Pages).
+     BUT on file:// Chrome treats a crossOrigin <img> as a blocked cross-origin
+     request and refuses to load it at all - even though the file exists. On
+     file:// the image is same-origin and getImageData works WITHOUT the
+     attribute, so only set it when actually served over http(s). */
+  if(location.protocol==="http:"||location.protocol==="https:"){
+    img.crossOrigin="anonymous";
+  }
+  _patternCache[src]=img;
+  let triedRetry=false;
+  img.onload=function(){ onReady(img); };
+  img.onerror=function(){
+    if(!triedRetry){
+      triedRetry=true;
+      setTimeout(function(){ img.src=src+(src.indexOf("?")<0?"?":"&")+"r="+Date.now(); },150);
+      return;
+    }
+    if(canvas){
+      const ctx=canvas.getContext("2d");
+      const w=canvas.width||300,h=canvas.height||200;
+      canvas.width=w;canvas.height=h;
+      ctx.fillStyle="#f7f7f7";ctx.fillRect(0,0,w,h);
+      ctx.fillStyle="#999";ctx.font="12px Segoe UI,Arial,sans-serif";ctx.textAlign="center";
+      ctx.fillText("Pattern image not found",w/2,h/2-6);
+      ctx.font="10px Segoe UI,Arial,sans-serif";
+      ctx.fillText(src,w/2,h/2+12);
+    }
+  };
+  img.src=src;
+}
+
+/* MAIN ENTRY POINT - replaces the old renderTintedPattern.
+ * Decides per-piece vs whole-pattern automatically and renders to canvas. */
+function renderPatternColored(canvas){
+  if(!canvas)return;
+  const ctx=canvas.getContext("2d");
+  const k=S.make+"|"+S.model;
+
+  /* resolve which whole-pattern image is showing (variant-aware) */
+  const fallbackKey=typeof PATTERN_FALLBACK!=="undefined"?PATTERN_FALLBACK[k]:null;
+  let autoVariantImg=null;
+  if(!S.selectedVariantImg&&typeof PATTERN_VARIANTS!=="undefined"&&PATTERN_VARIANTS[k]&&S.year){
+    const yr=parseInt(S.year);
+    const mv=PATTERN_VARIANTS[k].find(function(v){return v.years&&yr>=v.years[0]&&yr<=v.years[1];});
+    if(mv)autoVariantImg=mv.img;
+  }
+  const wholeImg=S.selectedVariantImg||autoVariantImg||
+    (typeof PATTERN_IMGS!=="undefined"?(PATTERN_IMGS[k]||(fallbackKey?PATTERN_IMGS[fallbackKey]:null)):null);
+  if(!wholeImg)return;
+
+  /* colour + texture for the fill. The swatch image path comes straight from
+     state (set by selMat when the colour was picked) - no name->id->path
+     guessing, so it can't miss the way the v9.62 "oatmeal-berber" key did. */
+  const texSrc=S.swatchSrc||null;
+  const hex=S.colorHex;
+
+  /* does this boat have split per-piece files? (and is it not a fallback image) */
+  const isFallbackImg=!PATTERN_IMGS[k]&&!S.selectedVariantImg&&!autoVariantImg&&!!wholeImg;
+  const pieceList=(!isFallbackImg&&typeof PATTERN_PIECES!=="undefined")?PATTERN_PIECES[k]:null;
+  const usePerPiece=!!(pieceList&&pieceList.length);
+
+  if(usePerPiece){
+    renderPerPiece(canvas,wholeImg,pieceList,hex,texSrc);
+  } else {
+    renderWholePattern(canvas,wholeImg,hex,texSrc);
+  }
+}
+
+/* WHOLE-PATTERN FALLBACK - colours the entire pattern interior (today's
+ * behaviour, just with texture support and threshold 180). */
+function renderWholePattern(canvas,imgSrc,hex,texSrc){
+  const ctx=canvas.getContext("2d");
+  function draw(img){
+    const maxW=500;
+    const scale=img.naturalWidth>maxW?maxW/img.naturalWidth:1;
+    const cw=Math.round(img.naturalWidth*scale);
+    const ch=Math.round(img.naturalHeight*scale);
+    canvas.width=cw;canvas.height=ch;
+    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,cw,ch);
+    ctx.drawImage(img,0,0,cw,ch);
+    if(!hex&&!texSrc)return;            /* no colour picked -> plain pattern */
+    let region;
+    try{ region=_computeInterior(ctx,cw,ch); }
+    catch(e){ return; }                /* cross-origin -> leave plain */
+    function paint(texImg){
+      _fillInterior(region.imgData,region.interior,region.outline,region.outside,cw,ch,hex,texImg);
+      ctx.putImageData(region.imgData,0,0);
+    }
+    if(texSrc){ _loadPatternImage(texSrc,null,function(t){paint(t);}); }
+    else { paint(null); }
+  }
+  _loadPatternImage(imgSrc,canvas,function(img){
+    try{ draw(img); }
+    catch(e){
+      /* draw plain so the pattern still shows even if colouring failed */
+      try{
+        const mw=500,sc=img.naturalWidth>mw?mw/img.naturalWidth:1;
+        canvas.width=Math.round(img.naturalWidth*sc);
+        canvas.height=Math.round(img.naturalHeight*sc);
+        ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      }catch(e2){}
+    }
+  });
+}
+
+/* PER-PIECE PATH - draws each piece image; selected pieces filled,
+ * unselected pieces outline-only. Pieces share one canvas so they stack. */
+function renderPerPiece(canvas,wholeImg,pieceList,hex,texSrc){
+  const ctx=canvas.getContext("2d");
+  /* size the canvas from the whole-pattern image (the shared coordinate
+     space all piece files are cut on) */
+  _loadPatternImage(wholeImg,canvas,function(baseImg){
+    const maxW=500;
+    const scale=baseImg.naturalWidth>maxW?maxW/baseImg.naturalWidth:1;
+    const cw=Math.round(baseImg.naturalWidth*scale);
+    const ch=Math.round(baseImg.naturalHeight*scale);
+    canvas.width=cw;canvas.height=ch;
+    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,cw,ch);
+
+    /* load every piece image, then composite in order */
+    let pending=pieceList.length;
+    const loaded={};
+    let failed=false;
+    pieceList.forEach(function(p){
+      _loadPatternImage(p.img,null,function(im){
+        loaded[p.id]=im;
+        if(--pending===0&&!failed)composite();
+      });
+      /* if a piece file genuinely fails, fall back to whole-pattern so the
+         customer still sees something correct rather than a half-rendered set */
+      const cached=_patternCache[p.img];
+      if(cached){
+        cached.addEventListener&&cached.addEventListener("error",function(){
+          if(!failed){failed=true;renderWholePattern(canvas,wholeImg,hex,texSrc);}
+        });
+      }
+    });
+
+    function composite(){
+      /* texture image (optional) - load once, then paint everything */
+      function withTexture(texImg){
+        ctx.fillStyle="#ffffff";ctx.fillRect(0,0,cw,ch);
+        pieceList.forEach(function(p){
+          const im=loaded[p.id];
+          if(!im)return;
+          /* draw this piece onto its own scratch canvas at full canvas size */
+          const oc=document.createElement("canvas");
+          oc.width=cw;oc.height=ch;
+          const octx=oc.getContext("2d");
+          octx.fillStyle="#ffffff";octx.fillRect(0,0,cw,ch);
+          octx.drawImage(im,0,0,cw,ch);
+          const selected=!!S.sel[p.id];
+          if(selected&&(hex||texImg)){
+            let region;
+            try{ region=_computeInterior(octx,cw,ch); }
+            catch(e){ region=null; }
+            if(region){
+              _fillInterior(region.imgData,region.interior,region.outline,region.outside,cw,ch,hex,texImg);
+              octx.putImageData(region.imgData,0,0);
+            }
+          }
+          /* composite this piece onto the shared canvas. Pieces are on a
+             white field; multiply blend keeps each piece's outline + fill
+             and lets the white areas show through to whatever's underneath. */
+          ctx.globalCompositeOperation="multiply";
+          ctx.drawImage(oc,0,0);
+          ctx.globalCompositeOperation="source-over";
+        });
+      }
+      if(texSrc){ _loadPatternImage(texSrc,null,function(t){withTexture(t);}); }
+      else { withTexture(null); }
+    }
+  });
+}
+
+/* back-compat shim: anything still calling the old name routes to the new
+ * entry point (the call site in updSidebar is updated too, but this keeps
+ * any stray callers working). */
+function renderTintedPattern(imgSrc,canvas,colorHex){
+  renderPatternColored(canvas);
 }
 function drawBoat(){
   const canvas=g("boatCanvas"),ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
@@ -2472,8 +3006,18 @@ function clearPhoto(){photoURL=null;g("uploadZone").style.display="block";g("bpi
 function calc(){
   S.zip=g("zip").value.trim();
   if(!S.pricePerSY){toast("Please select a color in Step 3 first.");return}
-  let sf=0;ALL.forEach(function(id){if(S.sel[id])sf+=PIECES[id].sf;});
-  const sy=sf/9,ups=estUPS(S.zip,sy),base=sy*S.pricePerSY+sy*S_LABOR_SY,bcPrice=Math.round(base*S_CMC_MULT*S_RET_MULT)+ups+(S.binding&&S.binding.upcharge?S.binding.upcharge:0);
+  /* Variant-aware square footage: use variant pieceDefs if active, else SVG_DEFS, else PIECES.
+     Must match calcAndShow() exactly so the recalc path can't disagree with the primary path. */
+  let sf=0;
+  const _k=S.make+"|"+S.model;
+  const _def=SVG_DEFS[_k];
+  const _activePieces=(S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(_def?_def.pieces:null);
+  if(_activePieces){
+    _activePieces.forEach(function(p){if(S.sel[p.id])sf+=p.sf;});
+  } else {
+    ALL.forEach(function(id){if(S.sel[id])sf+=PIECES[id].sf;});
+  }
+  const sy=sf/9,ups=estUPS(S.zip,sy),base=sy*S.pricePerSY+sy*S_LABOR_SY,addonsTotal=calcAddonsTotal({pieces:Object.keys(S.sel).filter(function(id){return S.sel[id];}).length,sqft:sf}),bcPrice=Math.round(base*S_CMC_MULT*S_RET_MULT)+ups+addonsTotal;
   g("bc-body").innerHTML='<div class="pbig">$'+bcPrice.toFixed(2)+'</div>'
     +'<div style="font-size:12px;color:var(--muted);margin-top:4px">'
     +(S.color?(S.matType==="vinyl"?"Marine Vinyl":"Berber Carpet")+"  -  "+S.color:"")
@@ -2784,10 +3328,17 @@ const PATTERN_VARIANTS={
   ],
   "Sea Ray|330 Sundancer": [
     {
+      id: "sr330da-gen2",
+      label: "2008-2014 (Gen 2) pattern",
+      years: [2008, 2014],
+      yearNote: "Second-generation 330 Sundancer (35'6\" LOA), fits 2008-2014",
+      img: "patterns/variants/sr330da-gen2.webp"
+    },
+    {
       id: "sr330da-older",
-      label: "1995-1999 older pattern",
+      label: "1995-1999 (Gen 1) older pattern",
       years: [1995, 1999],
-      yearNote: "Original 330 DA pattern, fits 1995-1999",
+      yearNote: "Original 330 DA pattern (35'10\" LOA), fits 1995-1999. Note: no 330 Sundancer was produced 2000-2007.",
       img: "patterns/variants/sr330da-older.jpg"
     }
   ],
@@ -2988,7 +3539,11 @@ function calcAndShow(){
   var sy = sf/9;
   var ups = estUPS(S.zip, sy);
   var base = sy*S.pricePerSY + sy*S_LABOR_SY;
-  var bcPrice = Math.round(base*S_CMC_MULT*S_RET_MULT)+ups;
+  var selPieceCount = 0;
+  if(activePieces){ activePieces.forEach(function(p){ if(S.sel[p.id]) selPieceCount++; }); }
+  else { ALL.forEach(function(id){ if(S.sel[id]) selPieceCount++; }); }
+  var addonsTotal = calcAddonsTotal({pieces:selPieceCount, sqft:sf});
+  var bcPrice = Math.round(base*S_CMC_MULT*S_RET_MULT)+ups+addonsTotal;
   S.price = bcPrice;
 
   /* Update sidebar */
