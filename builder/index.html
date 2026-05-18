@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.62.2]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.64]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -238,7 +238,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.62.2</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.64</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -777,7 +777,46 @@ const PATTERN_IMGS = {
   "Chris-Craft|200": "patterns/chris-craft-200.webp",
   "Chaparral|200": "patterns/chaparral-200.webp",
   "Chaparral|243 Sunesta": "patterns/chaparral-243-sunesta.webp",
-  "Chaparral|285 SSi": "patterns/chaparral-285-ssi.webp"
+  "Chaparral|285 SSi": "patterns/chaparral-285-ssi.webp",
+
+  /* v9.64 - Sea Ray CMC batch (37) */
+  "Sea Ray|190 Sundeck": "patterns/sea-ray-190-sundeck.webp",
+  "Sea Ray|210 SLX": "patterns/sea-ray-210-slx.webp",
+  "Sea Ray|210 SPX": "patterns/sea-ray-210-spx.webp",
+  "Sea Ray|220 Signature": "patterns/sea-ray-220-signature.webp",
+  "Sea Ray|230 Bow Rider": "patterns/sea-ray-230-bow-rider.webp",
+  "Sea Ray|230 Overnighter": "patterns/sea-ray-230-overnighter.webp",
+  "Sea Ray|230 SLX": "patterns/sea-ray-230-slx.webp",
+  "Sea Ray|230 Signature": "patterns/sea-ray-230-signature.webp",
+  "Sea Ray|240 Overnighter": "patterns/sea-ray-240-overnighter.webp",
+  "Sea Ray|245 Weekender": "patterns/sea-ray-245-weekender.webp",
+  "Sea Ray|260 Bow Rider": "patterns/sea-ray-260-bow-rider.webp",
+  "Sea Ray|270 Amberjack": "patterns/sea-ray-270-amberjack.webp",
+  "Sea Ray|270 SDX": "patterns/sea-ray-270-sdx.webp",
+  "Sea Ray|270 Special Edition": "patterns/sea-ray-270-special-edition.webp",
+  "Sea Ray|280 SLX": "patterns/sea-ray-280-slx.webp",
+  "Sea Ray|280 SS": "patterns/sea-ray-280-ss.webp",
+  "Sea Ray|280 Sundeck": "patterns/sea-ray-280-sundeck.webp",
+  "Sea Ray|290 Amberjack": "patterns/sea-ray-290-amberjack.webp",
+  "Sea Ray|290 SS": "patterns/sea-ray-290-ss.webp",
+  "Sea Ray|290 Sundeck": "patterns/sea-ray-290-sundeck.webp",
+  "Sea Ray|290 Sunsport": "patterns/sea-ray-290-sunsport.webp",
+  "Sea Ray|300 Sundeck": "patterns/sea-ray-300-sundeck.webp",
+  "Sea Ray|310 Sunsport": "patterns/sea-ray-310-sunsport.webp",
+  "Sea Ray|330 Express Cruiser": "patterns/sea-ray-330-express-cruiser.webp",
+  "Sea Ray|340 Amberjack": "patterns/sea-ray-340-amberjack.webp",
+  "Sea Ray|360 Sedan Bridge": "patterns/sea-ray-360-sedan-bridge.webp",
+  "Sea Ray|370 Express Cruiser": "patterns/sea-ray-370-express-cruiser.webp",
+  "Sea Ray|400 Sedan Bridge": "patterns/sea-ray-400-sedan-bridge.webp",
+  "Sea Ray|420 Sedan Bridge": "patterns/sea-ray-420-sedan-bridge.webp",
+  "Sea Ray|420 Sundancer": "patterns/sea-ray-420-sundancer.webp",
+  "Sea Ray|440 Sedan Bridge": "patterns/sea-ray-440-sedan-bridge.webp",
+  "Sea Ray|440 Sundancer": "patterns/sea-ray-440-sundancer.webp",
+  "Sea Ray|470 Sedan Bridge": "patterns/sea-ray-470-sedan-bridge.webp",
+  "Sea Ray|480 Motor Yacht": "patterns/sea-ray-480-motor-yacht.webp",
+  "Sea Ray|480 Sedan Bridge": "patterns/sea-ray-480-sedan-bridge.webp",
+  "Sea Ray|500 Sundancer": "patterns/sea-ray-500-sundancer.webp",
+  "Sea Ray|510 Sundancer": "patterns/sea-ray-510-sundancer.webp"
 };
 const PATTERN_FALLBACK={
   "Chaparral|186 SSi":"Chaparral|230 SSi",
@@ -872,7 +911,7 @@ const VINYL_PHOTOS = {
   "vanilla": "assets/swatches/vinyl-vanilla.jpg"
 };
 
-/* -- SWATCH TEXTURE - how it works (v9.62.2) --
+/* -- SWATCH TEXTURE - how it works (v9.64) --
  * The pattern renderer texture-fills pieces using the swatch image path
  * stored in S.swatchSrc. That path is set by selMat() at the moment a colour
  * is picked - the colour card / vinyl grid passes its own swatch path in
@@ -2153,7 +2192,7 @@ const SVG_DEFS={
 
 const MD={
   "Chaparral":{m:["186 SSi","196 SSi","200","200 SSi","204 SSi","210 SSi","215 SS","216 SSI","220 SSI","224 Sunesta","226 SSi","230 SSi","236 SSi","236 Sunesta","243 Sunesta","246 SSi","256 SSi","270 Signature","276 SSi","285 SSi","290 Signature","310 Signature","H2O 21 Sport"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
-  "Sea Ray":{m:["SeaRayder F-14","SeaRayder F-16","175 Sport","180 Sport","185 Sport","185 Fish & Ski","190 Sport","190 SPX","195 Sport","200 Select","200 Sport","200 Sundeck","205 Sport","210 Sundeck","215 Weekender","220 Sundeck","225 Weekender","230 Select","240 Sundancer","240 Sundeck","250 SLX","260 Sundancer","260 Sundeck","270 Sundancer","270 Sundeck","270 SLX","280 Sundancer","290 Bow Rider","290 Sundancer","290 SLX","300 Sundancer","300 SLX","310 Sundancer","320 Sundancer","330 Sundancer","340 Sundancer","350 Sundancer","360 Sundancer","370 Aft Cabin","370 Sundancer","380 Sundancer","390 Sundancer","400 Express Cruiser","420 AC","400 Sundancer","410 Sundancer","450 Sundancer","460 Sundancer","480 Sundancer","540 Sundancer","560 Sedan Bridge"],y:(function(){var a=[];for(var i=0;i<36;i++)a.push((2025-i)+"");return a;})()},
+  "Sea Ray":{m:["175 Sport","180 Sport","185 Fish & Ski","185 Sport","190 Sport","190 SPX","190 Sundeck","195 Sport","200 Select","200 Sport","200 Sundeck","205 Sport","210 SLX","210 SPX","210 Sundeck","215 Weekender","220 Signature","220 Sundeck","225 Weekender","230 Bow Rider","230 Overnighter","230 Select","230 Signature","230 SLX","240 Overnighter","240 Sundancer","240 Sundeck","245 Weekender","250 SLX","260 Bow Rider","260 Sundancer","260 Sundeck","270 Amberjack","270 SDX","270 SLX","270 Special Edition","270 Sundancer","270 Sundeck","280 SLX","280 SS","280 Sundancer","280 Sundeck","290 Amberjack","290 Bow Rider","290 SLX","290 SS","290 Sundancer","290 Sundeck","290 Sunsport","300 SLX","300 Sundancer","300 Sundeck","310 Sundancer","310 Sunsport","320 Sundancer","330 Express Cruiser","330 Sundancer","340 Amberjack","340 Sundancer","350 Sundancer","360 Sedan Bridge","360 Sundancer","370 Aft Cabin","370 Express Cruiser","370 Sundancer","380 Sundancer","390 Sundancer","400 Express Cruiser","400 Sedan Bridge","400 Sundancer","410 Sundancer","420 AC","420 Sedan Bridge","420 Sundancer","440 Sedan Bridge","440 Sundancer","450 Sundancer","460 Sundancer","470 Sedan Bridge","480 Motor Yacht","480 Sedan Bridge","480 Sundancer","500 Sundancer","510 Sundancer","540 Sundancer","560 Sedan Bridge","SeaRayder F-14","SeaRayder F-16"],y:(function(){var a=[];for(var i=0;i<36;i++)a.push((2025-i)+"");return a;})()},
   "Four Winns":{m:["180 Horizon","190 Horizon","200 Horizon","210 Horizon","220 Horizon","240 Horizon","260 Horizon","280 Horizon","190 SS","205 Sundowner","22 Funship","230 Horizon (Port Back-to-Back)","243 Vista","244 Funship","248 Vista","264 Funship","278 Vista","285 Sundowner","288 Vista","298 Vista","310 Horizon","318 Vista","348 Vista","H200 (2005)","H200 (2011)","H210 (2006)","H210 (2012-2014)","H210 SS","H240","S215","V375 Vista"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
   "Cobalt":{m:["190 BR","200","206","210","220","240","250","270","292","A25"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
   "Crownline":{m:["180 BR","190 BR","200 LS","210 CCR","225 BR","240 CR"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
@@ -2174,7 +2213,7 @@ const MD={
 };
 
 
-const CMC_SET=new Set(["Chaparral|186 SSi","Chaparral|196 SSi","Chaparral|204 SSi","Chaparral|210 SSi","Chaparral|215 SS","Chaparral|216 SSI","Chaparral|220 SSI","Chaparral|226 SSi","Chaparral|230 SSi","Chaparral|256 SSi","Chaparral|270 Signature","Chaparral|276 SSi","Chaparral|285 SSi","Chaparral|290 Signature","Sea Ray|175 Sport","Sea Ray|180 Sport","Sea Ray|185 Sport","Sea Ray|190 Sport","Sea Ray|195 Sport","Sea Ray|200 Sport","Sea Ray|200 Select","Sea Ray|205 Sport","Sea Ray|210 Sundeck","Sea Ray|220 Sundeck","Sea Ray|240 Sundancer","Sea Ray|240 Sundeck","Sea Ray|260 Sundancer","Sea Ray|270 Sundancer","Sea Ray|270 Sundeck","Sea Ray|280 Sundancer","Sea Ray|290 Sundancer","Sea Ray|300 Sundancer","Sea Ray|310 Sundancer","Sea Ray|320 Sundancer","Sea Ray|330 Sundancer","Sea Ray|340 Sundancer","Sea Ray|350 Sundancer","Sea Ray|400 Express Cruiser","Sea Ray|420 AC","Sea Ray|400 Sundancer","Sea Ray|460 Sundancer","Sea Ray|480 Sundancer","Rinker|186 Captiva BR","Rinker|192 Captiva BR","Rinker|212 Captiva BR","Rinker|226 Captiva BR","Rinker|23 QX BR","Rinker|232 Captiva BR","Rinker|232 Captiva Cuddy","Rinker|242 FV","Rinker|243 Siesta","Rinker|246 BR","Rinker|250 FV","Rinker|260 EC","Rinker|262 Captiva","Rinker|265 FV","Rinker|270 FV","Rinker|272 Captiva BR","Rinker|272 Captiva Cuddy","Rinker|276 Captiva BR","Rinker|280 EC","Rinker|282 BR","Rinker|282 CC","Rinker|290 FV","Rinker|300 FV EC","Rinker|310 FV","Rinker|312 FV","Rinker|320 FV","Rinker|340 FV","Rinker|342 FV","Rinker|350 FV","Rinker|360 FV","Rinker|370 EC","Rinker|370 EX","Rinker|400 EC","Rinker|410 FV","Hurricane|GS 170","Maxum|2400 SCR","Ebbtide|200 Campione","Caravelle|192 Interceptor","Bayliner|225","Four Winns|260 Horizon","Baja|202 Islander","Chaparral|236 SSi","Chaparral|236 Sunesta","Chris-Craft|Launch 22","Sea Ray|190 SPX","Sea Ray|SeaRayder F-14","Sea Ray|SeaRayder F-16","Sea Ray|260 Sundeck","Sea Ray|360 Sundancer","Sea Ray|370 Sundancer","Sea Ray|380 Sundancer","Sea Ray|390 Sundancer","Sea Ray|410 Sundancer","Chaparral|H2O 21 Sport","Caravelle|212 Interceptor","Four Winns|190 Horizon","Four Winns|210 Horizon","Cobalt|292","Cobalt|A25","Bryant|236","Wellcraft|2600 Martinique","Cruisers Yachts|375 Aft Cabin","Doral|Boca Grande 36","Lund|1775 Adventure","Four Winns|180 Horizon","Four Winns|190 SS","Four Winns|200 Horizon","Four Winns|205 Sundowner","Four Winns|22 Funship","Four Winns|220 Horizon","Four Winns|230 Horizon (Port Back-to-Back)","Four Winns|243 Vista","Four Winns|244 Funship","Four Winns|248 Vista","Four Winns|264 Funship","Four Winns|278 Vista","Four Winns|285 Sundowner","Four Winns|288 Vista","Four Winns|298 Vista","Four Winns|310 Horizon","Four Winns|318 Vista","Four Winns|348 Vista","Four Winns|H200 (2005)","Four Winns|H200 (2011)","Four Winns|H210 (2006)","Four Winns|H210 (2012-2014)","Four Winns|H210 SS","Four Winns|H240","Four Winns|S215","Four Winns|V375 Vista"]);
+const CMC_SET=new Set(["Chaparral|186 SSi","Chaparral|196 SSi","Chaparral|204 SSi","Chaparral|210 SSi","Chaparral|215 SS","Chaparral|216 SSI","Chaparral|220 SSI","Chaparral|226 SSi","Chaparral|230 SSi","Chaparral|256 SSi","Chaparral|270 Signature","Chaparral|276 SSi","Chaparral|285 SSi","Chaparral|290 Signature","Sea Ray|175 Sport","Sea Ray|180 Sport","Sea Ray|185 Sport","Sea Ray|190 Sport","Sea Ray|195 Sport","Sea Ray|200 Sport","Sea Ray|200 Select","Sea Ray|205 Sport","Sea Ray|210 Sundeck","Sea Ray|220 Sundeck","Sea Ray|240 Sundancer","Sea Ray|240 Sundeck","Sea Ray|260 Sundancer","Sea Ray|270 Sundancer","Sea Ray|270 Sundeck","Sea Ray|280 Sundancer","Sea Ray|290 Sundancer","Sea Ray|300 Sundancer","Sea Ray|310 Sundancer","Sea Ray|320 Sundancer","Sea Ray|330 Sundancer","Sea Ray|340 Sundancer","Sea Ray|350 Sundancer","Sea Ray|400 Express Cruiser","Sea Ray|420 AC","Sea Ray|400 Sundancer","Sea Ray|460 Sundancer","Sea Ray|480 Sundancer","Rinker|186 Captiva BR","Rinker|192 Captiva BR","Rinker|212 Captiva BR","Rinker|226 Captiva BR","Rinker|23 QX BR","Rinker|232 Captiva BR","Rinker|232 Captiva Cuddy","Rinker|242 FV","Rinker|243 Siesta","Rinker|246 BR","Rinker|250 FV","Rinker|260 EC","Rinker|262 Captiva","Rinker|265 FV","Rinker|270 FV","Rinker|272 Captiva BR","Rinker|272 Captiva Cuddy","Rinker|276 Captiva BR","Rinker|280 EC","Rinker|282 BR","Rinker|282 CC","Rinker|290 FV","Rinker|300 FV EC","Rinker|310 FV","Rinker|312 FV","Rinker|320 FV","Rinker|340 FV","Rinker|342 FV","Rinker|350 FV","Rinker|360 FV","Rinker|370 EC","Rinker|370 EX","Rinker|400 EC","Rinker|410 FV","Hurricane|GS 170","Maxum|2400 SCR","Ebbtide|200 Campione","Caravelle|192 Interceptor","Bayliner|225","Four Winns|260 Horizon","Baja|202 Islander","Chaparral|236 SSi","Chaparral|236 Sunesta","Chris-Craft|Launch 22","Sea Ray|190 SPX","Sea Ray|SeaRayder F-14","Sea Ray|SeaRayder F-16","Sea Ray|260 Sundeck","Sea Ray|360 Sundancer","Sea Ray|370 Sundancer","Sea Ray|380 Sundancer","Sea Ray|390 Sundancer","Sea Ray|410 Sundancer","Chaparral|H2O 21 Sport","Caravelle|212 Interceptor","Four Winns|190 Horizon","Four Winns|210 Horizon","Cobalt|292","Cobalt|A25","Bryant|236","Wellcraft|2600 Martinique","Cruisers Yachts|375 Aft Cabin","Doral|Boca Grande 36","Lund|1775 Adventure","Four Winns|180 Horizon","Four Winns|190 SS","Four Winns|200 Horizon","Four Winns|205 Sundowner","Four Winns|22 Funship","Four Winns|220 Horizon","Four Winns|230 Horizon (Port Back-to-Back)","Four Winns|243 Vista","Four Winns|244 Funship","Four Winns|248 Vista","Four Winns|264 Funship","Four Winns|278 Vista","Four Winns|285 Sundowner","Four Winns|288 Vista","Four Winns|298 Vista","Four Winns|310 Horizon","Four Winns|318 Vista","Four Winns|348 Vista","Four Winns|H200 (2005)","Four Winns|H200 (2011)","Four Winns|H210 (2006)","Four Winns|H210 (2012-2014)","Four Winns|H210 SS","Four Winns|H240","Four Winns|S215","Four Winns|V375 Vista","Sea Ray|190 Sundeck","Sea Ray|210 SLX","Sea Ray|210 SPX","Sea Ray|220 Signature","Sea Ray|230 Bow Rider","Sea Ray|230 Overnighter","Sea Ray|230 SLX","Sea Ray|230 Signature","Sea Ray|240 Overnighter","Sea Ray|245 Weekender","Sea Ray|260 Bow Rider","Sea Ray|270 Amberjack","Sea Ray|270 SDX","Sea Ray|270 Special Edition","Sea Ray|280 SLX","Sea Ray|280 SS","Sea Ray|280 Sundeck","Sea Ray|290 Amberjack","Sea Ray|290 SS","Sea Ray|290 Sundeck","Sea Ray|290 Sunsport","Sea Ray|300 Sundeck","Sea Ray|310 Sunsport","Sea Ray|330 Express Cruiser","Sea Ray|340 Amberjack","Sea Ray|360 Sedan Bridge","Sea Ray|370 Express Cruiser","Sea Ray|400 Sedan Bridge","Sea Ray|420 Sedan Bridge","Sea Ray|420 Sundancer","Sea Ray|440 Sedan Bridge","Sea Ray|440 Sundancer","Sea Ray|470 Sedan Bridge","Sea Ray|480 Motor Yacht","Sea Ray|480 Sedan Bridge","Sea Ray|500 Sundancer","Sea Ray|510 Sundancer"]);
 
 const CMC_YEARS={
   "Chaparral|186 SSi":[2000,2006],
@@ -2278,7 +2317,46 @@ const CMC_YEARS={
   "Chris-Craft|200":[2000,2010],
   "Chaparral|200":[2001,2003],
   "Chaparral|243 Sunesta":[2002,2002],
-  "Chaparral|285 SSi":[2000,2009]
+  "Chaparral|285 SSi":[2000,2009],
+
+  /* v9.64 - Sea Ray CMC batch */
+  "Sea Ray|190 Sundeck":[1999,2002],
+  "Sea Ray|210 SLX":[2012,2015],
+  "Sea Ray|210 SPX":[2018,2018],
+  "Sea Ray|220 Signature":[1994,1994],
+  "Sea Ray|230 Bow Rider":[2002,2002],
+  "Sea Ray|230 Overnighter":[1997,1999],
+  "Sea Ray|230 SLX":[2011,2016],
+  "Sea Ray|230 Signature":[1996,2000],
+  "Sea Ray|240 Overnighter":[1995,1997],
+  "Sea Ray|245 Weekender":[2000,2001],
+  "Sea Ray|260 Bow Rider":[1997,1997],
+  "Sea Ray|270 Amberjack":[2005,2008],
+  "Sea Ray|270 SDX":[2016,2016],
+  "Sea Ray|270 Special Edition":[1998,1998],
+  "Sea Ray|280 SLX":[2017,2024],
+  "Sea Ray|280 SS":[1999,1999],
+  "Sea Ray|280 Sundeck":[2009,2014],
+  "Sea Ray|290 Amberjack":[2000,2007],
+  "Sea Ray|290 SS":[2004,2008],
+  "Sea Ray|290 Sundeck":[2008,2017],
+  "Sea Ray|290 Sunsport":[2006,2006],
+  "Sea Ray|300 Sundeck":[2011,2013],
+  "Sea Ray|310 Sunsport":[1993,1993],
+  "Sea Ray|330 Express Cruiser":[1999,2000],
+  "Sea Ray|340 Amberjack":[2001,2001],
+  "Sea Ray|360 Sedan Bridge":[2007,2007],
+  "Sea Ray|370 Express Cruiser":[1995,1997],
+  "Sea Ray|400 Sedan Bridge":[2001,2002],
+  "Sea Ray|420 Sedan Bridge":[2004,2004],
+  "Sea Ray|420 Sundancer":[1990,2004],
+  "Sea Ray|440 Sedan Bridge":[2006,2006],
+  "Sea Ray|440 Sundancer":[1994,2008],
+  "Sea Ray|470 Sedan Bridge":[2007,2008],
+  "Sea Ray|480 Motor Yacht":[2005,2005],
+  "Sea Ray|480 Sedan Bridge":[1998,2002],
+  "Sea Ray|500 Sundancer":[1997,2005],
+  "Sea Ray|510 Sundancer":[2000,2001]
 };
 
 const VENDOR_SOURCE={
@@ -2371,7 +2449,46 @@ const VENDOR_SOURCE={
   "Chris-Craft|200":"CMC",
   "Chaparral|200":"CMC",
   "Chaparral|243 Sunesta":"CMC",
-  "Chaparral|285 SSi":"CMC"
+  "Chaparral|285 SSi":"CMC",
+
+  /* v9.64 - Sea Ray CMC batch */
+  "Sea Ray|190 Sundeck":"CMC",
+  "Sea Ray|210 SLX":"CMC",
+  "Sea Ray|210 SPX":"CMC",
+  "Sea Ray|220 Signature":"CMC",
+  "Sea Ray|230 Bow Rider":"CMC",
+  "Sea Ray|230 Overnighter":"CMC",
+  "Sea Ray|230 SLX":"CMC",
+  "Sea Ray|230 Signature":"CMC",
+  "Sea Ray|240 Overnighter":"CMC",
+  "Sea Ray|245 Weekender":"CMC",
+  "Sea Ray|260 Bow Rider":"CMC",
+  "Sea Ray|270 Amberjack":"CMC",
+  "Sea Ray|270 SDX":"CMC",
+  "Sea Ray|270 Special Edition":"CMC",
+  "Sea Ray|280 SLX":"CMC",
+  "Sea Ray|280 SS":"CMC",
+  "Sea Ray|280 Sundeck":"CMC",
+  "Sea Ray|290 Amberjack":"CMC",
+  "Sea Ray|290 SS":"CMC",
+  "Sea Ray|290 Sundeck":"CMC",
+  "Sea Ray|290 Sunsport":"CMC",
+  "Sea Ray|300 Sundeck":"CMC",
+  "Sea Ray|310 Sunsport":"CMC",
+  "Sea Ray|330 Express Cruiser":"CMC",
+  "Sea Ray|340 Amberjack":"CMC",
+  "Sea Ray|360 Sedan Bridge":"CMC",
+  "Sea Ray|370 Express Cruiser":"CMC",
+  "Sea Ray|400 Sedan Bridge":"CMC",
+  "Sea Ray|420 Sedan Bridge":"CMC",
+  "Sea Ray|420 Sundancer":"CMC",
+  "Sea Ray|440 Sedan Bridge":"CMC",
+  "Sea Ray|440 Sundancer":"CMC",
+  "Sea Ray|470 Sedan Bridge":"CMC",
+  "Sea Ray|480 Motor Yacht":"CMC",
+  "Sea Ray|480 Sedan Bridge":"CMC",
+  "Sea Ray|500 Sundancer":"CMC",
+  "Sea Ray|510 Sundancer":"CMC"
 };
 
 
