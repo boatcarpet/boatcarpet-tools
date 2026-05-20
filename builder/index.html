@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.65]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.68]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -239,7 +239,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.65</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.68</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1605,10 +1605,9 @@ const SVG_DEFS={
   "Rinker|186 Captiva BR":{
     svg:'',
     pieces:[
-      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward section",  sf:18},
-      {id:"port",    svgId:"", name:"Port Side",     desc:"Port side panel",  sf:10},
-      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Main floor",       sf:28},
-      {id:"star",    svgId:"", name:"Stbd Side",     desc:"Stbd side panel",  sf:10}
+      {id:"bow",     svgId:"", name:"Bow Walkway",                desc:"Pointed-top bow walkthrough piece",                       sf:7,  numPos:{x:50,y:20}},
+      {id:"locker",  svgId:"", name:"Ski Locker / Storage Hatch", desc:"Center rounded-rectangle locker/hatch cover",             sf:4,  numPos:{x:50,y:60}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",         desc:"Large floor with two seat-post cutouts; full kit body",   sf:37, numPos:{x:25,y:72}}
     ]
   },
   "Rinker|192 Captiva BR":{
@@ -1625,10 +1624,12 @@ const SVG_DEFS={
   "Rinker|212 Captiva BR":{
     svg:'',
     pieces:[
-      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward section",  sf:18},
-      {id:"port",    svgId:"", name:"Port Side",     desc:"Port side panel",  sf:10},
-      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Main floor",       sf:28},
-      {id:"star",    svgId:"", name:"Stbd Side",     desc:"Stbd side panel",  sf:10}
+      {id:"top",     svgId:"", name:"Bow Tip",                    desc:"Small rectangular strip at the very front",               sf:3,  numPos:{x:51,y:12}},
+      {id:"bow",     svgId:"", name:"Bow Walkway",                desc:"Bow walkthrough piece between forward seats",             sf:7,  numPos:{x:51,y:32}},
+      {id:"locker",  svgId:"", name:"Ski Locker / Storage Hatch", desc:"Small hexagonal hatch cover on starboard side",           sf:4,  numPos:{x:72,y:24}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",         desc:"Large irregular floor with two seat-post cutouts",        sf:30, numPos:{x:38,y:62}},
+      {id:"step",    svgId:"", name:"Engine Step",                desc:"Small angled step piece between floor and stern",         sf:6,  numPos:{x:72,y:71}},
+      {id:"stern",   svgId:"", name:"Stern Strip",                desc:"Rectangular aft platform/swim strip",                     sf:10, numPos:{x:75,y:81}}
     ]
   },
   "Rinker|226 Captiva BR":{
@@ -2562,7 +2563,7 @@ const CMC_YEARS={
   "Rinker|350 FV":[1998,2007],
 
   /* v9.65 - Rinker 15-new years (2026-05-19) */
-  "Rinker|186 Captiva BR":[2009,2013],
+  "Rinker|186 Captiva BR":[2010,2015],
   "Rinker|226 Captiva BR":[2006,2011],
   "Rinker|243 Siesta":[2000,2002],
   "Rinker|246 BR":[2010,2012],
@@ -2619,6 +2620,10 @@ const CMC_YEARS={
   "Four Winns|190 Horizon":[1994,2007],
   "Four Winns|210 Horizon":[1994,2008],
   "Rinker|192 Captiva BR":[2006,2010],
+
+  /* v9.68 - Rinker 212 verified (2026-05-20) */
+  "Rinker|212 Captiva BR":[1999,2004],
+
   "Rinker|282 BR":[2003,2006]
 ,
   "Cobalt|292":[1999,2000],
