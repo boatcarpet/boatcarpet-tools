@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1633,10 +1634,12 @@ const SVG_DEFS={
   "Rinker|226 Captiva BR":{
     svg:'',
     pieces:[
-      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward section",  sf:18},
-      {id:"port",    svgId:"", name:"Port Side",     desc:"Port side panel",  sf:10},
-      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Main floor",       sf:28},
-      {id:"star",    svgId:"", name:"Stbd Side",     desc:"Stbd side panel",  sf:10}
+      {id:"bowcap",  svgId:"", name:"Bow Cap",       desc:"Small pointed-top piece at the bow corner",    sf:5,  numPos:{x:21,y:25}},
+      {id:"side",    svgId:"", name:"Side Strip",    desc:"Tall narrow walkway/side piece",               sf:10, numPos:{x:21,y:45}},
+      {id:"stern",   svgId:"", name:"Stern Strip",   desc:"Small stern strip piece",                      sf:5,  numPos:{x:21,y:78}},
+      {id:"bow",     svgId:"", name:"Bow Walkway",   desc:"Top bow piece with anchor cutout",             sf:12, numPos:{x:62,y:17}},
+      {id:"cockpit", svgId:"", name:"Main Floor",    desc:"Large main cockpit floor with two seat-post cutouts", sf:28, numPos:{x:62,y:50}},
+      {id:"step",    svgId:"", name:"Step",          desc:"Bottom step piece below the main floor",       sf:6,  numPos:{x:62,y:78}}
     ]
   },
   "Rinker|23 QX BR":{
@@ -2560,7 +2563,7 @@ const CMC_YEARS={
 
   /* v9.65 - Rinker 15-new years (2026-05-19) */
   "Rinker|186 Captiva BR":[2009,2013],
-  "Rinker|226 Captiva BR":[2004,2008],
+  "Rinker|226 Captiva BR":[2006,2011],
   "Rinker|243 Siesta":[2000,2002],
   "Rinker|246 BR":[2010,2012],
   "Rinker|260 EC":[2008,2013],
@@ -4852,3 +4855,4 @@ function pricingEdit(step){
 
 </script>
 </body>
+
