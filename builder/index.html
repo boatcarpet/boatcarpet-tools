@@ -1613,10 +1613,12 @@ const SVG_DEFS={
   "Rinker|192 Captiva BR":{
     svg:'',
     pieces:[
-      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward section",  sf:18},
-      {id:"port",    svgId:"", name:"Port Side",     desc:"Port side panel",  sf:10},
-      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Main floor",       sf:28},
-      {id:"star",    svgId:"", name:"Stbd Side",     desc:"Stbd side panel",  sf:10}
+      {id:"top",     svgId:"", name:"Bow Tip",                    desc:"Small trapezoid piece at the very front",    sf:3,  numPos:{x:48,y:6}},
+      {id:"bow",     svgId:"", name:"Bow Walkway",                desc:"Pointed-top bow walkthrough piece",          sf:8,  numPos:{x:50,y:18}},
+      {id:"locker",  svgId:"", name:"Ski Locker / Storage Hatch", desc:"Center rectangular locker/hatch cover",      sf:4,  numPos:{x:50,y:32}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",         desc:"Irregular floor with two seat-post cutouts", sf:28, numPos:{x:42,y:55}},
+      {id:"step",    svgId:"", name:"Engine Step",                desc:"Small angled stern step piece",              sf:4,  numPos:{x:67,y:72}},
+      {id:"stern",   svgId:"", name:"Stern Strip",                desc:"Narrow rectangular aft strip",               sf:4,  numPos:{x:67,y:88}}
     ]
   },
   "Rinker|212 Captiva BR":{
@@ -2613,6 +2615,7 @@ const CMC_YEARS={
   "Caravelle|212 Interceptor":[1997,2010],
   "Four Winns|190 Horizon":[1994,2007],
   "Four Winns|210 Horizon":[1994,2008],
+  "Rinker|192 Captiva BR":[2006,2010],
   "Rinker|282 BR":[2003,2006]
 ,
   "Cobalt|292":[1999,2000],
@@ -4849,4 +4852,3 @@ function pricingEdit(step){
 
 </script>
 </body>
-
