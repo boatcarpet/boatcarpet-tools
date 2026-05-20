@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.64]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.65]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -238,7 +238,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.64</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.65</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1086,7 +1086,41 @@ const PATTERN_IMGS = {
   "Formula|400 Super Sport": "patterns/formula-400-super-sport.webp",
   "Formula|41 PC": "patterns/formula-41-pc.webp",
   "Formula|41 PC (alt)": "patterns/formula-41-pc-alt.webp",
-  "Formula|48 Yacht": "patterns/formula-48-yacht.webp"
+  "Formula|48 Yacht": "patterns/formula-48-yacht.webp",
+
+
+  /* v9.65 - Rinker 30-image fix (2026-05-19) */
+  "Rinker|192 Captiva BR": "patterns/rinker-192-captiva-br.webp",
+  "Rinker|212 Captiva BR": "patterns/rinker-212-captiva-br.webp",
+  "Rinker|23 QX BR": "patterns/rinker-23-qx-br.webp",
+  "Rinker|232 Captiva Cuddy": "patterns/rinker-232-captiva-cuddy.webp",
+  "Rinker|242 FV": "patterns/rinker-242-fv.webp",
+  "Rinker|250 FV": "patterns/rinker-250-fv.webp",
+  "Rinker|262 Captiva": "patterns/rinker-262-captiva.webp",
+  "Rinker|272 Captiva BR": "patterns/rinker-272-captiva-br.webp",
+  "Rinker|272 Captiva Cuddy": "patterns/rinker-272-captiva-cuddy.webp",
+  "Rinker|280 EC": "patterns/rinker-280-ec.webp",
+  "Rinker|310 FV": "patterns/rinker-310-fv.webp",
+  "Rinker|320 FV": "patterns/rinker-320-fv.webp",
+  "Rinker|370 EC": "patterns/rinker-370-ec.webp",
+  "Rinker|370 EX": "patterns/rinker-370-ex.webp",
+  "Rinker|400 EC": "patterns/rinker-400-ec.webp",
+  "Rinker|186 Captiva BR": "patterns/rinker-186-captiva-br.webp",
+  "Rinker|226 Captiva BR": "patterns/rinker-226-captiva-br.webp",
+  "Rinker|243 Siesta": "patterns/rinker-243-siesta.webp",
+  "Rinker|246 BR": "patterns/rinker-246-br.webp",
+  "Rinker|260 EC": "patterns/rinker-260-ec.webp",
+  "Rinker|265 FV": "patterns/rinker-265-fv.webp",
+  "Rinker|276 Captiva BR": "patterns/rinker-276-captiva-br.webp",
+  "Rinker|282 CC": "patterns/rinker-282-cc.webp",
+  "Rinker|290 FV": "patterns/rinker-290-fv.webp",
+  "Rinker|300 FV EC": "patterns/rinker-300-fv-ec.webp",
+  "Rinker|312 FV": "patterns/rinker-312-fv.webp",
+  "Rinker|340 FV": "patterns/rinker-340-fv.webp",
+  "Rinker|342 FV": "patterns/rinker-342-fv.webp",
+  "Rinker|360 FV": "patterns/rinker-360-fv.webp",
+  "Rinker|410 FV": "patterns/rinker-410-fv.webp"
+
 };
 const PATTERN_FALLBACK={
   "Chaparral|186 SSi":"Chaparral|230 SSi",
@@ -1111,37 +1145,7 @@ const PATTERN_FALLBACK={
   "Sea Ray|400 Express Cruiser":"Sea Ray|250 SLX",
   "Sea Ray|460 Sundancer":"Sea Ray|250 SLX",
   "Sea Ray|480 Sundancer":"Sea Ray|250 SLX",
-  "Rinker|186 Captiva BR":"Rinker|270 FV",
-  "Rinker|192 Captiva BR": "patterns/rinker-192-captiva-br.webp",
-  "Rinker|212 Captiva BR": "patterns/rinker-212-captiva-br.webp",
-  "Rinker|226 Captiva BR":"Rinker|270 FV",
-  "Rinker|23 QX BR": "patterns/rinker-23-qx-br.webp",
-  "Rinker|232 Captiva Cuddy": "patterns/rinker-232-captiva-cuddy.webp",
-  "Rinker|242 FV": "patterns/rinker-242-fv.webp",
-  "Rinker|243 Siesta":"Rinker|270 FV",
-  "Rinker|246 BR":"Rinker|270 FV",
-  "Rinker|250 FV": "patterns/rinker-250-fv.webp",
-  "Rinker|260 EC":"Rinker|270 FV",
-  "Rinker|262 Captiva": "patterns/rinker-262-captiva.webp",
-  "Rinker|265 FV":"Rinker|270 FV",
-  "Rinker|272 Captiva BR": "patterns/rinker-272-captiva-br.webp",
-  "Rinker|272 Captiva Cuddy": "patterns/rinker-272-captiva-cuddy.webp",
-  "Rinker|276 Captiva BR":"Rinker|270 FV",
-  "Rinker|280 EC": "patterns/rinker-280-ec.webp",
   
-  "Rinker|282 CC":"Rinker|270 FV",
-  "Rinker|290 FV":"Rinker|270 FV",
-  "Rinker|300 FV EC":"Rinker|270 FV",
-  "Rinker|310 FV": "patterns/rinker-310-fv.webp",
-  "Rinker|312 FV":"Rinker|270 FV",
-  "Rinker|320 FV": "patterns/rinker-320-fv.webp",
-  "Rinker|340 FV":"Rinker|270 FV",
-  "Rinker|342 FV":"Rinker|270 FV",
-  "Rinker|360 FV":"Rinker|270 FV",
-  "Rinker|370 EC": "patterns/rinker-370-ec.webp",
-  "Rinker|370 EX": "patterns/rinker-370-ex.webp",
-  "Rinker|400 EC": "patterns/rinker-400-ec.webp",
-  "Rinker|410 FV":"Rinker|270 FV",
   "Chaparral|236 Sunesta":"Chaparral|236 SSi"
 };
 const VINYL_COLORS=[
@@ -2551,6 +2555,23 @@ const CMC_YEARS={
   "Rinker|232 Captiva BR":[1998,2006],
   "Rinker|270 FV":[1999,2006],
   "Rinker|350 FV":[1998,2007],
+
+  /* v9.65 - Rinker 15-new years (2026-05-19) */
+  "Rinker|186 Captiva BR":[2009,2013],
+  "Rinker|226 Captiva BR":[2004,2008],
+  "Rinker|243 Siesta":[2000,2002],
+  "Rinker|246 BR":[2010,2012],
+  "Rinker|260 EC":[2008,2013],
+  "Rinker|265 FV":[1994,1996],
+  "Rinker|276 Captiva BR":[2007,2016],
+  "Rinker|282 CC":[2003,2006],
+  "Rinker|290 FV":[2003,2005],
+  "Rinker|300 FV EC":[2004,2008],
+  "Rinker|312 FV":[2003,2005],
+  "Rinker|340 FV":[2000,2007],
+  "Rinker|342 FV":[2002,2003],
+  "Rinker|360 FV":[2003,2007],
+  "Rinker|410 FV":[2003,2007],
   "Hurricane|GS 170":[2001,2005],
   "Maxum|2400 SCR":[1992,2003],
   "Ebbtide|200 Campione":[2000,2005],
@@ -2950,6 +2971,23 @@ const VENDOR_SOURCE={
   "Rinker|232 Captiva BR":"CMC",
   "Rinker|270 FV":"CMC",
   "Rinker|350 FV":"CMC",
+
+  /* v9.65 - Rinker 15-new (2026-05-19) */
+  "Rinker|186 Captiva BR":"CMC",
+  "Rinker|226 Captiva BR":"CMC",
+  "Rinker|243 Siesta":"CMC",
+  "Rinker|246 BR":"CMC",
+  "Rinker|260 EC":"CMC",
+  "Rinker|265 FV":"CMC",
+  "Rinker|276 Captiva BR":"CMC",
+  "Rinker|282 CC":"CMC",
+  "Rinker|290 FV":"CMC",
+  "Rinker|300 FV EC":"CMC",
+  "Rinker|312 FV":"CMC",
+  "Rinker|340 FV":"CMC",
+  "Rinker|342 FV":"CMC",
+  "Rinker|360 FV":"CMC",
+  "Rinker|410 FV":"CMC",
   "Caravelle|192 Interceptor":"Matworks",
   "Bayliner|225":"Matworks",
   "Four Winns|260 Horizon":"Matworks",
