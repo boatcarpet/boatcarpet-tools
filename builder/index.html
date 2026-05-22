@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.71]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.72]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -239,7 +239,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.71</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.72</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -2063,8 +2063,10 @@ const SVG_DEFS={
   "Sea Ray|270 Sundeck":{
     svg:'',
     pieces:[
-      {id:"bow",     svgId:"", name:"Bow / Forward Cockpit", desc:"Top T-shape forward area",          sf:24, numPos:{x:50,y:30}},
-      {id:"cockpit", svgId:"", name:"Aft Cockpit Floor",     desc:"Bottom L-shape aft cockpit floor",  sf:30, numPos:{x:50,y:75}}
+      {id:"bow",     svgId:"", name:"Bow",          desc:"Forward T-shape walkway",          sf:18, numPos:{x:50,y:18}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor",desc:"Helm-area floor below the bow",    sf:26, numPos:{x:50,y:38}},
+      {id:"locker",  svgId:"", name:"Locker",       desc:"Ski-locker / engine hatch cover",  sf:6,  numPos:{x:50,y:55}},
+      {id:"rear",    svgId:"", name:"Aft Seating",  desc:"Aft U-lounge / stern seating floor",sf:24, numPos:{x:50,y:80}}
     ]
   },
   "Sea Ray|280 Sundancer":{
@@ -2629,7 +2631,7 @@ const CMC_YEARS={
   "Sea Ray|240 Sundancer":[1996,2013],
   "Sea Ray|240 Sundeck":[2004,2014],
   "Sea Ray|260 Sundancer":[2003,2010],
-  "Sea Ray|270 Sundeck":[2014,2021],
+  "Sea Ray|270 Sundeck":[2015,2021],
   "Sea Ray|280 Sundancer":[2010,2016],
   "Sea Ray|320 Sundancer":[2003,2008],
   "Sea Ray|330 Sundancer":[2015,2017],
