@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.68]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.69]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -239,7 +239,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.68</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.69</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -702,6 +702,7 @@ const PATTERN_IMGS = {
   "Sea Ray|240 Sundeck": "patterns/sea-ray-240-sundeck.webp",
   "Sea Ray|260 Sundancer": "patterns/sea-ray-260-sundancer.webp",
   "Sea Ray|270 Sundeck": "patterns/sea-ray-270-sundeck.webp",
+  "Sea Ray|280 Sundancer": "patterns/sea-ray-280-sundancer.webp",
   "Sea Ray|320 Sundancer": "patterns/sea-ray-320-sundancer.webp",
   "Sea Ray|330 Sundancer": "patterns/sea-ray-330-sundancer.webp",
   "Sea Ray|340 Sundancer": "patterns/sea-ray-340-sundancer.webp",
@@ -1139,7 +1140,6 @@ const PATTERN_FALLBACK={
   "Sea Ray|205 Sport":"Sea Ray|250 SLX",
   "Sea Ray|210 Sundeck":"Sea Ray|250 SLX",
   "Sea Ray|270 Sundancer":"Sea Ray|250 SLX",
-  "Sea Ray|280 Sundancer":"Sea Ray|250 SLX",
   "Sea Ray|290 Sundancer":"Sea Ray|250 SLX",
   "Sea Ray|300 Sundancer":"Sea Ray|250 SLX",
   "Sea Ray|310 Sundancer":"Sea Ray|250 SLX",
@@ -2042,8 +2042,7 @@ const SVG_DEFS={
   "Sea Ray|280 Sundancer":{
     svg:'',
     pieces:[
-      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:38},
-      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:28}
+      {id:"main", svgId:"", name:"Cabin & Cockpit Floor", desc:"Single L-shape one-piece floor with seat post cutout", sf:80, numPos:{x:46,y:40}}
     ]
   },
   "Sea Ray|290 Sundancer":{
@@ -2602,6 +2601,7 @@ const CMC_YEARS={
   "Sea Ray|240 Sundeck":[2004,2014],
   "Sea Ray|260 Sundancer":[2003,2010],
   "Sea Ray|270 Sundeck":[2014,2021],
+  "Sea Ray|280 Sundancer":[2010,2016],
   "Sea Ray|320 Sundancer":[2003,2008],
   "Sea Ray|330 Sundancer":[2015,2017],
   "Sea Ray|340 Sundancer":[1999,2003],
@@ -3019,6 +3019,7 @@ const VENDOR_SOURCE={
   "Sea Ray|240 Sundeck":"CMC",
   "Sea Ray|260 Sundancer":"CMC",
   "Sea Ray|270 Sundeck":"CMC",
+  "Sea Ray|280 Sundancer":"CMC",
   "Sea Ray|320 Sundancer":"CMC",
   "Sea Ray|330 Sundancer":"CMC",
   "Sea Ray|340 Sundancer":"CMC",
