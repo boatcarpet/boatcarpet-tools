@@ -1222,6 +1222,34 @@ const VINYL_PHOTOS = {
 const PATTERN_PIECES = {
 };
 
+/* PIECE_OPTIONS - per-piece factory options (table hole, ski locker, hatch ring, etc.)
+   Top-level keyed by "Make|Model".  Each piece id maps to an array of options.
+   Each option has: id, label, sfDelta (vs base piece sf), desc.
+   No isDefault - customer must explicitly choose.
+   For PATTERN_VARIANTS patterns, options live inside each variant's pieceOptions field;
+   this top-level table is the fallback for non-variant patterns.
+   See PIECE_OPTIONS_SPEC.md v0.2 for full design. */
+const PIECE_OPTIONS = {
+  /* Empty until first pattern's options are verified.  v9.71 ships the mechanism only. */
+};
+
+/* getPieceOptionsFor - single read path for piece-options lookup.
+   1. Active variant's pieceOptions[pieceId]  (if a variant is selected)
+   2. Top-level PIECE_OPTIONS[key][pieceId]   (for non-variant patterns)
+   3. null  (no options on this piece - today's default behavior) */
+function getPieceOptionsFor(pieceId){
+  if(!pieceId||!S.make||!S.model) return null;
+  const k=S.make+"|"+S.model;
+  /* Variant-scoped options take precedence */
+  if(S.selectedVariant&&typeof PATTERN_VARIANTS!=="undefined"&&PATTERN_VARIANTS[k]){
+    const v=PATTERN_VARIANTS[k].find(function(v){return v.id===S.selectedVariant;});
+    if(v&&v.pieceOptions&&v.pieceOptions[pieceId]) return v.pieceOptions[pieceId];
+  }
+  /* Top-level fallback */
+  if(PIECE_OPTIONS[k]&&PIECE_OPTIONS[k][pieceId]) return PIECE_OPTIONS[k][pieceId];
+  return null;
+}
+
 
 /* -- PIECES per model -- */
 const PIECES={
@@ -3401,7 +3429,7 @@ const BINDING_COLORS=[
 ];
 
 let S={make:"",year:"",model:"",sel:{},
-  "Caravelle":{y:["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["192 Interceptor","212 Interceptor"]},matType:"berber",color:"",colorHex:"",swatchSrc:null,pricePerSY:17.50,zip:"",price:0,isProbable:false,binding:{custom:false,color:"",hex:"",upcharge:0},addons:[],patternConfirmed:false,selectedVariantImg:null,selectedVariant:"",selectedVariantLabel:"",selectedVariantPieces:null,selectedVariantPieceDefs:null};
+  "Caravelle":{y:["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["192 Interceptor","212 Interceptor"]},matType:"berber",color:"",colorHex:"",swatchSrc:null,pricePerSY:17.50,zip:"",price:0,isProbable:false,binding:{custom:false,color:"",hex:"",upcharge:0},addons:[],patternConfirmed:false,selectedVariantImg:null,selectedVariant:"",selectedVariantLabel:"",selectedVariantPieces:null,selectedVariantPieceDefs:null,pieceOptions:{}};
 let curDef=null;
 
 /* -- AUTO FILL -- */
@@ -3506,7 +3534,7 @@ function hideYearHelp(){
 function sniff(){
   /* If make/model/year changed, reset pattern confirmation */
   if(S.make!==g("make").value||S.model!==g("model").value||S.year!==g("year").value){
-    S.patternConfirmed=false;S.isProbable=false;S.selectedVariantImg=null;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;
+    S.patternConfirmed=false;S.isProbable=false;S.selectedVariantImg=null;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;S.pieceOptions={};
   }
   S.make=g("make").value;S.year=g("year").value;S.model=g("model").value;
   g("vq").style.display="none";g("nopat").style.display="none";g("prob-warn").style.display="none";
@@ -3731,6 +3759,10 @@ function tp(id){
   if(!id)return;
   S.sel[id]=!S.sel[id];
   const on=!!S.sel[id];
+  /* When deselecting a piece, clear its option choice so re-select starts fresh */
+  if(!on&&S.pieceOptions&&S.pieceOptions[id]){
+    delete S.pieceOptions[id];
+  }
   syncPieceVisual(id,on);
   updateKitBadge();updSidebar();
 }
@@ -3784,6 +3816,7 @@ function clearAll(){
   const ids=activeP3?activeP3.map(function(p){return p.id;}):ALL;
   ids.forEach(function(id){S.sel[id]=false;syncPieceVisual(id,false);});
   ALL.forEach(function(id){S.sel[id]=false;});
+  S.pieceOptions={};
   buildPieceList();updateKitBadge();updSidebar();
 }
 
