@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v9.87]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v9.88]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -239,7 +239,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.87</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v9.88</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -3004,7 +3004,36 @@ const SVG_DEFS={
     {id:"bow_cushion",svgId:"",name:"Bow Cushion Area",desc:"Small rounded piece at the bow",sf:4,numPos:{x:51,y:14}},
     {id:"walkthru_pad",svgId:"",name:"Walk-Through Pad",desc:"Pad between bow and cockpit",sf:10,numPos:{x:51,y:29}},
     {id:"main_floor",svgId:"",name:"Main Cockpit Floor",desc:"Large L-shaped floor with two seat post cutouts",sf:36,numPos:{x:47,y:58}}
-  ]}
+  ]},
+  /* v9.88 - Regal 28 SVG_DEFS (2026-05-24) */
+  "Regal|1900 Bow Rider":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:12},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:28},{id:"step",svgId:"",name:"Engine Step",desc:"Engine hatch and step area",sf:6}]},
+  "Regal|2000":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:12},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:30},{id:"step",svgId:"",name:"Engine Step",desc:"Engine hatch and step area",sf:6}]},
+  "Regal|2100 RS":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:13},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:30},{id:"step",svgId:"",name:"Engine Step",desc:"Engine hatch and step area",sf:7}]},
+  "Regal|23":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:15},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:8},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:30},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:8}]},
+  "Regal|2400 Bow Rider":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:16},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:8},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:32},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:8}]},
+  "Regal|2500":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:17},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:9},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:31},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:9}]},
+  "Regal|2520":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:17},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:9},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:32},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:9}]},
+  "Regal|2600 LSR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:17},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:9},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:34},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:9}]},
+  "Regal|2220 Fasdeck":{svg:'',pieces:[{id:"aisle",svgId:"",name:"Bow Walkway / Aisle",desc:"Center walkway and bow aisle area",sf:14},{id:"stbd_helm",svgId:"",name:"Starboard Helm Floor",desc:"Starboard helm and driver area",sf:20},{id:"port_floor",svgId:"",name:"Port Cockpit Floor",desc:"Port side seating and floor area",sf:18},{id:"aft",svgId:"",name:"Aft / Stern Section",desc:"Aft deck and stern carpet area",sf:15}]},
+  "Regal|24 Fasdeck":{svg:'',pieces:[{id:"aisle",svgId:"",name:"Bow Walkway / Aisle",desc:"Center walkway and bow aisle area",sf:15},{id:"stbd_helm",svgId:"",name:"Starboard Helm Floor",desc:"Starboard helm and driver area",sf:22},{id:"port_floor",svgId:"",name:"Port Cockpit Floor",desc:"Port side seating and floor area",sf:19},{id:"aft",svgId:"",name:"Aft / Stern Section",desc:"Aft deck and stern carpet area",sf:16}]},
+  "Regal|27 Fasdeck RX":{svg:'',pieces:[{id:"aisle",svgId:"",name:"Bow Walkway / Aisle",desc:"Center walkway and bow aisle area",sf:17},{id:"stbd_helm",svgId:"",name:"Starboard Helm Floor",desc:"Starboard helm and driver area",sf:24},{id:"port_floor",svgId:"",name:"Port Cockpit Floor",desc:"Port side seating and floor area",sf:22},{id:"aft",svgId:"",name:"Aft / Stern Section",desc:"Aft deck and stern carpet area",sf:18}]},
+  "Regal|2565 Window Express":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:21},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:41},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:17}]},
+  "Regal|2570":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:21},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:41},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:18}]},
+  "Regal|2760 Commodore":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:22},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:45},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:19}]},
+  "Regal|2860 Commodore":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:23},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:46},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:20}]},
+  "Regal|3060 Express":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:24},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:48},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:20}]},
+  "Regal|3260":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:25},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:51},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:22}]},
+  "Regal|33 SAV":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:26},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:51},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:22}]},
+  "Regal|3360 Express":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:26},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:53},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:22}]},
+  "Regal|35 Sport Coupe":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:27},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:55},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:23}]},
+  "Regal|3550 Sport Coupe":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:28},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:55},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:24}]},
+  "Regal|3560":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:28},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:55},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:24}]},
+  "Regal|3860":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:32},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:62},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:26}]},
+  "Regal|4160":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:35},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:66},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:28}]},
+  "Regal|42 Sport Coupe":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:35},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:66},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:29}]},
+  "Regal|4260":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:36},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:67},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:29}]},
+  "Regal|4460 Sport Yacht":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:37},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:71},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:30}]},
+  "Regal|46 Sport Coupe":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin or bow carpet area",sf:39},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:73},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:31}]}
 };
 
 const MD={
