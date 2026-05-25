@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.02]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.03]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -34,8 +34,9 @@ header{background:var(--navy);color:#fff;padding:0 24px;height:54px;display:flex
 .sidebar{background:#fff;padding:18px 20px;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto}
 @media(max-width:820px){.layout{grid-template-columns:1fr}.sidebar{border-top:1px solid var(--border);position:static}}
 .panel{display:none}.panel.active{display:block}
-.sec-lbl{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.sec-lbl{font-size:22px;font-weight:700;letter-spacing:0;text-transform:none;color:#1a2b3c;margin-bottom:4px}
 .pat-subline{font-size:13px;color:#555;margin:4px 0 16px;line-height:1.5}
+.step-subtitle{font-size:14px;color:#4a5a6a;margin:2px 0 14px;line-height:1.5}
 .card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:16px 18px;margin-bottom:12px}
 .fg{display:grid;gap:12px;margin-bottom:14px}
 .fg3{grid-template-columns:1fr 1fr 1fr}.fg2{grid-template-columns:1fr 1fr}.fg1{grid-template-columns:1fr}
@@ -242,7 +243,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.02</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.03</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -259,6 +260,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <!-- STEP 1: MODEL -->
 <div class="panel active" id="p0">
   <div class="sec-lbl">Find Your Boat's Pattern</div>
+  <p class="step-subtitle">In just a few easy steps — find your boat, select the pieces, choose a color, then get your quote.</p>
   <p class="pat-subline">Browse our expansive library of patterns. If you do not find your pattern, we can still help you — <a href="mailto:info@boatcarpet.com">email us</a> and we can check if we have your pattern on file.</p>
   <div class="card">
     <div id="af-alert" class="alert as" style="display:none"><span>✓</span><span>Auto-filled from your form — review and adjust if needed.</span></div>
