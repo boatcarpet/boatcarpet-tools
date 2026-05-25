@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.10]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.11]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -93,7 +93,13 @@ textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-rad
 /* ══ COLOR ══ */
 .csec-hd{font-size:13px;font-weight:700;color:var(--navy);margin:14px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px;}
 
-.berber-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;}
+.berber-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0;}
+.berber-wrap{display:flex;gap:16px;align-items:flex-start;margin-bottom:10px;}
+.berber-features{flex:1;min-width:0;}
+.berber-features ul{margin:0;padding:0;list-style:none;}
+.berber-features li{font-size:12px;color:var(--navy);padding:3px 0;display:flex;align-items:flex-start;gap:5px;}
+.berber-features li::before{content:"✔";color:#2a7a2a;font-size:11px;flex-shrink:0;margin-top:1px;}
+.berber-features .bf-link{color:var(--blue);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;font-size:12px;}
 .cc{border:2.5px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;transition:border-color .15s,box-shadow .15s;user-select:none;}
 .cc:hover{border-color:#7ab5d9;}
 .cc.sel{border-color:var(--blue);box-shadow:0 4px 20px rgba(26,122,191,.18);}
@@ -247,7 +253,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.10</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.11</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -459,15 +465,26 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
   <div class="sec-lbl">Choose Your Material &amp; Color</div>
   <div class="card">
     <div class="csec-hd">Berber Carpet</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">UV resistant, action-back, snap-in fit. Made in the USA.</p>
-    <div class="berber-grid">
-      <div class="cc" id="co-o" onclick="selMat('Oatmeal','berber','#ada59a',17.50,'co-o','assets/swatches/oatmeal-berber.jpg')">
-        <img src="assets/swatches/oatmeal-berber.jpg" alt="Oatmeal Berber">
-        <div class="cc-body"><div><div class="cname">Oatmeal</div><div class="cdesc">Warm tan/cream · Classic</div></div><div class="cchk">✓</div></div>
+    <div class="berber-wrap">
+      <div class="berber-grid">
+        <div class="cc" id="co-o" onclick="selMat('Oatmeal','berber','#ada59a',17.50,'co-o','assets/swatches/oatmeal-berber.jpg')">
+          <img src="assets/swatches/oatmeal-berber.jpg" alt="Oatmeal Berber">
+          <div class="cc-body"><div><div class="cname">Oatmeal</div><div class="cdesc">Warm tan/cream</div></div><div class="cchk">✓</div></div>
+        </div>
+        <div class="cc" id="co-g" onclick="selMat('Gray','berber','#64676c',17.50,'co-g','assets/swatches/gray-berber.jpg')">
+          <img src="assets/swatches/gray-berber.jpg" alt="Gray Berber">
+          <div class="cc-body"><div><div class="cname">Gray</div><div class="cdesc">Medium gray</div></div><div class="cchk">✓</div></div>
+        </div>
       </div>
-      <div class="cc" id="co-g" onclick="selMat('Gray','berber','#64676c',17.50,'co-g','assets/swatches/gray-berber.jpg')">
-        <img src="assets/swatches/gray-berber.jpg" alt="Gray Berber">
-        <div class="cc-body"><div><div class="cname">Gray</div><div class="cdesc">Cool medium gray · Modern</div></div><div class="cchk">✓</div></div>
+      <div class="berber-features">
+        <ul>
+          <li>Made in the USA</li>
+          <li>UV resistant</li>
+          <li>Action-back</li>
+          <li>Snap-in fit</li>
+          <li>Bound with matching binding</li>
+          <li><button class="bf-link" onclick="document.getElementById('bindToggle').click()">Or bound with a different color</button></li>
+        </ul>
       </div>
     </div>
     <div class="csec-hd" style="margin-top:20px">Marine Vinyl</div>
