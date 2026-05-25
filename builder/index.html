@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.03]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.04]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -36,7 +36,7 @@ header{background:var(--navy);color:#fff;padding:0 24px;height:54px;display:flex
 .panel{display:none}.panel.active{display:block}
 .sec-lbl{font-size:22px;font-weight:700;letter-spacing:0;text-transform:none;color:#1a2b3c;margin-bottom:4px}
 .pat-subline{font-size:13px;color:#555;margin:4px 0 16px;line-height:1.5}
-.step-subtitle{font-size:14px;color:#4a5a6a;margin:2px 0 14px;line-height:1.5}
+.step-subtitle{font-size:16px;color:#4a5a6a;margin:8px 0 10px;line-height:1.5}
 .card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:16px 18px;margin-bottom:12px}
 .fg{display:grid;gap:12px;margin-bottom:14px}
 .fg3{grid-template-columns:1fr 1fr 1fr}.fg2{grid-template-columns:1fr 1fr}.fg1{grid-template-columns:1fr}
@@ -180,8 +180,8 @@ hr.div{border:none;border-top:1px solid var(--border);margin:16px 0;}
 .pl-item:last-child{border-bottom:none;}
 .plchk{width:20px;height:20px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .plchk svg{width:11px;height:11px;fill:#fff;}
-.nopat{background:#fffbf0;border:1.5px solid #f5d87a;border-radius:9px;padding:18px;margin-top:14px;}
-.nopat h3{font-size:13px;font-weight:700;color:#6b4800;margin-bottom:8px;}
+.nopat{background:#fffbf0;border:1.5px solid #f5d87a;border-radius:7px;padding:10px 14px;margin-top:10px;}
+.nopat h3{font-size:12px;font-weight:700;color:#6b4800;margin-bottom:4px;}
 .nopat-mini{font-size:11px;color:#888;margin-top:10px;text-align:center;padding:2px 0 8px;}
 .nopat-mini a{color:#888;text-decoration:underline;}
 #toast{position:fixed;bottom:18px;right:18px;background:var(--navy);color:#fff;padding:11px 17px;border-radius:8px;font-size:13px;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.28);max-width:300px;line-height:1.5;}
@@ -243,7 +243,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.03</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.04</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -260,8 +260,6 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <!-- STEP 1: MODEL -->
 <div class="panel active" id="p0">
   <div class="sec-lbl">Find Your Boat's Pattern</div>
-  <p class="step-subtitle">In just a few easy steps — find your boat, select the pieces, choose a color, then get your quote.</p>
-  <p class="pat-subline">Browse our expansive library of patterns. If you do not find your pattern, we can still help you — <a href="mailto:info@boatcarpet.com">email us</a> and we can check if we have your pattern on file.</p>
   <div class="card">
     <div id="af-alert" class="alert as" style="display:none"><span>✓</span><span>Auto-filled from your form — review and adjust if needed.</span></div>
     <div class="fg fg3">
@@ -390,7 +388,6 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
       <span id="pb" class="ab" style="display:none">Auto-filled</span>
       <span id="eb" class="ab" style="display:none">Auto-filled</span>
     </div>
-    <p id="nopat-mini" style="display:block">Don't see your boat? <a href="mailto:info@boatcarpet.com">Email us</a> and we'll check if we have your pattern on file.</p>
     <div class="nopat" id="nopat" style="display:none">
       <h3>⚠ Pattern Not Listed</h3>
       <p style="margin:0 0 12px;font-size:13px;color:#555">We may still have your pattern — <a href="mailto:info@boatcarpet.com" style="color:#1a6eb5">email us at info@boatcarpet.com</a> and we'll check. Fill out your details below and we'll get back to you.</p>
@@ -409,6 +406,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
       <div id="np-confirm" class="alert as" style="display:none;margin-top:10px"><span>✓</span><span>Request sent!</span></div>
     </div>
   </div>
+  <p class="step-subtitle">In just a few easy steps — find your boat, select the pieces, choose a color, then get your quote.</p>
   <div class="nav-bar"><div></div><button class="btn-nav bnp" onclick="go(1)">Next: Choose Pieces →</button></div>
 </div>
 
@@ -4382,12 +4380,12 @@ function sniff(){
     S.patternConfirmed=false;S.isProbable=false;S.selectedVariantImg=null;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;S.pieceOptions={};
   }
   S.make=g("make").value;S.year=g("year").value;S.model=g("model").value;
-  g("vq").style.display="none";g("nopat-mini").style.display="block";g("nopat").style.display="none";g("prob-warn").style.display="none";
+  g("vq").style.display="none";g("nopat").style.display="none";g("prob-warn").style.display="none";
   updSidebar();
   if(!S.make||!S.model)return;
   const k=S.make+"|"+S.model,hC=CMC_SET.has(k);
-  if(!hC){g("nopat-mini").style.display="none";g("nopat").style.display="block";if(g("cn").value)g("np-name").value=g("cn").value;showPattern();return}
-  else{g("nopat-mini").style.display="none";g("nopat").style.display="none";}
+  if(!hC){g("nopat").style.display="block";if(g("cn").value)g("np-name").value=g("cn").value;showPattern();return}
+  else{g("nopat").style.display="none";}
 
   /* Check confirmed year range from CMC_YEARS */
   const yr=parseInt(S.year);
