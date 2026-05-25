@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.06]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.07]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -247,7 +247,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.06</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.07</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -4313,7 +4313,7 @@ function updModels(pY,pM){
   if(g("yr-help"))g("yr-help").style.display="none";
   if(g("yr-hint"))g("yr-hint").style.display="none";
   hideYearHelp();
-  if(!MD[mk]){sniff();return;}
+  if(mk==="other"||!MD[mk]){showNotListed(mk);return;}
   /* Populate MODEL dropdown with confirmed vs probable groups */
   const conf=[],prob=[];
   MD[mk].m.forEach(function(m){(CMC_SET.has(mk+"|"+m)?conf:prob).push(m)});
@@ -4324,6 +4324,8 @@ function updModels(pY,pM){
   if(pM){
     for(let o of ms.options)if(o.value.toLowerCase()===pM.toLowerCase()){ms.value=o.value;break}
     if(ms.value)updModelYears(pY);
+  /* Add "not listed" option at bottom of model list */
+  const nlOpt=document.createElement("option");nlOpt.value="not-listed";nlOpt.textContent="❓ My model isn’t listed — get help";ms.appendChild(nlOpt);
   } else {
     sniff();
   }
@@ -4336,6 +4338,7 @@ function updYearModels(pM){
   }
 }
 function updModelYears(pY){
+  const md2=g("model").value;if(md2==="not-listed"){showNotListed(g("make").value);return;}
   const mk=g("make").value,md=g("model").value;
   S.model=md;
   const ys=g("year");
@@ -4375,6 +4378,20 @@ function hideYearHelp(){
   const m=g("year-help-msg");
   if(m)m.style.display="none";
 }
+function showNotListed(mk){
+  /* Hide all other status elements */
+  const pw=g("prob-warn");if(pw)pw.style.display="none";
+  const vq=g("vq");if(vq)vq.style.display="none";
+  g("nopat").style.display="block";
+  g("nopat").scrollIntoView({behavior:"smooth",block:"nearest"});
+  /* Pre-fill make in ymm field */
+  const ymm=g("np-ymm");
+  if(ymm&&!ymm.value){
+    const mkLabel=mk&&mk!=="other"?mk+"":" ";
+    ymm.value=mkLabel;
+    ymm.focus();
+  }
+}
 function sniff(){
   /* If make/model/year changed, reset pattern confirmation */
   if(S.make!==g("make").value||S.model!==g("model").value||S.year!==g("year").value){
@@ -4385,8 +4402,7 @@ function sniff(){
   updSidebar();
   if(!S.make||!S.model)return;
   const k=S.make+"|"+S.model,hC=CMC_SET.has(k);
-  if(!hC){g("nopat").style.display="block";if(g("cn").value)g("np-name").value=g("cn").value;showPattern();return}
-  else{g("nopat").style.display="none";}
+  if(!hC){showPattern();return}
 
   /* Check confirmed year range from CMC_YEARS */
   const yr=parseInt(S.year);
