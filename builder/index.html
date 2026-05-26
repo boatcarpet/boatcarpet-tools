@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.19]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.20]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -253,7 +253,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.19</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.20</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -317,8 +317,8 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
       <div>
         <label>Year</label>
         <select id="year" onchange="sniff()"><option value="">— Year —</option></select>
-        <div id="yr-help" style="display:none;font-size:11px;color:#666;margin-top:6px;font-style:italic;line-height:1.5;">Don't see your year? Many boats use the same pattern for multiple years — <a href="#" onclick="event.preventDefault();showYearHelp();" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">see how to verify</a> or call <a href="tel:8882830704" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">888.283.0704</a>.</div>
-        <div id="yr-hint" style="display:none;font-size:10px;color:#b36f00;margin-top:4px;">&#9888; Years marked with &#9888; are outside the confirmed template range but may still fit — we verify before cutting.</div>
+        <div id="yr-help" style="display:none;font-size:11px;color:#666;margin-top:6px;font-style:italic;line-height:1.5;">Don't see your year? Boat makers often use the same cockpit across multiple model years — <a href="#" onclick="event.preventDefault();showYearHelp();" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">see how to verify</a> or call <a href="tel:8882830704" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">888.283.0704</a>.</div>
+        <div id="yr-hint" style="display:none;font-size:10px;color:#b36f00;margin-top:4px;">&#9888; Years marked with &#9888; are outside our confirmed range — but that’s okay. Boat manufacturers often carry the same cockpit design across several model years, so this pattern may still fit your boat.</div>
       </div>
     </div>
     <!-- Trust message — hidden by default, expands when "see how to verify" link is clicked -->
@@ -327,13 +327,13 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
         <div style="font-size:24px;flex-shrink:0;">&#9888;</div>
         <div>
           <div style="font-weight:700;color:#1a2e4a;font-size:14px;margin-bottom:8px;">Your boat may still fit this pattern</div>
-          <div style="font-size:13px;color:#444;line-height:1.6;">Many boat manufacturers use the same cockpit design for several years at a time, so even if your year isn't listed above, the pattern shown often still fits.</div>
+          <div style="font-size:13px;color:#444;line-height:1.6;">Boat manufacturers often carry over the same cockpit design across several model years — so our listed years may not be exact. If the pattern shown looks like your boat, the carpet most likely is correct. To be sure, we can send you measurements to verify.</div>
           <div style="font-weight:700;color:#1a2e4a;font-size:13px;margin:14px 0 6px;">Two ways to verify:</div>
           <ol style="font-size:13px;color:#444;line-height:1.6;padding-left:20px;">
-            <li><strong>Compare visually</strong> — look at the pattern image to the right and compare to your boat's cockpit. If it looks right, it most likely is.</li>
-            <li><strong>Request exact measurements</strong> — we can send you the dimensions to verify the fit yourself before ordering.</li>
+            <li><strong>Compare visually</strong> — look at the pattern image to the right and compare it to your boat’s cockpit layout. If it looks right, it most likely is.</li>
+            <li><strong>Request measurements</strong> — call or message us and we’ll send you the dimensions to verify the fit before ordering.</li>
           </ol>
-          <div style="font-size:13px;color:#444;line-height:1.6;margin-top:12px;">Reply to this page or call <a href="tel:8882830704" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">888.283.0704</a> and we'll send measurements right over.</div>
+          <div style="font-size:13px;color:#444;line-height:1.6;margin-top:12px;">Call us at <a href="tel:8882830704" style="color:#1F6AA5;font-weight:bold;text-decoration:none;">888.283.0704</a> or reply below and we’ll send measurements to verify.</div>
         </div>
       </div>
     </div>
@@ -1385,7 +1385,7 @@ const PIECES={
 const ALL=Object.keys(PIECES);
 
 /* -- SVG DEFS  -  Sea Ray style, pure vector, no photo -- */
-const SVG_DEFS={/* v10.18 - quote modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
+const SVG_DEFS={/* v10.20 - year-range msg modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
   /* v10.14 - remove overlay; label below image always shows year/make/model */
   /* v9.64 - Sea Ray CMC pieces pilot (37) - 14 HIGH from corrected same-series defs, 23 LOW estimates */
   "Sea Ray|190 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:18,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:27,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:11,numPos:{x:50,y:88}}]},
