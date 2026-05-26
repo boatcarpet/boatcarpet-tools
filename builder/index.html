@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.21]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.22]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -253,7 +253,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.21</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.22</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1385,7 +1385,7 @@ const PIECES={
 const ALL=Object.keys(PIECES);
 
 /* -- SVG DEFS  -  Sea Ray style, pure vector, no photo -- */
-const SVG_DEFS={/* v10.21 - brand year fixes modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
+const SVG_DEFS={/* v10.22 - brand year fixes pt2 modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
   /* v10.14 - remove overlay; label below image always shows year/make/model */
   /* v9.64 - Sea Ray CMC pieces pilot (37) - 14 HIGH from corrected same-series defs, 23 LOW estimates */
   "Sea Ray|190 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:18,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:27,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:11,numPos:{x:50,y:88}}]},
@@ -3277,9 +3277,9 @@ const MD={
   "MasterCraft":{m:["X-10","X-14","X-14V","X-2","X-2 (alt)","X-25","X-30","X-30 (alt)","X-35","X-45","X-55","X-STAR","X15"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
   "Maxum":{m:["1800 SR","1900 SR","2000 SR","2100 SD","2100 SR","2400 SCR","2500 SCR","2700 SCR","2900 SCR","3000 SCR","3100 SE","3300 SCR","3500 SCR","3700 SCR","4100 SCA","SCR 2400"],y:["2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999"]},
   "Glastron":{m:["185 GT","205 GT","205 GX","235 GLX","DS 215","GT 200","GX 185 SF","SX 175"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
-  "Wellcraft":{m:["29 Scarab","33 Martinique","2600 Martinique","3200 Martinique","3700 Martinique","Eclipse 2400 SS","Excalibur Sport","Scarab 30"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
+  "Wellcraft":{m:["29 Scarab","33 Martinique","2600 Martinique","3200 Martinique","3700 Martinique","Eclipse 2400 SS","Excalibur Sport","Scarab 30"],y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999"]},
   "Yamaha":{m:["230","240 Limited","AR 210 (2014-2022)","AR 240 (2012)","AR 240/242","AR210"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
-  "Sea Doo":{m:["150 Speedster","210 Challenger SE","210 Wake","230 Challenger SE"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
+  "Sea Doo":{m:["150 Speedster","210 Challenger SE","210 Wake","230 Challenger SE"],y:["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999"]},
   "Regal":{m:["23","24 Fasdeck","27 Fasdeck RX","33 SAV","35 Sport Coupe","42 Sport Coupe","46 Sport Coupe","1900 Bow Rider","2000","2100 RS","2220 Fasdeck","2400 Bow Rider","2500","2520","2565 Window Express","2570","2600 LSR","2760 Commodore","2860 Commodore","3060 Express","3260","3360 Express","3550 Sport Coupe","3560","3860","4160","4260","4460 Sport Yacht"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
   "Baja":{m:["20 Outlaw","25 Outlaw","29 Outlaw","30 Outlaw","33 Outlaw","192 Islander","212 Islander","232","232 Boss","232 Islander","245 Boss","252","260 Cuddy","275","302","Hammer"],y:["2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999"]},
   "Chaparral":{m:["183 SS","186 SSi","190 SSi","196 SSi","200","200 SSi","204 SSi","210 SSi","210 Sunesta","215 SS","216 SSI","216 Sunesta","220 SSI","222 SSi","222 Sunesta","223 Sunesta","224 Extreme","224 Sunesta","226 SSi","230 SSi","232 Sunesta","233 Sunesta","235 SSi","236 SSi","236 Sunesta","240 Signature","243 Sunesta","244 Sunesta","246 SSi","250 Signature","252 Sunesta","253 SSi","254 Sunesta","256 SSi","257 SSX","260 Signature","263 Sunesta","264 Sunesta","265 SSi","270 Signature","275 SSi","276 Signature","276 SSi","280 Signature","285 SSi","287 SSX","290 Signature","300 Signature","307 SSX","310 Signature","320 Signature","327 SSX","330 Signature","350 Signature","2330 Bow Rider","2430 Vortex","H2O 21 Sport","H2O 23 Sport"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
@@ -3287,22 +3287,22 @@ const MD={
   "Four Winns":{m:["180 Horizon","190 Horizon","200 Horizon","210 Horizon","220 Horizon","240 Horizon","260 Horizon","280 Horizon","190 SS","205 Sundowner","22 Funship","230 Horizon (Port Back-to-Back)","243 Vista","244 Funship","248 Vista","264 Funship","278 Vista","285 Sundowner","288 Vista","298 Vista","310 Horizon","318 Vista","348 Vista","H200 (2005)","H200 (2011)","H210 (2006)","H210 (2012-2014)","H210 SS","H240","S215","V375 Vista"],y:(function(){var a=[];for(var i=0;i<26;i++)a.push((2025-i)+"");return a;})()},
   "Cobalt":{m:["190","190 BR","200","200S","206","210","212","220","220 SS","226 Bow Rider","227","232","232 WWS","240","240 Bow Rider","240 Sun Deck","242","250","252","255","260 Sun Deck","262","270","272 Bow Rider","273 Cuddy Cabin","282","292","302","360","A25","A28","R3","R5","R7"],y:(function(){var a=[];for(var i=0;i<28;i++)a.push((2026-i)+"");return a;})()},
   
-  "Ranger Tugs":{y:["2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022"],m:["R 21","R 25","R 26","R 27","R 28","R 29","R 30","R 31"]},"Rinker":{m:["186 Captiva BR", "192 Captiva BR", "212 Captiva BR", "226 Captiva BR", "23 QX BR", "232 Captiva BR", "232 Captiva Cuddy", "242 FV", "243 Siesta", "246 BR", "250 FV", "260 EC", "262 Captiva", "265 FV", "270 FV", "272 Captiva BR", "272 Captiva Cuddy", "276 Captiva BR", "280 EC", "282 BR", "282 CC", "290 FV", "300 FV EC", "310 FV", "312 FV", "320 FV", "340 FV", "342 FV", "350 FV", "360 FV", "370 EC", "370 EX", "400 EC", "410 FV"],y:["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997", "1996", "1995", "1994", "1993", "1992", "1991", "1990"]},
-  "Hurricane":{y:["1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"],m:["GS 170","GS 188","198 Fundeck","201 Fundeck","218 Fundeck","226 Fundeck","228 Fundeck","232 Fundeck","246 Fundeck","Sundeck 185","Sundeck 187","Sundeck 217"]},
-    "Larson":{y:["2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011"],m:["Cabrio 310","Cabrio 274","LXi 248","Senza 206","LXi 228","Cabrio 370","LSI 212","Cabrio 330"]},
+  "Ranger Tugs":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006"],m:["R 21","R 25","R 26","R 27","R 28","R 29","R 30","R 31"]},"Rinker":{m:["186 Captiva BR", "192 Captiva BR", "212 Captiva BR", "226 Captiva BR", "23 QX BR", "232 Captiva BR", "232 Captiva Cuddy", "242 FV", "243 Siesta", "246 BR", "250 FV", "260 EC", "262 Captiva", "265 FV", "270 FV", "272 Captiva BR", "272 Captiva Cuddy", "276 Captiva BR", "280 EC", "282 BR", "282 CC", "290 FV", "300 FV EC", "310 FV", "312 FV", "320 FV", "340 FV", "342 FV", "350 FV", "360 FV", "370 EC", "370 EX", "400 EC", "410 FV"],y:["2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010", "2009", "2008", "2007", "2006", "2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998", "1997", "1996", "1995", "1994", "1993", "1992", "1991", "1990"]},
+  "Hurricane":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996","1995","1994","1993","1992","1991","1990"],m:["GS 170","GS 188","198 Fundeck","201 Fundeck","218 Fundeck","226 Fundeck","228 Fundeck","232 Fundeck","246 Fundeck","Sundeck 185","Sundeck 187","Sundeck 217"]},
+    "Larson":{y:["2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"],m:["Cabrio 310","Cabrio 274","LXi 248","Senza 206","LXi 228","Cabrio 370","LSI 212","Cabrio 330"]},
     "Monterey":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996"],m:["263 Explorer","260 Sport Cruiser","330 Sport Yacht","296 Cruiser","282 Cruiser","220 Explorer","276 Cruiser","214 FS","268 SS","194 FS","264 FS"]},
-  "Ebbtide":{y:["1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011"],m:["170 SE","180 SE","192 SE","200 Campione","210 Campione","210 SE","220 SE","2200 SC","2600 CBR"]},
+  "Ebbtide":{y:["2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996","1995"],m:["170 SE","180 SE","192 SE","200 Campione","210 Campione","210 SE","220 SE","2200 SC","2600 CBR"]},
   "Caravelle":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997"],m:["192 Interceptor","212 Interceptor"]},
   "Chris-Craft":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"],m:["200","Launch 22"]}
 ,
   "Bryant":{m:["236"],y:["2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003"]},
   "Cruisers Yachts":{m:["375 Aft Cabin"],y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002"]},
   
-  "Donzi":{y:["1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["22 ZX","26 ZX","27 ZX","33 Daytona"]},"Doral":{m:["Boca Grande 36"],y:(function(){var a=[];for(var i=0;i<8;i++)a.push((2010-i)+"");return a;})()},
+  "Donzi":{y:["2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996","1995","1994","1993","1992","1991","1990","1989","1988","1987"],m:["22 ZX","26 ZX","27 ZX","33 Daytona"]},"Doral":{m:["Boca Grande 36"],y:["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003"]},
   "Lund":{m:["1775 Adventure"],y:(function(){var a=[];for(var i=0;i<9;i++)a.push((2026-i)+"");return a;})()},
-  "Meridian":{y:["2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012"],m:["341 Bridge","391 SB","408 Bridge"]},
-  "PowerQuest":{y:["1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["280 Silencer","290 Entice","300 Revenge","Ultra LX"]},
-  "Starcraft":{y:["2000","2001","2002","2003","2004","2005","2006","2007"],m:["Aurora 2000"]},
+  "Meridian":{y:["2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002"],m:["341 Bridge","391 SB","408 Bridge"]},
+  "PowerQuest":{y:["2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998","1997","1996","1995","1994","1993","1992","1991","1990"],m:["280 Silencer","290 Entice","300 Revenge","Ultra LX"]},
+  "Starcraft":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"],m:["Aurora 2000"]},
   "Stingray":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000","1999","1998"],m:["215 LR","220 CS","235 CR","250 LR"]},
   "Tiara":{y:["2025","2024","2023","2022","2021","2020","2019","2018","2017","2016","2015","2014","2013","2012","2011","2010","2009","2008","2007","2006","2005","2004","2003","2002","2001","2000"],m:["350 Open","44 Coupe","4300 Sovran","4700 Open"]}
 };
