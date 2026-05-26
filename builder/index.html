@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.14]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.15]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -253,7 +253,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.14</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.15</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -261,8 +261,8 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
   <button class="st active" onclick="go(0)"><div class="snum">1</div><div class="slabel">Model</div></button>
   <button class="st" onclick="go(1)"><div class="snum">2</div><div class="slabel">Pieces</div></button>
   <button class="st" onclick="go(2)"><div class="snum">3</div><div class="slabel">Color</div></button>
-  <button class="st" onclick="go(3)"><div class="snum">4</div><div class="slabel">Pricing</div></button>
-  <button class="st" onclick="go(4)"><div class="snum">5</div><div class="slabel">Order</div></button>
+  <button class="st" onclick="go(3)"><div class="snum">4</div><div class="slabel">Checkout</div></button>
+  <button class="st" onclick="go(4)"><div class="snum">5</div><div class="slabel">Sales Tool</div></button>
 </div>
 <div class="layout">
 <div class="main">
@@ -512,13 +512,12 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 
 <!-- STEP 4: PRICING -->
 <div class="panel" id="p3">
-  <div class="sec-lbl">Review Your Order</div>
+  <div class="sec-lbl">Review &amp; Checkout</div>
 
   <!-- Order Summary Card -->
   <div class="card" style="margin-bottom:14px;">
     <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
-      Here is the carpet you configured. If everything looks right, enter your ZIP and proceed to checkout.
-      Or use the <strong>Edit</strong> buttons below to make changes.
+      Here is the carpet you configured. If everything looks right, click <strong>Add to Cart</strong> to order on BoatCarpet.com, or use the <strong>Edit</strong> buttons below to make changes.
     </div>
 
     <!-- Boat + Pattern -->
@@ -582,9 +581,27 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
     </div>
   </div>
 
+  <!-- Checkout action bar (shown once price is ready) -->
+  <div id="checkout-bar" style="display:none;padding:0 16px 16px 16px;">
+    <div style="background:#f0f8f0;border:2px solid #2a7a2a;border-radius:10px;padding:16px 18px;">
+      <div style="font-size:13px;font-weight:700;color:#1a5c1a;margin-bottom:12px;text-align:center;">
+        ✓ Your carpet is configured &mdash; ready to order!
+      </div>
+      <button id="add-to-cart-btn" onclick="addToCart()" style="width:100%;padding:14px 10px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;cursor:pointer;letter-spacing:.3px;margin-bottom:10px;display:block;text-align:center;">
+        🛒 Add to Cart &nbsp;&mdash;&nbsp; <span id="cart-price-display">$0.00</span>
+      </button>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <button onclick="saveQ()" style="flex:1;padding:10px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">💾 Save Quote</button>
+        <button onclick="copyQ()" style="flex:1;padding:10px;background:#fff;color:#445566;border:2px solid #c0cad4;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">📋 Copy Quote</button>
+        <button onclick="go(4)" style="flex:1;padding:10px;background:#fff;color:#445566;border:2px solid #c0cad4;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">Sales Tool →</button>
+      </div>
+      <div style="text-align:center;font-size:11px;color:#667788;line-height:1.5;">
+        Secure checkout on BoatCarpet.com &nbsp;·&nbsp; Snaps included &nbsp;·&nbsp; Ships approximately 4 weeks
+      </div>
+    </div>
+  </div>
   <div class="nav-bar">
     <button class="btn-nav bno" onclick="go(2)">← Back</button>
-    <button id="rev-proceed-btn" class="btn-nav bnp" onclick="go(4)" style="opacity:0.4;pointer-events:none;">Next: Order →</button>
   </div>
 </div>
 
@@ -592,7 +609,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <!-- STEP 5: ORDER -->
 <div class="panel" id="p4">
   <div class="qhero">
-    <div class="qhl">Your Quote</div>
+    <div class="qhl">Sales Tool</div>
     <div class="qhp" id="qprice">$0.00</div>
     <div class="qhs" id="qsub">Complete steps 1–4 to generate your quote</div>
     <div class="qhd" id="qdetails"></div>
@@ -1370,7 +1387,7 @@ const PIECES={
 const ALL=Object.keys(PIECES);
 
 /* -- SVG DEFS  -  Sea Ray style, pure vector, no photo -- */
-const SVG_DEFS={
+const SVG_DEFS={/* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
   /* v10.14 - remove overlay; label below image always shows year/make/model */
   /* v9.64 - Sea Ray CMC pieces pilot (37) - 14 HIGH from corrected same-series defs, 23 LOW estimates */
   "Sea Ray|190 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:18,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:27,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:11,numPos:{x:50,y:88}}]},
@@ -5254,6 +5271,28 @@ function quoteBody(){
   return{num,txt};
 }
 function submitOrder(){if(!g("on").value||!g("oe").value){toast("Please enter customer name and email.");return}saveQ(true);g("sc-msg").textContent="Order submitted for "+g("on").value+"  -  $"+S.price.toFixed(2);g("sc").style.display="flex";toast("Order submitted!")}
+function addToCart(){
+  /* WooCommerce Product ID for "Custom Snap-In Boat Carpet Kit"
+     Developer: replace PLACEHOLDER_PRODUCT_ID with the real product ID after creating the product */
+  var PRODUCT_ID = 'PLACEHOLDER_PRODUCT_ID';
+  var pieces = (S.sel ? Object.keys(S.sel).filter(function(k){return S.sel[k];}) : []).join(',');
+  var bindingStr = (S.binding && S.binding.custom) ? S.binding.color : 'None';
+  var materialStr = S.matType === 'vinyl' ? 'Marine Vinyl' : 'Berber Carpet';
+  var params = [
+    'add-to-cart=' + PRODUCT_ID,
+    'quantity=1',
+    'carpet_year=' + encodeURIComponent(S.year || ''),
+    'carpet_make=' + encodeURIComponent(S.make || ''),
+    'carpet_model=' + encodeURIComponent(S.model || ''),
+    'carpet_material=' + encodeURIComponent(materialStr),
+    'carpet_color=' + encodeURIComponent(S.color || ''),
+    'carpet_binding=' + encodeURIComponent(bindingStr),
+    'carpet_pieces=' + encodeURIComponent(pieces),
+    'carpet_zip=' + encodeURIComponent(S.zip || ''),
+    'carpet_price=' + encodeURIComponent((S.price || 0).toFixed(2))
+  ];
+  window.open('https://www.boatcarpet.com/cart/?' + params.join('&'), '_blank');
+}
 function dlPDF(){
   var q=quoteBody();
   var k=S.make+"|"+S.model;
@@ -5765,6 +5804,13 @@ function calcAndShow(){
       +(S.color?(S.matType==="vinyl"?"Marine Vinyl":"Berber Carpet")+"  -  "+S.color:"")
       +(S.zip?" \u00b7 Delivered to "+S.zip:"")+"</div>";
   }
+
+  /* Show checkout bar and update cart price display */
+  S.price = bcPrice;
+  var cartBar = g("checkout-bar");
+  var cartPriceEl = g("cart-price-display");
+  if(cartBar) cartBar.style.display = "block";
+  if(cartPriceEl) cartPriceEl.textContent = "$"+bcPrice.toFixed(2);
 }
 
 function pricingEdit(step){
