@@ -5817,12 +5817,11 @@ function pricingEdit(step){
 }
 
 
-/* ── Quote Modal (v10.18) ── */
+/* -- Quote Modal (v10.18) -- */
 function openQuoteModal(){
   if(!S.year||!S.make||!S.model){toast("Please complete all steps first.");return;}
   const modal=g("quote-modal");
   modal.style.display="flex";
-  // Pre-fill name/email/phone from Sales Tool fields if filled
   const pName=g("on")?g("on").value:"";
   const pEmail=g("oe")?g("oe").value:"";
   const pPhone=g("op")?g("op").value:"";
@@ -5842,7 +5841,6 @@ function submitQuoteModal(){
   const notes=(g("qm-notes").value||"").trim();
   if(!name){toast("Please enter your name.");g("qm-name").focus();return;}
   if(!email){toast("Please enter your email.");g("qm-email").focus();return;}
-  // Build material/color note for comments
   const matNote=S.matType==="vinyl"?"DuraVinyl":"Snap-In Berber";
   const colorNote=S.color?S.color+" ":"";
   const k=S.make+"|"+S.model;
@@ -5853,49 +5851,25 @@ function submitQuoteModal(){
     if(activeQP){const pd=activeQP.find(function(p){return p.id===id;});if(pd)return pd.name;}
     return PIECES[id]?PIECES[id].n:id;
   }).join(", ")||"Not selected";
-  const autoComment="Interested in: "+colorNote+matNote+" - Pieces: "+pcs+(notes?"
-"+notes:"");
-  // Format in Paste & Auto-Fill inquiry format
-  const nameParts=name.trim().split(/s+/);
+  const autoComment="Interested in: "+colorNote+matNote+" - Pieces: "+pcs+(notes?"\n"+notes:"");
+  const nameParts=name.trim().split(/\s+/);
   const firstName=nameParts[0]||name;
   const lastName=nameParts.slice(1).join(" ")||"";
   const fullName=lastName?firstName+" "+lastName:firstName;
   const makeLabel=S.make+" Boat Model";
-  const txt="Your Name
-"+fullName+"
-
-Boat Year
-"+S.year+"
-
-Boat Make
-"+S.make+"
-
-"+makeLabel+"
-"+S.model+"
-
-Your Phone
-"+(phone||"Not provided")+"
-
-Your Email Address
-"+email+"
-
-Your Comments/Questions
-"+autoComment;
-  // Copy to clipboard
+  var NL="\n";
+  const txt="Your Name"+NL+fullName+NL+NL+"Boat Year"+NL+S.year+NL+NL+"Boat Make"+NL+S.make+NL+NL+makeLabel+NL+S.model+NL+NL+"Your Phone"+NL+(phone||"Not provided")+NL+NL+"Your Email Address"+NL+email+NL+NL+"Your Comments/Questions"+NL+autoComment;
   function showSuccess(){
     const msg=g("qm-msg");
-    msg.innerHTML="&#x2713; Quote request copied to clipboard!<br><span style='font-size:12px;color:#334455;'>Paste into Business Tools &rsaquo; Paste &amp; Auto-Fill to generate the quote email.</span>";
+    msg.innerHTML='&#x2713; Quote request copied to clipboard!<br><span style="font-size:12px;color:#334455;">Paste into Business Tools &rsaquo; Paste &amp; Auto-Fill to generate the quote email.</span>';
     msg.style.display="block";
-    // Also save to localStorage for reference
     const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");
     saved.unshift({num:qNum(),date:new Date().toLocaleDateString(),name:fullName,boat:S.year+" "+S.make+" "+S.model,color:(colorNote+matNote).trim(),price:S.price.toFixed(2),txt:txt});
     if(saved.length>50)saved.pop();
     localStorage.setItem("bcQ",JSON.stringify(saved));
   }
   if(navigator.clipboard&&window.isSecureContext){
-    navigator.clipboard.writeText(txt).then(showSuccess).catch(function(){
-      fallbackCopy(txt);showSuccess();
-    });
+    navigator.clipboard.writeText(txt).then(showSuccess).catch(function(){fallbackCopy(txt);showSuccess();});
   } else {
     fallbackCopy(txt);showSuccess();
   }
