@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.17]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.18]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -253,7 +253,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.17</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.18</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -590,7 +590,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
         🛒 Add to Cart &nbsp;&mdash;&nbsp; <span id="cart-price-display">$0.00</span>
       </button>
       <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <button onclick="saveQ()" style="flex:1;padding:10px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">💾 Save Quote</button>
+        <button onclick="openQuoteModal()" style="flex:1;padding:10px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">💾 Get a Quote</button>
         <button onclick="copyQ()" style="flex:1;padding:10px;background:#fff;color:#445566;border:2px solid #c0cad4;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">📋 Copy Quote</button>
       </div>
       <div style="text-align:center;font-size:11px;color:#667788;line-height:1.5;">
@@ -1385,7 +1385,7 @@ const PIECES={
 const ALL=Object.keys(PIECES);
 
 /* -- SVG DEFS  -  Sea Ray style, pure vector, no photo -- */
-const SVG_DEFS={/* v10.17 - remove Sales Tool button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
+const SVG_DEFS={/* v10.18 - quote modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
   /* v10.14 - remove overlay; label below image always shows year/make/model */
   /* v9.64 - Sea Ray CMC pieces pilot (37) - 14 HIGH from corrected same-series defs, 23 LOW estimates */
   "Sea Ray|190 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:18,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:27,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:11,numPos:{x:50,y:88}}]},
@@ -5816,6 +5816,124 @@ function pricingEdit(step){
   go(step);
 }
 
+
+/* ── Quote Modal (v10.18) ── */
+function openQuoteModal(){
+  if(!S.year||!S.make||!S.model){toast("Please complete all steps first.");return;}
+  const modal=g("quote-modal");
+  modal.style.display="flex";
+  // Pre-fill name/email/phone from Sales Tool fields if filled
+  const pName=g("on")?g("on").value:"";
+  const pEmail=g("oe")?g("oe").value:"";
+  const pPhone=g("op")?g("op").value:"";
+  if(pName)g("qm-name").value=pName;
+  if(pEmail)g("qm-email").value=pEmail;
+  if(pPhone)g("qm-phone").value=pPhone;
+  g("qm-msg").style.display="none";
+  g("qm-msg").textContent="";
+}
+function closeQuoteModal(){
+  g("quote-modal").style.display="none";
+}
+function submitQuoteModal(){
+  const name=(g("qm-name").value||"").trim();
+  const email=(g("qm-email").value||"").trim();
+  const phone=(g("qm-phone").value||"").trim();
+  const notes=(g("qm-notes").value||"").trim();
+  if(!name){toast("Please enter your name.");g("qm-name").focus();return;}
+  if(!email){toast("Please enter your email.");g("qm-email").focus();return;}
+  // Build material/color note for comments
+  const matNote=S.matType==="vinyl"?"DuraVinyl":"Snap-In Berber";
+  const colorNote=S.color?S.color+" ":"";
+  const k=S.make+"|"+S.model;
+  const def=SVG_DEFS[k];
+  const activeQP=(S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+  const ids=activeQP?activeQP.map(function(p){return p.id;}):ALL;
+  const pcs=ids.filter(function(id){return !!S.sel[id];}).map(function(id){
+    if(activeQP){const pd=activeQP.find(function(p){return p.id===id;});if(pd)return pd.name;}
+    return PIECES[id]?PIECES[id].n:id;
+  }).join(", ")||"Not selected";
+  const autoComment="Interested in: "+colorNote+matNote+" - Pieces: "+pcs+(notes?"
+"+notes:"");
+  // Format in Paste & Auto-Fill inquiry format
+  const nameParts=name.trim().split(/s+/);
+  const firstName=nameParts[0]||name;
+  const lastName=nameParts.slice(1).join(" ")||"";
+  const fullName=lastName?firstName+" "+lastName:firstName;
+  const makeLabel=S.make+" Boat Model";
+  const txt="Your Name
+"+fullName+"
+
+Boat Year
+"+S.year+"
+
+Boat Make
+"+S.make+"
+
+"+makeLabel+"
+"+S.model+"
+
+Your Phone
+"+(phone||"Not provided")+"
+
+Your Email Address
+"+email+"
+
+Your Comments/Questions
+"+autoComment;
+  // Copy to clipboard
+  function showSuccess(){
+    const msg=g("qm-msg");
+    msg.innerHTML="&#x2713; Quote request copied to clipboard!<br><span style='font-size:12px;color:#334455;'>Paste into Business Tools &rsaquo; Paste &amp; Auto-Fill to generate the quote email.</span>";
+    msg.style.display="block";
+    // Also save to localStorage for reference
+    const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");
+    saved.unshift({num:qNum(),date:new Date().toLocaleDateString(),name:fullName,boat:S.year+" "+S.make+" "+S.model,color:(colorNote+matNote).trim(),price:S.price.toFixed(2),txt:txt});
+    if(saved.length>50)saved.pop();
+    localStorage.setItem("bcQ",JSON.stringify(saved));
+  }
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(txt).then(showSuccess).catch(function(){
+      fallbackCopy(txt);showSuccess();
+    });
+  } else {
+    fallbackCopy(txt);showSuccess();
+  }
+}
+function fallbackCopy(txt){
+  const ta=document.createElement("textarea");
+  ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");}catch(e){}
+  document.body.removeChild(ta);
+}
 </script>
+
+<!-- QUOTE REQUEST MODAL -->
+<div id="quote-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:420px;width:92%;box-shadow:0 8px 32px rgba(0,0,0,.25);position:relative;">
+    <button onclick="closeQuoteModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#888;">&#x2715;</button>
+    <div style="font-size:18px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">&#x1F4CB; Request a Quote</div>
+    <div style="font-size:13px;color:#556677;margin-bottom:18px;">We'll prepare your quote and email it within 1 business day.</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Full Name *</label>
+      <input id="qm-name" type="text" placeholder="e.g. James Smith" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Email *</label>
+      <input id="qm-email" type="email" placeholder="e.g. james@email.com" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Phone</label>
+      <input id="qm-phone" type="tel" placeholder="e.g. (937) 470-8146" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
+    </div>
+    <div style="margin-bottom:18px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Comments / Questions</label>
+      <textarea id="qm-notes" rows="2" placeholder="Any additional info..." style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;resize:vertical;"></textarea>
+    </div>
+    <button onclick="submitQuoteModal()" style="width:100%;padding:12px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Send Quote Request</button>
+    <div id="qm-msg" style="display:none;margin-top:14px;padding:12px;background:#f0f8f0;border:1px solid #2a7a2a;border-radius:7px;font-size:13px;color:#1a5c1a;text-align:center;"></div>
+  </div>
+</div>
 </body>
 
