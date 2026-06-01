@@ -4390,6 +4390,44 @@ function updModels(pY,pM){
     for(let o of ys.options)if(o.value===pY){ys.value=o.value;sniff();break}
   }
 }
+function updYearModels(pM){
+  /* Stub kept for autofill backward compatibility */
+  if(pM){
+    const ms=g("model");
+    for(let o of ms.options)if(o.value.toLowerCase()===pM.toLowerCase()){ms.value=o.value;updModelYears();break}
+  }
+}
+function updModelYears(pY){
+  const md2=g("model").value;if(md2==="not-listed"){showNotListed(g("make").value);return;}
+  const mk=g("make").value,md=g("model").value;
+  S.model=md;
+  const ys=g("year");
+  ys.innerHTML='<option value=""> -  Year  - </option>';
+  if(g("yr-help"))g("yr-help").style.display="none";
+  hideYearHelp();
+  if(!mk||!md){sniff();return;}
+  /* Look up year range for this make+model */
+  const key=mk+"|"+md;
+  const range=(typeof CMC_YEARS!=="undefined"&&CMC_YEARS[key])||null;
+  let years=[];
+  if(range&&range.length===2){
+    for(let y=range[1];y>=range[0];y--)years.push(String(y));
+  } else {
+    /* Fallback: full year range from MD */
+    if(MD[mk]&&MD[mk].y){
+      years=MD[mk].y.slice().sort(function(a,b){return Number(b)-Number(a);});
+    }
+  }
+  years.forEach(function(y){const o=document.createElement("option");o.value=y;o.textContent=y;ys.appendChild(o)});
+  /* Show short trust note */
+  if(g("yr-help"))g("yr-help").style.display="block";
+  /* Trigger sniff to show pattern image in sidebar even without Year */
+  sniff();
+  /* Pre-fill year if provided (autofill) */
+  if(pY){
+    for(let o of ys.options)if(o.value===pY){ys.value=o.value;sniff();break}
+  }
+}
 function showYearHelp(){
   const m=g("year-help-msg");
   if(!m)return;
