@@ -397,7 +397,11 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
       <span id="pb" class="ab" style="display:none">Auto-filled</span>
       <span id="eb" class="ab" style="display:none">Auto-filled</span>
     </div>
-    <div class="nopat" id="nopat" style="display:none">
+
+  </div>
+  <p class="step-subtitle">In just a few easy steps — find your boat below, select your carpet pieces, choose a color, and get your instant quote. We have patterns for <strong>hundreds of makes &amp; models</strong> — and we’re adding more all the time.</p>
+  <div class="nav-bar"><div></div><button class="btn-nav bnp" onclick="go(1)">Next: Choose Pieces →</button></div>
+    <div class="nopat" id="nopat">
       <h3>⚠ Don’t see your pattern listed? We may still have it!</h3>
       <p style="font-size:13px;color:#5a4300;margin:0 0 10px 0;line-height:1.5;">We have patterns for hundreds of boats — yours may just not be in our drop-down yet. Fill out the form below and we’ll check right away. <strong>If we have your pattern, great — we’ll get you set up. If not, we can still help you replace your carpet and make your boat look great again.</strong></p>
       <div class="nopat-form-row">
@@ -411,9 +415,6 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
       <button class="btn bp" style="margin-top:4px;width:100%;font-size:14px;padding:10px;" onclick="submitNoPat()">🔍 Check My Pattern &amp; Get Help</button>
       <div id="np-confirm" class="alert as" style="display:none;margin-top:10px"><span>✓</span><span>Request sent! We’ll research your pattern and get back to you shortly.</span></div>
     </div>
-  </div>
-  <p class="step-subtitle">In just a few easy steps — find your boat below, select your carpet pieces, choose a color, and get your instant quote. We have patterns for <strong>hundreds of makes &amp; models</strong> — and we’re adding more all the time.</p>
-  <div class="nav-bar"><div></div><button class="btn-nav bnp" onclick="go(1)">Next: Choose Pieces →</button></div>
 </div>
 
 <!-- STEP 2: PIECES -->
@@ -4360,18 +4361,6 @@ function updModels(pY,pM){
   } else {
     sniff();
   }
-  /* Add "not listed" option at top of model list (after blank placeholder) */
-  const nlOpt=document.createElement("option");nlOpt.value="not-listed";nlOpt.textContent="❓ My model isn’t listed — get help";ms.insertBefore(nlOpt,ms.children[1]||null);
-}
-function updYearModels(pM){
-  /* Stub kept for autofill backward compatibility */
-  if(pM){
-    const ms=g("model");
-    for(let o of ms.options)if(o.value.toLowerCase()===pM.toLowerCase()){ms.value=o.value;updModelYears();break}
-  }
-}
-function updModelYears(pY){
-  const md2=g("model").value;if(md2==="not-listed"){showNotListed(g("make").value);return;}
   const mk=g("make").value,md=g("model").value;
   S.model=md;
   const ys=g("year");
@@ -4415,8 +4404,6 @@ function showNotListed(mk){
   /* Hide all other status elements */
   const pw=g("prob-warn");if(pw)pw.style.display="none";
   const vq=g("vq");if(vq)vq.style.display="none";
-  g("nopat").style.display="block";
-  g("nopat").scrollIntoView({behavior:"smooth",block:"nearest"});
   /* Pre-fill make in ymm field */
   const ymm=g("np-ymm");
   if(ymm&&!ymm.value){
@@ -4431,7 +4418,7 @@ function sniff(){
     S.patternConfirmed=false;S.isProbable=false;S.selectedVariantImg=null;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;S.pieceOptions={};
   }
   S.make=g("make").value;S.year=g("year").value;S.model=g("model").value;
-  g("vq").style.display="none";g("nopat").style.display="none";g("prob-warn").style.display="none";
+  g("vq").style.display="none";g("prob-warn").style.display="none";
   updSidebar();
   if(!S.make||!S.model)return;
   const k=S.make+"|"+S.model,hC=CMC_SET.has(k);
