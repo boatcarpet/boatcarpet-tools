@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.23]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.24]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -253,7 +253,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.23</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.24</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -261,7 +261,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
   <button class="st active" onclick="go(0)"><div class="snum">1</div><div class="slabel">Model</div></button>
   <button class="st" onclick="go(1)"><div class="snum">2</div><div class="slabel">Pieces</div></button>
   <button class="st" onclick="go(2)"><div class="snum">3</div><div class="slabel">Color</div></button>
-  <button class="st" onclick="go(3)"><div class="snum">4</div><div class="slabel">Checkout</div></button>
+  <button class="st" onclick="go(3)"><div class="snum">4</div><div class="slabel">Pricing</div></button>
 </div>
 <div class="layout">
 <div class="main">
@@ -419,6 +419,10 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 
 <!-- STEP 2: PIECES -->
 <div class="panel" id="p1">
+  <div style="display:flex;gap:8px;margin-bottom:12px;padding-top:4px">
+    <button class="btn-sec" onclick="goTo(0)" style="padding:8px 16px">&#8592; Back</button>
+    <button class="btn-pri" style="flex:1" onclick="goTo(2)">Next: Choose Color &#8594;</button>
+  </div>
   <div class="alert ai" id="pattern-msg" style="display:none">
     <span>ℹ</span>
     <div><strong id="pattern-headline"></strong><br>
@@ -462,6 +466,10 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 
 <!-- STEP 3: COLOR -->
 <div class="panel" id="p2">
+  <div style="display:flex;gap:8px;margin-bottom:12px;padding-top:4px">
+    <button class="btn-sec" onclick="goTo(1)" style="padding:8px 16px">&#8592; Back</button>
+    <button class="btn-pri" style="flex:1" onclick="goTo(3)">Next: Pricing &#8594;</button>
+  </div>
   <div class="sec-lbl">Choose Your Material &amp; Color</div>
   <div class="card">
     <div class="csec-hd">Berber Carpet</div>
@@ -512,7 +520,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 
 <!-- STEP 4: PRICING -->
 <div class="panel" id="p3">
-  <div class="sec-lbl">Review &amp; Checkout</div>
+  <div class="sec-lbl">Your Pricing</div>
 
   <!-- Order Summary Card -->
   <div class="card" style="margin-bottom:14px;">
@@ -564,7 +572,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
             oninput="this.value=this.value.replace(/\D/g,'');calcAndShow()"
             style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;font-family:Arial,sans-serif;box-sizing:border-box;">
         </div>
-        <button class="btn bp" onclick="calcAndShow()" style="padding:10px 18px;white-space:nowrap;flex-shrink:0;">Get My Price</button>
+        
       </div>
       <div id="rev-price-result" style="display:none;">
         <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px;">
@@ -592,7 +600,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
       </button>
       <div style="display:flex;gap:8px;margin-bottom:10px;">
         <button onclick="openQuoteModal()" style="flex:1;padding:10px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">💾 Get a Quote</button>
-        <button onclick="copyQ()" style="flex:1;padding:10px;background:#fff;color:#445566;border:2px solid #c0cad4;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">📋 Copy Quote</button>
+        <button onclick="copyQ()" style="flex:1;padding:10px;background:#fff;color:#445566;border:2px solid #c0cad4;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;">📋 Save Quote</button>
       </div>
       <div style="text-align:center;font-size:11px;color:#667788;line-height:1.5;">
         Secure checkout on BoatCarpet.com &nbsp;·&nbsp; Snaps included &nbsp;·&nbsp; Made to order &mdash; tracking info sent when your order ships
@@ -1275,9 +1283,6 @@ const PATTERN_FALLBACK={
   "Chaparral|236 Sunesta":"Chaparral|236 SSi"
 };
 const VINYL_COLORS=[
-  /* ── Berber Carpet ── */
-  {id:"grey-berber",  n:"Grey Berber",     hex:"#9ea89e", type:"berber"},
-  {id:"oatmeal-berber",n:"Oatmeal Berber", hex:"#c8bfa8", type:"berber"},
   /* ── Vinyl ── */
   {id:"ivory-tower",  n:"Ivory Tower",     hex:"#e8e2ce", type:"vinyl"},
   {id:"ivory",        n:"Ivory",           hex:"#ede8d5", type:"vinyl"},
@@ -4584,7 +4589,7 @@ function showPattern(){
     /* Use flex-direction:column so img container and legend stack properly */
     wrap.style.flexDirection='column';
     wrap.innerHTML='<div class="pat-img-container"><img src="'+displayImg+'" style="width:100%;height:auto;display:block;border-radius:6px" alt="'+year+' '+make+' '+model+'">'+overlayHtml+'</div>'
-      +(hasPositions?'<div class="pat-num-legend">&#128205; The numbered circles match the piece list below &mdash; tap a piece to select it.</div>':'');
+      +(hasPositions?'':'');
     if(isFallback){
       if(label)label.textContent=year+' '+make+' '+model;
       wrap.style.opacity="1";
