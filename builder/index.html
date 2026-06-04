@@ -5349,3 +5349,541 @@ function dlPDF(){
     +'.footer{margin-top:24px;padding-top:16px;border-top:1px solid #ddd;font-size:12px;color:#888;}'
     +'@media print{.noprint{display:none}}';
   var h='
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>BoatCarpet Quote #'+q.num+'</title>'
+    +'<style>'+css+'</style></head><body>'
+    +'<h2>BoatCarpet.com</h2>'
+    +'<p style="color:#666;font-size:13px;margin:0">Quote #'+q.num+' &nbsp; '+new Date().toLocaleDateString()+'</p>'
+    +imgBlock
+    +'<table>'
+    +'<tr><td>Customer</td><td>'+custName+'</td></tr>'
+    +'<tr><td>Phone</td><td>'+custPhone+'</td></tr>'
+    +'<tr><td>Email</td><td>'+custEmail+'</td></tr>'
+    +'<tr><td>Boat</td><td>'+S.year+' '+S.make+' '+S.model+'</td></tr>'
+    +'<tr><td>Material</td><td>'+colorSwatch+matLabel+'</td></tr>'
+    +(S.binding&&S.binding.custom&&S.binding.color?'<tr><td>Binding</td><td><span style="display:inline-block;width:16px;height:16px;border-radius:50%;background:'+S.binding.hex+';border:1px solid #ccc;vertical-align:middle;margin-right:6px;"></span>'+S.binding.color+' (+$55)</td></tr>':'')
+    +'<tr><td>Pieces</td><td>'+pieces+'</td></tr>'
+    +'</table>'
+    +'<div class="price">Total: $'+S.price.toFixed(2)+'</div>'
+    +'<p style="font-size:12px;color:#888;">* Shipping not included. Price valid 30 days.</p>'
+    +'<div class="footer">BoatCarpet.com &nbsp; 888.283.0704 &nbsp; info@boatcarpet.com &nbsp; www.boatcarpet.com</div>'
+    +'<br><button class="noprint" onclick="window.print()" style="background:#1a2e4a;color:#fff;border:none;padding:12px 28px;border-radius:7px;font-size:14px;cursor:pointer;margin-top:8px;">Print / Save as PDF</button>'
+    +'</body></html>';
+  var w=window.open("","_blank","width=680,height=820,scrollbars=yes");
+  if(w){w.document.open();w.document.write(h);w.document.close();}
+  else{toast("Popup blocked - please allow popups.");}
+}
+function emailCust(){
+  const e=g("oe").value||g("ce").value;
+  if(!e){toast("Enter customer email first.");return;}
+  const q=quoteBody();
+  const subject=encodeURIComponent("Your BoatCarpet.com Quote - "+S.year+" "+S.make+" "+S.model);
+  const body=encodeURIComponent(q.txt);
+  const mailto="mailto:"+e+"?subject="+subject+"&body="+body;
+  window.open(mailto,"_blank");
+  toast("Opening email client...");
+}
+function emailMe(){
+  const q=quoteBody();
+  const subject=encodeURIComponent("[Quote] "+S.year+" "+S.make+" "+S.model+" - $"+S.price.toFixed(2));
+  const body=encodeURIComponent(q.txt);
+  const mailto="mailto:info@boatcarpet.com?subject="+subject+"&body="+body;
+  window.open(mailto,"_blank");
+  toast("Opening email client...");
+}
+function emailPatternReq(){window.location.href="mailto:info@boatcarpet.com?subject="+encodeURIComponent("Pattern Request: "+S.year+" "+S.make+" "+S.model)+"&body="+encodeURIComponent("Hi, please send the carpet pattern images for my "+S.year+" "+S.make+" "+S.model+". Thank you!")}
+function submitNoPat(){const n=g("np-name").value,e=g("np-email").value;if(!n||!e){toast("Please enter name and email.");return;}const ph=g("np-phone").value,ymm=g("np-ymm").value||S.year+" "+S.make+" "+S.model;window.open("mailto:info@boatcarpet.com?subject=Pattern+Request&body="+encodeURIComponent("Name: "+n+"\nEmail: "+e+"\nPhone: "+ph+"\nBoat: "+ymm+"\nBuilder State: "+S.year+" "+S.make+" "+S.model));g("np-confirm").style.display="flex"}
+function saveQ(silent){const q=quoteBody();const name=g("on").value||g("cn").value||"Unknown";const rec={num:q.num,date:new Date().toLocaleDateString(),name,boat:S.year+" "+S.make+" "+S.model,color:S.color,price:S.price.toFixed(2),txt:q.txt};const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");saved.unshift(rec);if(saved.length>50)saved.pop();localStorage.setItem("bcQ",JSON.stringify(saved));if(!silent)toast("Quote saved!");loadSavedQuotes()}
+function loadSavedQuotes(){const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");const sec=g("savedSection"),list=g("savedList");if(!saved.length){sec.style.display="none";return}sec.style.display="block";list.innerHTML=saved.slice(0,15).map(function(q){return '<div style="display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:var(--blue)">'+q.num+'</span><span style="font-size:11px;color:var(--muted);flex:1">'+q.date+' \u00b7 '+q.name+' \u00b7 '+q.boat+'</span><span style="font-size:12px;font-weight:700">$'+q.price+'</span></div>';}).join("")}
+function copyQ(){
+  const q=quoteBody();
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(q.txt).then(function(){toast("Quote text copied!");});
+  } else {
+    const ta=document.createElement("textarea");
+    ta.value=q.txt;
+    ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");toast("Quote text copied!");}
+    catch(e){toast("Copy failed  -  please copy manually.");}
+    document.body.removeChild(ta);
+  }
+}
+let cur=0;
+function go(n){
+  document.getElementById("p"+cur).classList.remove("active");
+  document.querySelectorAll(".st").forEach(function(b,i){b.classList.remove("active","done");if(i<n)b.classList.add("done");if(i===n)b.classList.add("active")});
+  cur=n;document.getElementById("p"+n).classList.add("active");
+  if(n===1){S.make=g("make").value;S.year=g("year").value;S.model=g("model").value;showPattern();updateKitBadge();}
+  if(n===3)fillPricingReview();if(n===4)fillOrder();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function toast(m){const t=g("toast");t.textContent=m;t.style.display="block";setTimeout(function(){t.style.display="none";},3200)}
+function g(id){return document.getElementById(id)}
+document.addEventListener("DOMContentLoaded",autoFill);
+function showProbPattern(){
+  var k=S.make+"|"+S.model;
+  var boatName=S.year+" "+S.make+" "+S.model;
+  var pboat=g("pw-boat-name");
+  if(pboat)pboat.textContent=boatName;
+  var gallery=g("pw-gallery");
+  if(!gallery){g("pw-state1").style.display="none";g("pw-state2").style.display="block";return;}
+  gallery.innerHTML="";
+  var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:null;
+  if(variants&&variants.length>0){
+    variants.forEach(function(v){
+      if(!v.img)return;
+      var isTest=v.yearNote&&v.yearNote.indexOf("TEST")>-1;
+      var card=document.createElement("div");
+      card.style.cssText="background:#fff;border:2px solid #dde8f0;border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s;";
+      var vImg=v.img;var vId=v.id;var vLbl=v.label;
+      card.innerHTML=(isTest?'<div style="background:#f0a000;color:#fff;font-size:9px;font-weight:700;text-align:center;padding:2px 4px;">TEST ONLY</div>':'')
+        +'<img src="'+vImg+'" style="width:100%;height:auto;display:block;" alt="'+vLbl+'">'
+        +'<div style="padding:8px;">'
+        +'<div style="font-size:11px;font-weight:700;color:#1a2e4a;margin-bottom:3px;">'+vLbl+'</div>'
+        +'<div style="font-size:10px;color:#888;margin-bottom:8px;">'+v.yearNote+'</div>'
+        +'<button class="sel-variant-btn" style="width:100%;background:#1e6e3c;color:#fff;border:none;border-radius:5px;padding:7px 4px;font-size:11px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">This is my pattern</button>'
+        +'</div>';
+      card.querySelector(".sel-variant-btn").addEventListener("click",function(){
+        probPatternYes(vId,vLbl,vImg,v.pieces||null);
+      });
+      card.addEventListener("mouseover",function(){this.style.borderColor="#1a7abf";this.style.boxShadow="0 2px 10px rgba(26,122,191,0.2)";});
+      card.addEventListener("mouseout",function(){this.style.borderColor="#dde8f0";this.style.boxShadow="";});
+      gallery.appendChild(card);
+    });
+  } else {
+    var img=PATTERN_IMGS[k]||null;
+    var lbl="Your exact cut pattern";
+    if(!img){
+      var def=SVG_DEFS[k];
+      if(def&&def.svg&&def.svg.length>50){
+        var svgCard=document.createElement("div");
+        svgCard.style.cssText="background:#fff;border:2px solid #dde8f0;border-radius:8px;overflow:hidden;";
+        svgCard.innerHTML='<div style="padding:8px;">'+def.svg+'</div>'
+          +'<div style="padding:8px;text-align:center;">'
+          +'<button class="sel-svg-btn" style="background:#1e6e3c;color:#fff;border:none;border-radius:5px;padding:8px 16px;font-size:11px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;">This is my pattern</button>'
+          +'</div>';
+        svgCard.querySelector(".sel-svg-btn").addEventListener("click",function(){
+          probPatternYes("single","Pattern for this boat",null,null);
+        });
+        gallery.appendChild(svgCard);
+        g("pw-state1").style.display="none";g("pw-state2").style.display="block";
+        return;
+      }
+      var fbKey=(typeof PATTERN_FALLBACK!=="undefined")&&PATTERN_FALLBACK[k]?PATTERN_FALLBACK[k]:null;
+      img=fbKey?PATTERN_IMGS[fbKey]:null;
+      lbl=img?"Representative pattern from a similar "+S.make+" model":"";
+    }
+    if(img){
+      var sImg=img;var sLbl=lbl;
+      var sCard=document.createElement("div");
+      sCard.style.cssText="background:#fff;border:2px solid #dde8f0;border-radius:8px;overflow:hidden;max-width:280px;margin:0 auto;transition:border-color .15s,box-shadow .15s;cursor:pointer;";
+      sCard.innerHTML='<img src="'+sImg+'" style="width:100%;height:auto;display:block;">'
+        +'<div style="padding:10px;text-align:center;">'
+        +(sLbl?'<div style="font-size:11px;color:#888;margin-bottom:8px;">'+sLbl+'</div>':'')+
+        '<button class="sel-single-btn" style="background:#1e6e3c;color:#fff;border:none;border-radius:5px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;width:100%;">This is my pattern</button>'
+        +'</div>';
+      sCard.querySelector(".sel-single-btn").addEventListener("click",function(){
+        probPatternYes("single",sLbl,sImg,null);
+      });
+      sCard.addEventListener("mouseover",function(){this.style.borderColor="#1a7abf";this.style.boxShadow="0 2px 10px rgba(26,122,191,0.2)";});
+      sCard.addEventListener("mouseout",function(){this.style.borderColor="#dde8f0";this.style.boxShadow="";});
+      gallery.appendChild(sCard)
+    } else {
+      gallery.innerHTML='<div style="padding:20px;text-align:center;color:#888;font-size:13px;">Call us and we will find the right pattern for your boat.<br><br><a href="tel:8882830704" style="color:#1a2e4a;font-weight:700;text-decoration:none;">888.283.0704</a></div>';
+    }
+  }
+  g("pw-state1").style.display="none";
+  g("pw-state2").style.display="block";
+}
+function probPatternYes(variantId, variantLabel, variantImg, variantPieces){
+  S.isProbable=false;
+  S.patternConfirmed=true;
+  S.selectedVariant=variantId||"single";
+  S.selectedVariantLabel=variantLabel||"";
+  S.selectedVariantImg=variantImg||null;
+  g("prob-warn").style.display="none";
+  go(1);
+}
+function probPatternNo(){
+  var boatName=S.year+" "+S.make+" "+S.model;
+  var b2=g("pw-boat-name2");
+  if(b2)b2.textContent=boatName;
+  var nm=g("pw-name");
+  if(nm&&g("cn")&&g("cn").value)nm.value=g("cn").value;
+  g("pw-state2").style.display="none";
+  g("pw-state3").style.display="block";
+}
+function submitProbQuote(){
+  var nm=g("pw-name")?g("pw-name").value.trim():"";
+  var em=g("pw-email")?g("pw-email").value.trim():"";
+  if(!nm||!em){toast("Please enter your name and email.");return;}
+  var ph=g("pw-phone")?g("pw-phone").value.trim():"";
+  var nt=g("pw-notes")?g("pw-notes").value.trim():"";
+  var boatName=S.year+" "+S.make+" "+S.model;
+  var subject=encodeURIComponent("Pattern Research Request: "+boatName);
+  var body=encodeURIComponent("Hi, I need help finding the correct carpet pattern for my "+boatName+".\n\nName: "+nm+"\nEmail: "+em+(ph?"\nPhone: "+ph:"")+(nt?"\n\nNotes: "+nt:"")+"\n\nThank you!");
+  window.open("mailto:info@boatcarpet.com?subject="+subject+"&body="+body,"_blank");
+  var sent=g("pw-sent");
+  if(sent)sent.style.display="block";
+  toast("Request sent!");
+}
+const PATTERN_VARIANTS={
+  "Sea Ray|380 Sundancer": [
+    {
+      id: "sr380da-older",
+      label: "1999-2004 older pattern",
+      years: [1999, 2004],
+      yearNote: "Original 380 DA pattern, fits 1999-2004 (Gen 1)",
+      img: "patterns/variants/sr380da-older.jpg"
+    }
+  ],
+  "Sea Ray|220 Sundeck": [
+    {
+      id: "sr220sd-older",
+      label: "2002-2008 older pattern",
+      years: [2002, 2008],
+      yearNote: "Original Sundeck pattern, fits 2002-2008",
+      pieceDefs: [
+        {id:"bow_left",  name:"Bow Walkway (Left)",  desc:"Small bow piece (left of split)",      sf:6,  numPos:{x:27,y:13}},
+        {id:"bow_right", name:"Bow Walkway (Right)", desc:"Larger bow piece (right of split)",    sf:8,  numPos:{x:54,y:13}},
+        {id:"cockpit",   name:"Main Cockpit Floor",  desc:"Large floor with two seat post cutouts",sf:36, numPos:{x:48,y:65}}
+      ],
+      img: "patterns/variants/sr220sd-older.png"
+    }
+  ],
+  "Sea Ray|240 Sundancer": [
+    {
+      id: "sr240da-older",
+      label: "1996-2004 older pattern",
+      years: [1996, 2004],
+      yearNote: "Pre-2005 layout (port bench), fits 1996-2004",
+      img: "patterns/variants/sr240da-older.jpg"
+    }
+  ],
+  "Sea Ray|240 Sundeck": [
+    {
+      id: "sr240sd-older",
+      label: "2004-2008 older pattern",
+      years: [2004, 2008],
+      yearNote: "First-generation 240 Sundeck (26'4\" LOA with bolt-on swim platform), fits 2004-2008",
+      img: "patterns/variants/sr240sd-older.jpg"
+    }
+  ],
+  "Sea Ray|330 Sundancer": [
+    {
+      id: "sr330da-gen2",
+      label: "2008-2014 (Gen 2) pattern",
+      years: [2008, 2014],
+      yearNote: "Second-generation 330 Sundancer (35'6\" LOA), fits 2008-2014",
+      img: "patterns/variants/sr330da-gen2.webp"
+    },
+    {
+      id: "sr330da-older",
+      label: "1995-1999 (Gen 1) older pattern",
+      years: [1995, 1999],
+      yearNote: "Original 330 DA pattern (35'10\" LOA), fits 1995-1999. Note: no 330 Sundancer was produced 2000-2007.",
+      img: "patterns/variants/sr330da-older.jpg"
+    }
+  ],
+  "Sea Ray|420 AC": [
+    {
+      id: "sr420-a",
+      label: "1998 to 2001 pattern",
+      yearNote: "Confirmed fit for 1997-2002",
+      img: "patterns/variants/sr420-a.jpg"
+    }
+  ],
+  "Baja|202 Islander": [
+    {
+      id: "baja202-a",
+      label: "2003 to 2007 pattern",
+      yearNote: "Confirmed fit for 2003-2007",
+      img: "patterns/variants/baja202-a.jpg"
+    }
+  ],
+  "Ebbtide|200 Campione": [
+    {
+      id: "ebbtide200-a",
+      label: "2000 to 2005 pattern",
+      yearNote: "Confirmed fit for 2000-2005",
+      img: "patterns/variants/ebbtide200-a.jpg"
+    }
+  ],
+  "Hurricane|GS 170": [
+    {
+      id: "hurricane170-a",
+      label: "2001 to 2005 pattern",
+      yearNote: "Confirmed fit for 2001-2005",
+      img: "patterns/variants/hurricane170-a.jpg"
+    }
+  ],
+  "Maxum|2400 SCR": [
+    {
+      id: "maxum2400-a",
+      label: "1992 to 2003 pattern",
+      yearNote: "Confirmed fit for 1992-2003",
+      img: "patterns/variants/maxum2400-a.jpg"
+    }
+  ],
+  "Rinker|232 Captiva BR": [
+    {
+      id: "rinker232-a",
+      label: "1998 to 2006 pattern",
+      yearNote: "Confirmed fit for 1998-2006",
+      img: "patterns/variants/rinker232-a.jpg"
+    }
+  ],
+  "Rinker|270 FV": [
+    {
+      id: "rinker270-a",
+      label: "1998 to 2006 pattern",
+      yearNote: "Confirmed fit for 1998-2006",
+      img: "patterns/variants/rinker270-a.jpg"
+    }
+  ],
+  "Rinker|350 FV": [
+    {
+      id: "rinker350-a",
+      label: "1998 to 2006 pattern",
+      yearNote: "Confirmed fit for 1998-2006",
+      img: "patterns/variants/rinker350-a.jpg"
+    }
+  ],
+  "Caravelle|192 Interceptor": [
+    {
+      id: "caravelle192-a",
+      label: "2006 to 2007 pattern",
+      yearNote: "Confirmed fit for 2006-2007",
+      img: "patterns/variants/caravelle192-a.jpg"
+    }
+  ],
+  "Bayliner|225": [
+    {
+      id: "bayliner225-a",
+      label: "2009 pattern",
+      yearNote: "Confirmed fit for 2009",
+      img: "patterns/variants/bayliner225-a.jpg"
+    }
+  ],
+  "Four Winns|260 Horizon": [
+    {
+      id: "fourwinns260-a",
+      label: "2006 to 2008 pattern",
+      yearNote: "Confirmed fit for 2006-2008",
+      img: "patterns/variants/fourwinns260-a.jpg"
+    }
+  ]
+};
+/* ── PRICING REVIEW PAGE ── */
+function fillPricingReview(){
+  var k = S.make+"|"+S.model;
+  var def = SVG_DEFS[k];
+  var revBoat = g("rev-boat");
+  if(revBoat) revBoat.textContent = (S.year?S.year+" ":"")+(S.make?S.make+" ":"")+(S.model||"");
+  var thumb = g("rev-pattern-thumb");
+  if(thumb){
+    var img = S.selectedVariantImg||(PATTERN_FALLBACK[k]?PATTERN_IMGS[PATTERN_FALLBACK[k]]:null);
+    if(!img&&PATTERN_IMGS[k])img=PATTERN_IMGS[k];
+    if(img){
+      thumb.innerHTML = '<img src="'+img+'" style="width:80px;height:80px;object-fit:contain;border-radius:6px;border:1px solid var(--border);">';
+    } else if(def&&def.svg&&def.svg.length>50){
+      thumb.innerHTML = '<div style="width:80px;height:80px;overflow:hidden;border-radius:6px;border:1px solid var(--border);">'+def.svg+'</div>';
+    } else {
+      thumb.innerHTML = '';
+    }
+  }
+  var patLbl = g("rev-pattern-label");
+  if(patLbl){
+    var lbl = S.selectedVariantLabel||(k in (typeof PATTERN_IMGS!=="undefined"?PATTERN_IMGS:{})?"Exact cut pattern for your boat":"Representative pattern");
+    patLbl.textContent = lbl;
+  }
+  var revPieces = g("rev-pieces");
+  if(revPieces){
+    var selPieces = [];
+    var revActivePieces = (S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+    if(revActivePieces){
+      revActivePieces.forEach(function(p,idx){
+        if(S.sel[p.id]) selPieces.push({num:idx+1, name:p.name, sf:p.sf});
+      });
+    } else {
+      ALL.forEach(function(id,idx){
+        if(S.sel[id]) selPieces.push({num:idx+1, name:PIECES[id].n, sf:PIECES[id].sf});
+      });
+    }
+    if(selPieces.length === 0){
+      revPieces.innerHTML = '<span style="color:#c0392b;font-weight:700;">No pieces selected — go back and select pieces.</span>';
+    } else {
+      revPieces.innerHTML = selPieces.map(function(p){
+        return '<div style="padding:5px 0;border-bottom:1px solid #f0f4f8;">'
+          +'<span style="color:var(--navy);">&#10003; <strong>'+p.num+'.</strong> '+p.name+'</span>'
+          +'</div>';
+      }).join('');
+    }
+  }
+  var revMat = g("rev-material");
+  var revCol = g("rev-color");
+  var revSwatch = g("rev-color-swatch");
+  if(revMat) revMat.textContent = S.matType==="vinyl"?"Marine Vinyl":"Berber Carpet";
+  if(revCol) revCol.textContent = S.color||"No color selected";
+  if(revSwatch){
+    var colorId = S.color ? S.color.toLowerCase().replace(/ /g,"-").replace(/[^a-z0-9-]/g,"") : null;
+    var hasPhoto = typeof VINYL_PHOTOS!=="undefined"&&colorId&&VINYL_PHOTOS[colorId];
+    if(hasPhoto){
+      revSwatch.innerHTML = '<img src="'+VINYL_PHOTOS[colorId]+'" style="width:100%;height:100%;object-fit:cover;">';
+    } else {
+      revSwatch.style.background = S.colorHex||"#ccc";
+    }
+  }
+  var priceResult = g("rev-price-result");
+  if(priceResult) priceResult.style.display = "none";
+  var proceedBtn = g("rev-proceed-btn");
+  if(proceedBtn){ proceedBtn.style.opacity="0.4"; proceedBtn.style.pointerEvents="none"; }
+  if(S.zip){
+    var zipField = g("zip");
+    if(zipField) zipField.value = S.zip;
+    calcAndShow();
+  }
+}
+function calcAndShow(){
+  var zipEl = g("zip");
+  S.zip = zipEl ? zipEl.value.trim() : "";
+  if(!S.zip||S.zip.length<5) return;
+  if(!S.pricePerSY){ toast("Please select a color in Step 3 first."); return; }
+  var sf = 0;
+  var k = S.make+"|"+S.model;
+  var def = SVG_DEFS[k];
+  var activePieces = (S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+  if(activePieces){
+    activePieces.forEach(function(p){ if(S.sel[p.id]) sf+=p.sf; });
+  } else {
+    ALL.forEach(function(id){ if(S.sel[id]) sf+=PIECES[id].sf; });
+  }
+  if(sf===0){ toast("No pieces selected — go back and select pieces."); return; }
+  var sy = sf/9;
+  var ups = estUPS(S.zip, sy);
+  var base = sy*S.pricePerSY + sy*S_LABOR_SY;
+  var selPieceCount = 0;
+  if(activePieces){ activePieces.forEach(function(p){ if(S.sel[p.id]) selPieceCount++; }); }
+  else { ALL.forEach(function(id){ if(S.sel[id]) selPieceCount++; }); }
+  var addonsTotal = calcAddonsTotal({pieces:selPieceCount, sqft:sf});
+  var bcPrice = Math.round(base*S_CMC_MULT*S_RET_MULT)+ups+addonsTotal;
+  S.price = bcPrice;
+  g("sb-price-sec").style.display = "block";
+  g("sb-price").textContent = "$"+bcPrice.toFixed(2);
+  var priceResult = g("rev-price-result");
+  if(priceResult) priceResult.style.display = "block";
+  var priceBig = g("rev-price-big");
+  if(priceBig) priceBig.textContent = "$"+bcPrice.toFixed(2);
+  var yw = g("rev-year-warn");
+  if(yw) yw.style.display = S.isProbable ? "block" : "none";
+  var proceedBtn = g("rev-proceed-btn");
+  if(proceedBtn){ proceedBtn.style.opacity="1"; proceedBtn.style.pointerEvents="auto"; }
+  var bcBody = g("bc-body");
+  if(bcBody){
+    bcBody.innerHTML = '<div class="pbig">$'+bcPrice.toFixed(2)+'</div>'
+      +'<div style="font-size:12px;color:var(--muted);margin-top:4px;">'
+      +(S.color?(S.matType==="vinyl"?"Marine Vinyl":"Berber Carpet")+"  -  "+S.color:"")
+      +(S.zip?" \u00b7 Delivered to "+S.zip:"")+"</div>";
+  }
+  S.price = bcPrice;
+  var cartBar = g("checkout-bar");
+  var cartPriceEl = g("cart-price-display");
+  if(cartBar) cartBar.style.display = "block";
+  if(cartPriceEl) cartPriceEl.textContent = "$"+bcPrice.toFixed(2);
+}
+function pricingEdit(step){
+  go(step);
+}
+/* -- Quote Modal (v10.18) --- */
+function openQuoteModal(){
+  if(!S.year||!S.make||!S.model){toast("Please complete all steps first.");return;}
+  const modal=g("quote-modal");
+  modal.style.display="flex";
+  const pName=g("on")?g("on").value:"";
+  const pEmail=g("oe")?g("oe").value:"";
+  const pPhone=g("op")?g("op").value:"";
+  if(pName)g("qm-name").value=pName;
+  if(pEmail)g("qm-email").value=pEmail;
+  if(pPhone)g("qm-phone").value=pPhone;
+  g("qm-msg").style.display="none";
+  g("qm-msg").textContent="";
+}
+function closeQuoteModal(){
+  g("quote-modal").style.display="none";
+}
+function submitQuoteModal(){
+  const name=(g("qm-name").value||"").trim();
+  const email=(g("qm-email").value||"").trim();
+  const phone=(g("qm-phone").value||"").trim();
+  const notes=(g("qm-notes").value||"").trim();
+  if(!name){toast("Please enter your name.");g("qm-name").focus();return;}
+  if(!email){toast("Please enter your email.");g("qm-email").focus();return;}
+  const matNote=S.matType==="vinyl"?"DuraVinyl":"Snap-In Berber";
+  const colorNote=S.color?S.color+" ":"";
+  const k=S.make+"|"+S.model;
+  const def=SVG_DEFS[k];
+  const activeQP=(S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+  const ids=activeQP?activeQP.map(function(p){return p.id;}):ALL;
+  const pcs=ids.filter(function(id){return !!S.sel[id];}).map(function(id){
+    if(activeQP){const pd=activeQP.find(function(p){return p.id===id;});if(pd)return pd.name;}
+    return PIECES[id]?PIECES[id].n:id;
+  }).join(", ")||"Not selected";
+  const autoComment="Interested in: "+colorNote+matNote+" - Pieces: "+pcs+(notes?"\n"+notes:"");
+  const nameParts=name.trim().split(/\s+/);
+  const firstName=nameParts[0]||name;
+  const lastName=nameParts.slice(1).join(" ")||"";
+  const fullName=lastName?firstName+" "+lastName:firstName;
+  const makeLabel=S.make+" Boat Model";
+  var NL="\n";
+  const txt="Your Name"+NL+fullName+NL+NL+"Boat Year"+NL+S.year+NL+NL+"Boat Make"+NL+S.make+NL+NL+makeLabel+NL+S.model+NL+NL+"Your Phone"+NL+(phone||"Not provided")+NL+NL+"Your Email Address"+NL+email+NL+NL+"Your Comments/Questions"+NL+autoComment;
+  function showSuccess(){
+    const msg=g("qm-msg");
+    msg.innerHTML='&#x2713; Quote request copied to clipboard!<br><span style="font-size:12px;color:#334455;">Paste into Business Tools &rsaquo; Paste &amp; Auto-Fill to generate the quote email.</span>';
+    msg.style.display="block";
+    const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");
+    saved.unshift({num:qNum(),date:new Date().toLocaleDateString(),name:fullName,boat:S.year+" "+S.make+" "+S.model,color:(colorNote+matNote).trim(),price:S.price.toFixed(2),txt:txt});
+    if(saved.length>50)saved.pop();
+    localStorage.setItem("bcQ",JSON.stringify(saved));
+  }
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(txt).then(showSuccess).catch(function(){fallbackCopy(txt);showSuccess();});
+  } else {
+    fallbackCopy(txt);showSuccess();
+  }
+}
+function fallbackCopy(txt){
+  const ta=document.createElement("textarea");
+  ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");}catch(e){}
+  document.body.removeChild(ta);
+}
+</script>
+<!-- QUOTE REQUEST MODAL -->
+<div id="quote-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:420px;width:92%;box-shadow:0 8px 32px rgba(0,0,0,.25);position:relative;">
+    <button onclick="closeQuoteModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#888;">&#x2715;</button>
+    <div style="font-size:18px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">&#x1F4CB; Request a Quote</div>
+    <div style="font-size:13px;color:#556677;margin-bottom:18px;">We'll prepare your quote and email it within 1 business day.</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Full Name *</label>
+      <input id="qm-name" type="text" placeholder="e.g. James Smith" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Email *</label>
+      <input id="qm-email" type="email" placeholder="e.g. james@email.com" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Phone</label>
+      <input id="qm-phone" type="tel" placeholder="e.g. (937) 470-8146" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
+    </div>
+    <div style="margin-bottom:18px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Comments / Questions</label>
+      <textarea id="qm-notes" rows="2" placeholder="Any additional info..." style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;resize:vertical;"></textarea>
+    </div>
+    <button onclick="submitQuoteModal()" style="width:100%;padding:12px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Send Quote Request</button>
+    <div id="qm-msg" style="display:none;margin-top:14px;padding:12px;background:#f0f8f0;border:1px solid #2a7a2a;border-radius:7px;font-size:13px;color:#1a5c1a;text-align:center;"></div>
+  </div>
+</div>
+</body>
+</html>
