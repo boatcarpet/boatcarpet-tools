@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.24]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.25]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -82,7 +82,7 @@ textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-rad
 .pi-dc{font-size:11px;color:var(--muted);margin-top:2px;}
 .pi-chk{width:22px;height:22px;border-radius:50%;border:2px solid #c5d4e0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;background:#fff;flex-shrink:0;transition:all .15s;}
 .pi.active .pi-chk{background:var(--sel);border-color:var(--sel);}
-.pat-img-container{position:relative;display:block;width:100%;align-self:stretch;line-height:0;}
+.pat-img-container{position:relative;display:inline-block;width:auto;max-width:100%;align-self:center;line-height:0;}
 .pat-num-badge{position:absolute;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#1F6AA5;color:#fff;font-size:13px;font-weight:700;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.35);transform:translate(-50%,-50%);pointer-events:none;}
 .pat-num-badge.active{background:#d32f2f;}
 .pat-num-legend{margin-top:10px;padding:8px 12px;background:#f7fbff;border:1px solid #dde8f0;border-radius:6px;font-size:11px;color:#456;line-height:1.6;text-align:center;}
@@ -210,7 +210,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 .nav-bar{margin-top:14px}
 
 /* Step 2 — pattern image displays at natural aspect ratio, container fits image */
-#pattern-img-wrap{padding:12px}
+#pattern-img-wrap{padding:12px;text-align:center}
 #pattern-img-wrap img{max-height:380px;width:auto;height:auto;max-width:100%;display:block;margin:0 auto}
 #pattern-img-wrap .pat-img-cont
 /* Step 3 — color swatches (sidebar) */
@@ -4581,7 +4581,7 @@ function showPattern(){
     }
     /* Use flex-direction:column so img container and legend stack properly */
     wrap.style.flexDirection='column';
-    wrap.innerHTML='<div class="pat-img-container"><img src="'+displayImg+'" style="width:100%;height:auto;display:block;border-radius:6px" alt="'+year+' '+make+' '+model+'">'+overlayHtml+'</div>'
+    wrap.innerHTML='<div class="pat-img-container"><img src="'+displayImg+'" style="display:block;border-radius:6px" alt="'+year+' '+make+' '+model+'">'+overlayHtml+'</div>'
       +(hasPositions?'':'');
     if(isFallback){
       if(label)label.textContent=year+' '+make+' '+model;
