@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.26]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.27]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -5685,9 +5685,9 @@ const PATTERN_VARIANTS={
 function fillPricingReview(){
   var k = S.make+"|"+S.model;
   var def = SVG_DEFS[k];
-  var revBoat = g("rev-boat");
+  var revBoat = g("rev-boat-name");
   if(revBoat) revBoat.textContent = (S.year?S.year+" ":"")+(S.make?S.make+" ":"")+(S.model||"");
-  var thumb = g("rev-pattern-thumb");
+  var thumb = g("rev-pat-img");
   if(thumb){
     var img = S.selectedVariantImg||(PATTERN_FALLBACK[k]?PATTERN_IMGS[PATTERN_FALLBACK[k]]:null);
     if(!img&&PATTERN_IMGS[k])img=PATTERN_IMGS[k];
@@ -5743,7 +5743,7 @@ function fillPricingReview(){
   }
   var priceResult = g("rev-price-result");
   if(priceResult) priceResult.style.display = "none";
-  var proceedBtn = g("rev-proceed-btn");
+  var proceedBtn = g("add-to-cart-btn");
   if(proceedBtn){ proceedBtn.style.opacity="0.4"; proceedBtn.style.pointerEvents="none"; }
   if(S.zip){
     var zipField = g("zip");
@@ -5783,7 +5783,7 @@ function calcAndShow(){
   if(priceBig) priceBig.textContent = "$"+bcPrice.toFixed(2);
   var yw = g("rev-year-warn");
   if(yw) yw.style.display = S.isProbable ? "block" : "none";
-  var proceedBtn = g("rev-proceed-btn");
+  var proceedBtn = g("add-to-cart-btn");
   if(proceedBtn){ proceedBtn.style.opacity="1"; proceedBtn.style.pointerEvents="auto"; }
   var bcBody = g("bc-body");
   if(bcBody){
