@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.27]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.28]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -261,7 +261,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.27</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.28</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -5745,17 +5745,14 @@ function fillPricingReview(){
   if(priceResult) priceResult.style.display = "none";
   var proceedBtn = g("add-to-cart-btn");
   if(proceedBtn){ proceedBtn.style.opacity="0.4"; proceedBtn.style.pointerEvents="none"; }
-  if(S.zip){
-    var zipField = g("zip");
-    if(zipField) zipField.value = S.zip;
-    calcAndShow();
-  }
+  var zipField = g("zip");
+  if(zipField && S.zip) zipField.value = S.zip;
+  calcAndShow();
 }
 function calcAndShow(){
   var zipEl = g("zip");
   S.zip = zipEl ? zipEl.value.trim() : "";
-  if(!S.zip||S.zip.length<5) return;
-  if(!S.pricePerSY){ toast("Please select a color in Step 3 first."); return; }
+    if(!S.pricePerSY){ toast("Please select a color in Step 3 first."); return; }
   var sf = 0;
   var k = S.make+"|"+S.model;
   var def = SVG_DEFS[k];
@@ -5767,7 +5764,7 @@ function calcAndShow(){
   }
   if(sf===0){ toast("No pieces selected — go back and select pieces."); return; }
   var sy = sf/9;
-  var ups = estUPS(S.zip, sy);
+  var ups = (S.zip && S.zip.length >= 5) ? estUPS(S.zip, sy) : 0;
   var base = sy*S.pricePerSY + sy*S_LABOR_SY;
   var selPieceCount = 0;
   if(activePieces){ activePieces.forEach(function(p){ if(S.sel[p.id]) selPieceCount++; }); }
