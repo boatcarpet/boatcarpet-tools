@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.28]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.29]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -261,7 +261,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.28</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.29</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -579,6 +579,9 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
           <input type="text" id="zip" placeholder="e.g. 48209" maxlength="5"
             style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:14px;margin-bottom:10px;"
             oninput="calcPrice()">
+        </div>
+        <div id="zip-prompt" style="padding:14px 0 6px;color:var(--muted);font-size:13px;line-height:1.5;">
+          📦 Enter your zip code above to get the price of your custom carpet delivered to you.
         </div>
         <div id="rev-price-result" style="display:none;">
           <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px;">
@@ -5745,13 +5748,17 @@ function fillPricingReview(){
   if(priceResult) priceResult.style.display = "none";
   var proceedBtn = g("add-to-cart-btn");
   if(proceedBtn){ proceedBtn.style.opacity="0.4"; proceedBtn.style.pointerEvents="none"; }
-  var zipField = g("zip");
-  if(zipField && S.zip) zipField.value = S.zip;
-  calcAndShow();
+  if(S.zip){
+    var zipField = g("zip");
+    if(zipField) zipField.value = S.zip;
+    calcAndShow();
+  }
 }
 function calcAndShow(){
   var zipEl = g("zip");
   S.zip = zipEl ? zipEl.value.trim() : "";
+  var zp = g("zip-prompt"); if(zp) zp.style.display = (!S.zip||S.zip.length<5) ? "block" : "none";
+  if(!S.zip||S.zip.length<5){ var pr2=g("rev-price-result"); if(pr2) pr2.style.display="none"; return; }
     if(!S.pricePerSY){ toast("Please select a color in Step 3 first."); return; }
   var sf = 0;
   var k = S.make+"|"+S.model;
@@ -5764,7 +5771,7 @@ function calcAndShow(){
   }
   if(sf===0){ toast("No pieces selected — go back and select pieces."); return; }
   var sy = sf/9;
-  var ups = (S.zip && S.zip.length >= 5) ? estUPS(S.zip, sy) : 0;
+  var ups = estUPS(S.zip, sy);
   var base = sy*S.pricePerSY + sy*S_LABOR_SY;
   var selPieceCount = 0;
   if(activePieces){ activePieces.forEach(function(p){ if(S.sel[p.id]) selPieceCount++; }); }
