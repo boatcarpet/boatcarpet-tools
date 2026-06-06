@@ -68,7 +68,7 @@ textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-rad
 .canvas-wrap{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;}
 .canvas-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
 .kit-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
-.btn-kit{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;background:var(--gold);color:var(--navy);font-size:12px;font-weight:700;border:none;border-radius:3px;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;}
+.btn-kit{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:#2a7a2a;color:#fff;font-size:13px;font-weight:700;border:2px solid #2a7a2a;border-radius:6px;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;width:100%;justify-content:center;margin-bottom:6px;}
 .btn-clear{padding:8px 11px;background:transparent;color:var(--muted);font-size:11px;border:1px solid var(--border);border-radius:3px;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;}
 
 /* ══ SEA RAY PI LIST ══ */
@@ -434,11 +434,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
     <span style="font-size:11px">Precision-cut to your exact factory specifications — guaranteed to fit.</span><br>
     <a href="#" onclick="emailPatternReq();return false;" style="color:#0a5578;font-weight:700;font-size:11px;text-decoration:underline">🖼 Want to see your exact pattern before ordering? Click to request it.</a></div>
   </div>
-  <div class="kit-bar" id="kit-bar-wrap">
-    <button class="btn-kit" onclick="addKit()">★ ADD COMPLETE KIT</button>
-    <button class="btn-clear" onclick="clearAll()">✕ Clear All</button>
-  </div>
-
+  
   <!-- Two-column layout: pattern image LEFT, piece list RIGHT -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
 
@@ -453,13 +449,21 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 
     <!-- RIGHT: Piece selection list -->
     <div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Select Your Pieces</div>
+      <div class="kit-bar" id="kit-bar-wrap">
+      <button class="btn-kit" onclick="addKit()">★ Complete Kit — All Pieces</button>
+      <button class="btn-clear" onclick="clearAll()">✕ Clear All</button>
+    </div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Select Your Pieces</div>
       <div class="kit-bdg" id="kit-bdg">
         <div style="font-size:16px">⭐</div>
         <div><div style="font-size:11px;font-weight:600">Complete Kit Selected</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px">All pieces included</div></div>
       </div>
       <div id="piece-list"></div>
       <div style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center" id="svgCount"></div>
+
+    <div style="margin-top:14px;padding:12px 14px;background:#f0f8f0;border:1px solid #9ed4b0;border-radius:6px;font-size:12px;color:#155a2e;line-height:1.65;">
+      <strong>&#9432; About these pieces:</strong> Our pattern catalog is continuously updated. Some boats show fewer named pieces than the full kit contains — the <strong>Complete Kit</strong> covers <em>all carpet sections for your boat</em> exactly as shown in the pattern drawing. If you’re unsure what’s included, call us at <strong>888.283.0704</strong> and we’ll walk you through it.
+    </div>
     </div>
   </div>
 
