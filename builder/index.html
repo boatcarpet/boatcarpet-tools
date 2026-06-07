@@ -5051,6 +5051,7 @@ function _fillInterior(imgData,interior,outline,outside,cw,ch,hex,texImg){
   const px=imgData.data;
   const N=cw*ch;
   let texPx=null,tw=0,th=0;
+  const bgC=(!texImg&&S.matType==="vinyl")?144:255;
   if(texImg&&texImg.complete&&texImg.naturalWidth){
     /* rasterize the swatch to a small offscreen buffer once */
     const oc=document.createElement("canvas");
@@ -5070,7 +5071,7 @@ function _fillInterior(imgData,interior,outline,outside,cw,ch,hex,texImg){
     if(outline[i])continue;          /* outline stays as-is */
     const off=i*4;
     if(outside[i]){                  /* background -> pure white */
-      px[off]=255;px[off+1]=255;px[off+2]=255;
+      px[off]=bgC;px[off+1]=bgC;px[off+2]=bgC;
       continue;
     }
     if(!interior[i])continue;        /* not part of this fill region */
@@ -5171,7 +5172,7 @@ function renderWholePattern(canvas,imgSrc,hex,texSrc){
     const cw=Math.round(img.naturalWidth*scale);
     const ch=Math.round(img.naturalHeight*scale);
     canvas.width=cw;canvas.height=ch;
-    ctx.fillStyle=S.matType==="vinyl"?"#909090":"#ffffff";ctx.fillRect(0,0,cw,ch);
+    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,cw,ch);
     ctx.drawImage(img,0,0,cw,ch);
     if(!hex&&!texSrc)return;            /* no colour picked -> plain pattern */
     let region;
