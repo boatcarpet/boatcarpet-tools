@@ -1320,21 +1320,21 @@ const VINYL_COLORS=[
   {id:"dolphin",      n:"Dolphin",         hex:"#7a8b9a", type:"vinyl"}
 ];
 const VINYL_PHOTOS = {
-  "ivory-tower":  "https://boatcarpet.com/wp-content/uploads/duravinyl-striped-boat-flooring_0008_01-Teak-Ivory-Towert.jpg",
-  "ivory":        "https://boatcarpet.com/wp-content/uploads/duravinyl-basket-weave-boat-flooring_0011_01-Ivory.jpg",
-  "pearl-stone":  "https://boatcarpet.com/wp-content/uploads/DuraVinyl_0000_pearlstone.jpg",
-  "rainforest":   "https://boatcarpet.com/wp-content/uploads/DuraVinyl_0001_rainforest.jpg",
-  "sand":         "https://boatcarpet.com/wp-content/uploads/DuraVinyl_0002_sand.jpg",
-  "sandcastle":   "https://boatcarpet.com/wp-content/uploads/Duravinyl_01-Sandcastle.jpg",
-  "teak-ivory":   "https://boatcarpet.com/wp-content/uploads/duravinyl-striped-boat-flooring_0008_01-Teak-Ivory-Towert.jpg",
-  "vanilla":      "https://boatcarpet.com/wp-content/uploads/duravinyl-basket-weave-boat-flooring_0010_01-Vanilla.jpg",
-  "beige":        "https://boatcarpet.com/wp-content/uploads/duravinyl-basket-weave-boat-flooring_0009_02-Beige.jpg",
-  "bisque":       "https://boatcarpet.com/wp-content/uploads/Duravinyl_02-Bisque.jpg",
-  "charcoal":     "https://boatcarpet.com/wp-content/uploads/Duravinyl_04-Charcoal.jpg",
-  "slate":        "https://boatcarpet.com/wp-content/uploads/Duravinyl_03-Silver-Mist.jpg",
-  "driftwood":    "https://boatcarpet.com/wp-content/uploads/duravinyl-basket-weave-boat-flooring_0008_02-Driftwood.jpg",
-  "mocha":        "https://boatcarpet.com/wp-content/uploads/duravinyl-striped-boat-flooring_0002_07-Teak-Mocha.jpg",
-  "tan":          "https://boatcarpet.com/wp-content/uploads/duravinyl-striped-boat-flooring_0005_04-Teak-Taupe.jpg"
+  "ivory-tower":  "assets/swatches/vinyl-ivory-tower.jpg",
+  "ivory":        "assets/swatches/vinyl-ivory.jpg",
+  "pearl-stone":  "assets/swatches/vinyl-pearl-stone.jpg",
+  "rainforest":   "assets/swatches/vinyl-rainforest.jpg",
+  "sand":         "assets/swatches/vinyl-sand.jpg",
+  "sandcastle":   "assets/swatches/vinyl-sandcastle.jpg",
+  "teak-ivory":   "assets/swatches/vinyl-teak-ivory.jpg",
+  "vanilla":      "assets/swatches/vinyl-vanilla.jpg",
+  "beige":        "assets/swatches/vinyl-beige.jpg",
+  "bisque":       "assets/swatches/vinyl-bisque.jpg",
+  "charcoal":     "assets/swatches/vinyl-charcoal.jpg",
+  "slate":        "assets/swatches/vinyl-slate.jpg",
+  "driftwood":    "assets/swatches/vinyl-driftwood.jpg",
+  "mocha":        "assets/swatches/vinyl-mocha.jpg",
+  "tan":          "assets/swatches/vinyl-tan.jpg"
 };
 
 /* -- SWATCH TEXTURE - how it works (v9.64) --
@@ -5171,7 +5171,7 @@ function renderWholePattern(canvas,imgSrc,hex,texSrc){
     const cw=Math.round(img.naturalWidth*scale);
     const ch=Math.round(img.naturalHeight*scale);
     canvas.width=cw;canvas.height=ch;
-    ctx.fillStyle="#ffffff";ctx.fillRect(0,0,cw,ch);
+    ctx.fillStyle=(S.matType==="vinyl"&&!texSrc)?"#909090":"#ffffff";ctx.fillRect(0,0,cw,ch);
     ctx.drawImage(img,0,0,cw,ch);
     if(!hex&&!texSrc)return;            /* no colour picked -> plain pattern */
     let region;
