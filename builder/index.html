@@ -31,6 +31,9 @@ header{background:var(--navy);color:#fff;padding:0 24px;height:54px;display:flex
 .layout{display:grid;grid-template-columns:1fr 280px;min-height:calc(100vh - 120px)}
 .main{padding:12px 16px 20px;border-right:1px solid var(--border)}
 .sidebar{background:#fff;padding:18px 20px;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto}
+#make-logo-wrap{text-align:center;padding:6px 0 10px;min-height:64px;display:flex;align-items:center;justify-content:center;}
+#make-logo{max-height:56px;max-width:180px;object-fit:contain;opacity:0;transition:opacity 0.35s ease;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.12));}
+#make-logo.visible{opacity:1;}
 @media(max-width:820px){.layout{grid-template-columns:1fr}.sidebar{border-top:1px solid var(--border);position:static}}
 .panel{display:none}.panel.active{display:block}
 .sec-lbl{font-size:17px;font-weight:700;letter-spacing:0;text-transform:none;color:#1a2b3c;margin-bottom:2px}
@@ -668,6 +671,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 
 <div class="sidebar">
   <h2>Your Custom Carpet</h2>
+  <div id="make-logo-wrap"><img id="make-logo" src="" alt="" /></div>
   <div id="sb-pattern-wrap" style="display:none;margin-bottom:14px;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);">
     <div id="sb-pat-tint-wrap" style="position:relative;background:#fff;">
       <canvas id="sb-pattern-canvas" style="width:100%;height:auto;display:block;"></canvas>
@@ -4367,7 +4371,32 @@ function autoFill(){
 }
 
 function updModels(pY,pM){
-  const mk=g("make").value;S.make=mk;
+  const mk=g("make").value;S.make=mk;  /* ── Brand logo ── */
+  const LOGOS={
+    'Baja':'https://boatcarpet.com/wp-content/uploads/baja31_watercraft.jpg',
+    'Bayliner':'https://boatcarpet.com/wp-content/uploads/bayliner-logo.png',
+    'Carver':'https://boatcarpet.com/wp-content/uploads/carver-logo.jpg',
+    'Chaparral':'https://boatcarpet.com/wp-content/uploads/chaparral-boats-inc-logo-png_seeklogo-29078-1.png',
+    'Cobalt':'https://boatcarpet.com/wp-content/uploads/cobalt-logo-1.png',
+    'Crownline':'https://boatcarpet.com/wp-content/uploads/crownline-logo.jpg',
+    'Formula':'https://boatcarpet.com/wp-content/uploads/formula-logo.png',
+    'Four Winns':'https://boatcarpet.com/wp-content/uploads/four-winns-logo.png',
+    'Glastron':'https://boatcarpet.com/wp-content/uploads/free-vector-glastron-boats-logo_091496_Glastron_Boats_logo.png',
+    'Hurricane':'https://boatcarpet.com/wp-content/uploads/Hurricane-logo.jpg',
+    'Lund':'https://boatcarpet.com/wp-content/uploads/Lund-Boats-Logo-Vinyl-Decal-Sticker-ND-4677-2048x2048-1-e1778183773759.webp',
+    'MasterCraft':'https://boatcarpet.com/wp-content/uploads/MasterCraft-logo.png',
+    'Monterey':'https://boatcarpet.com/wp-content/uploads/Monterey-logo.jpg',
+    'Regal':'https://boatcarpet.com/wp-content/uploads/regal-logo-1.png',
+    'Rinker':'https://boatcarpet.com/wp-content/uploads/Rinker-logo-1.png',
+    'Sea Ray':'https://boatcarpet.com/wp-content/uploads/sea-ray-logo-vector-10.png'
+  };
+  const mkLogoEl=document.getElementById('make-logo');
+  if(mkLogoEl){
+    const logoUrl=LOGOS[mk]||'';
+    if(logoUrl){mkLogoEl.src=logoUrl;mkLogoEl.alt=mk+' logo';mkLogoEl.classList.remove('visible');setTimeout(()=>mkLogoEl.classList.add('visible'),30);}
+    else{mkLogoEl.classList.remove('visible');setTimeout(()=>{mkLogoEl.src='';mkLogoEl.alt='';},350);}
+  }
+
   g("year").innerHTML='<option value=""> -  Year  - </option>';
   g("model").innerHTML='<option value=""> -  Model  - </option>';
   if(g("yr-help"))g("yr-help").style.display="none";
