@@ -6167,5 +6167,89 @@ function fallbackCopy(txt){
     <div id="qm-msg" style="display:none;margin-top:14px;padding:12px;background:#f0f8f0;border:1px solid #2a7a2a;border-radius:7px;font-size:13px;color:#1a5c1a;text-align:center;"></div>
   </div>
 </div>
+  <script>
+/* ===== BoatCarpet Website Quote Capture — PHASE 1 (TEST MODE) ===== */
+(function () {
+  const TEST_MODE = true; // flip to false in Phase 2 to send to WooCommerce
+  const WOO_ENDPOINT = 'https://boatcarpet.com/wp-admin/admin-ajax.php';
+
+  function collectQuoteData() {
+    const val = (id) => (document.getElementById(id)?.value || '').trim();
+    const txt = (id) => (document.getElementById(id)?.innerText || '').trim();
+
+    const make  = document.getElementById('make')?.selectedOptions?.[0]?.text || '';
+    const model = document.getElementById('model')?.selectedOptions?.[0]?.text || '';
+    const year  = document.getElementById('year')?.selectedOptions?.[0]?.text || '';
+    const boat  = [year, make, model]
+      .filter(s => s && !/^[—-]|Select|Model|Year/i.test(s))
+      .join(' ').trim();
+
+    const priceRaw = txt('cart-price-display') || txt('qprice') || txt('sb-price') || '';
+    const price = parseFloat(priceRaw.replace(/[^0-9.]/g, '')) || 0;
+
+    const reviewText = Array.from(document.querySelectorAll('.review-row'))
+      .map(r => r.innerText.replace(/\s+/g, ' ').trim()).join(' | ');
+
+    return {
+      quote_number: (window.__bcLastQuoteNum || ''),
+      name:     val('qm-name'),
+      email:    val('qm-email'),
+      phone:    val('qm-phone'),
+      boat:     boat,
+      color:    val('color') || (reviewText.match(/Berber[^|]*/i)?.[0] || ''),
+      pieces:   reviewText,
+      price:    price,
+      zip:      val('zip'),
+      comments: val('qm-notes'),
+      source:   'Website',
+      date:     new Date().toLocaleDateString()
+    };
+  }
+
+  function validate(d) {
+    const missing = [];
+    if (!d.name)  missing.push('Name');
+    if (!d.email) missing.push('Email');
+    if (!d.phone) missing.push('Phone');
+    if (!d.boat)  missing.push('Boat');
+    if (!d.price) missing.push('Price');
+    return missing;
+  }
+
+  function handleQuote() {
+    const data = collectQuoteData();
+    const missing = validate(data);
+    if (missing.length) {
+      alert('Please complete: ' + missing.join(', ') + ' before getting your quote.');
+      return false;
+    }
+    if (TEST_MODE) {
+      console.log('%c[QUOTE CAPTURE — TEST MODE] Payload that WILL be sent to WooCommerce:', 'color:#0a0;font-weight:bold');
+      console.table(data);
+      alert('TEST MODE — captured quote:\n\n' + JSON.stringify(data, null, 2));
+      return true;
+    }
+    fetch(WOO_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(Object.assign({ action: 'bc_website_quote' }, data))
+    })
+    .then(r => r.json())
+    .then(res => console.log('WooCommerce response:', res))
+    .catch(err => console.error('Quote send failed:', err));
+    return true;
+  }
+
+  const original = window.submitQuoteModal;
+  if (typeof original === 'function') {
+    window.submitQuoteModal = function () {
+      const ok = handleQuote();
+      if (ok) return original.apply(this, arguments);
+    };
+  } else {
+    console.warn('[QUOTE CAPTURE] submitQuoteModal not found.');
+  }
+})();
+</script>
 </body>
 </html>
