@@ -1,4 +1,4 @@
-h<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6173,62 +6173,53 @@ function fallbackCopy(txt){
   const TEST_MODE = true; // flip to false in Phase 2 to send to WooCommerce
   const WOO_ENDPOINT = 'https://boatcarpet.com/wp-admin/admin-ajax.php';
 
-  function collectQuoteData() {
-    const val = (id) => (document.getElementById(id)?.value || '').trim();
-    const txt = (id) => (document.getElementById(id)?.innerText || '').trim();
-
-    const make  = document.getElementById('make')?.selectedOptions?.[0]?.text || '';
-    const model = document.getElementById('model')?.selectedOptions?.[0]?.text || '';
-    const year  = document.getElementById('year')?.selectedOptions?.[0]?.text || '';
-    const boat  = [year, make, model]
-      .filter(s => s && !/^[—-]|Select|Model|Year/i.test(s))
-      .join(' ').trim();
-
-    const priceRaw = txt('cart-price-display') || txt('qprice') || txt('sb-price') || '';
-    const price = parseFloat(priceRaw.replace(/[^0-9.]/g, '')) || 0;
-
-    const reviewText = Array.from(document.querySelectorAll('.review-row'))
-      .map(r => r.innerText.replace(/\s+/g, ' ').trim()).join(' | ');
-
-    return {
-      quote_number: (window.__bcLastQuoteNum || ''),
-      name:     val('qm-name'),
-      email:    val('qm-email'),
-      phone:    val('qm-phone'),
-      boat:     boat,
-      color:    val('color') || (reviewText.match(/Berber[^|]*/i)?.[0] || ''),
-      pieces:   reviewText,
-      price:    price,
-      zip:      val('zip'),
-      comments: val('qm-notes'),
-      source:   'Website',
-      date:     new Date().toLocaleDateString()
-    };
-  }
-
-  function validate(d) {
-    const missing = [];
-    if (!d.name)  missing.push('Name');
-    if (!d.email) missing.push('Email');
-    if (!d.phone) missing.push('Phone');
-    if (!d.boat)  missing.push('Boat');
-    if (!d.price) missing.push('Price');
-    return missing;
-  }
-
+  // Validate required contact fields BEFORE the builder runs
   function handleQuote() {
-    const data = collectQuoteData();
-    const missing = validate(data);
+    const pre = {
+      name:  (document.getElementById('qm-name')?.value || '').trim(),
+      email: (document.getElementById('qm-email')?.value || '').trim(),
+      phone: (document.getElementById('qm-phone')?.value || '').trim()
+    };
+    const missing = [];
+    if (!pre.name)  missing.push('Name');
+    if (!pre.email) missing.push('Email');
+    if (!pre.phone) missing.push('Phone');
     if (missing.length) {
       alert('Please complete: ' + missing.join(', ') + ' before getting your quote.');
       return false;
     }
+    return true;
+  }
+
+  // Read the quote the builder just saved to localStorage, then send/show it
+  function captureSavedQuote() {
+    let q = null;
+    try { const a = JSON.parse(localStorage.getItem('bcQ')); q = a[a.length - 1]; } catch (e) {}
+    if (!q) { console.warn('[QUOTE CAPTURE] no saved quote found'); return; }
+
+    const piecesMatch = (q.txt || '').match(/Pieces:\s*([^\n]*)/);
+    const data = {
+      quote_number: q.num || '',
+      name:     q.name || (document.getElementById('qm-name')?.value || '').trim(),
+      email:    (document.getElementById('qm-email')?.value || '').trim(),
+      phone:    (document.getElementById('qm-phone')?.value || '').trim(),
+      boat:     q.boat || '',
+      color:    q.color || '',
+      pieces:   piecesMatch ? piecesMatch[1].trim() : '',
+      price:    parseFloat((q.price || '').toString().replace(/[^0-9.]/g, '')) || 0,
+      zip:      (document.getElementById('zip')?.value || '').trim(),
+      comments: (document.getElementById('qm-notes')?.value || '').trim(),
+      source:   'Website',
+      date:     q.date || new Date().toLocaleDateString()
+    };
+
     if (TEST_MODE) {
-      console.log('%c[QUOTE CAPTURE — TEST MODE] Payload that WILL be sent to WooCommerce:', 'color:#0a0;font-weight:bold');
+      console.log('%c[QUOTE CAPTURE — TEST MODE] Payload for WooCommerce:', 'color:#0a0;font-weight:bold');
       console.table(data);
       alert('TEST MODE — captured quote:\n\n' + JSON.stringify(data, null, 2));
-      return true;
+      return;
     }
+
     fetch(WOO_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -6237,14 +6228,15 @@ function fallbackCopy(txt){
     .then(r => r.json())
     .then(res => console.log('WooCommerce response:', res))
     .catch(err => console.error('Quote send failed:', err));
-    return true;
   }
 
   const original = window.submitQuoteModal;
   if (typeof original === 'function') {
     window.submitQuoteModal = function () {
-      const ok = handleQuote();
-      if (ok) return original.apply(this, arguments);
+      if (!handleQuote()) return;                      // validate first
+      const result = original.apply(this, arguments);  // builder runs + saves to bcQ
+      setTimeout(captureSavedQuote, 150);              // then read the saved quote
+      return result;
     };
   } else {
     console.warn('[QUOTE CAPTURE] submitQuoteModal not found.');
