@@ -1004,7 +1004,7 @@ function renderQuoteTracker() {
         + '<td style="white-space:nowrap;color:#555;font-size:11px;">' + (c.date||'') + '</td>'
         + '<td style="font-size:11px;color:#1F6AA5;font-weight:bold;white-space:nowrap;">' + (c.quoteNumber||'—') + '</td>'
         + '<td style="font-size:12px;"><strong>' + fn + ' ' + ln + '</strong></td>'
-        + '<td style="font-size:11px;"><a href="mailto:' + (c.email||'') + '?subject=' + fuSubj + '&body=' + fuBody + '" style="color:#1F6AA5;" title="Click to send follow-up">' + (c.email||'') + '</a></td>'
+        + '<td style="font-size:11px;"><a href="javascript:void(0)" onclick="generateFollowUp(' + c.id + ',true)" style="color:#1F6AA5;cursor:pointer;" title="Click to open branded follow-up email">' + (c.email||'') + '</a></td>'
         + '<td style="font-size:11px;">' + (c.phone||'') + '</td>'
         + '<td style="font-size:11px;">' + boatDesc + '</td>'
         + '<td style="font-size:11px;font-weight:bold;color:#333;white-space:nowrap;">' + (vendorLabel(c.source) || '\u2014') + '</td>'
@@ -1204,6 +1204,45 @@ function buildFollowUpHtml(rec, isQuote) {
     + '</table></td></tr></table></body></html>';
 }
 
+function buildFollowUpSubject(rec, isQuote) {
+  var boatDesc = ((rec.year||'') + ' ' + (rec.make||'') + ' ' + (rec.model||'')).trim() || rec.boat || '';
+  if (isQuote) {
+    return 'Following Up on Your Carpet Quote \u2014 ' + boatDesc + (rec.quoteNumber ? ' (' + rec.quoteNumber + ')' : '');
+  }
+  return 'Following Up on Your Carpet Inquiry' + (boatDesc ? ' \u2014 ' + boatDesc : '');
+}
+
+function copyHtmlToClipboard(html) {
+  try {
+    if (navigator.clipboard && window.ClipboardItem) {
+      var plain = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      var item = new ClipboardItem({
+        'text/html': new Blob([html], { type: 'text/html' }),
+        'text/plain': new Blob([plain], { type: 'text/plain' })
+      });
+      return navigator.clipboard.write([item]);
+    }
+  } catch (e) {}
+  // Fallback: copy rendered HTML via a temporary contenteditable element
+  try {
+    var holder = document.createElement('div');
+    holder.setAttribute('contenteditable', 'true');
+    holder.style.position = 'fixed';
+    holder.style.left = '-9999px';
+    holder.innerHTML = html;
+    document.body.appendChild(holder);
+    var range = document.createRange();
+    range.selectNodeContents(holder);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+    document.body.removeChild(holder);
+  } catch (e2) {}
+  return Promise.resolve();
+}
+
 function generateFollowUp(id, isQuote) {
   var loader = isQuote ? loadQuotes : loadEmails;
   var saver = isQuote ? saveQuotes : saveEmails;
@@ -1212,6 +1251,18 @@ function generateFollowUp(id, isQuote) {
     if (!rec) { alert('Could not find this record.'); return; }
     var html = buildFollowUpHtml(rec, isQuote);
     if (!openInWindow(html)) return;
+    // Combine: copy branded HTML to clipboard, then open Outlook with the matching subject line
+    var subject = buildFollowUpSubject(rec, isQuote);
+    var to = rec.email || '';
+    var body = '[Press Ctrl+V here to paste the branded follow-up email]';
+    function openMail() {
+      var url = 'mailto:' + encodeURIComponent(to)
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+      window.location.href = url;
+    }
+    var p = copyHtmlToClipboard(html);
+    if (p && typeof p.then === 'function') { p.then(openMail, openMail); } else { openMail(); }
     // Auto-update tracker: 1st FU sent -> next at +7 days; 2nd FU sent -> clear
     var count = (parseInt(rec.followupCount) || 0) + 1;
     rec.followupCount = count;
