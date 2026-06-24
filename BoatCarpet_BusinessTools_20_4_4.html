@@ -1452,15 +1452,16 @@ function importQuoteCSV(input) {
           notes: c[14] || ''
         });
       }
-      loadQuotes(function(existing) {
-        var msg = 'Import ' + records.length + ' quote(s)? This will REPLACE the ' + (existing ? existing.length : 0) + ' quote(s) currently in this tracker.';
-        if (!confirm(msg)) { input.value = ''; return; }
-        saveQuotes(records);
-        renderQuoteTracker();
-        if (typeof renderOrdersTracker === 'function') renderOrdersTracker();
-        alert('Imported ' + records.length + ' quote(s).');
-        input.value = '';
-      });
+      var existingRaw = localStorage.getItem('bc_quotes') || localStorage.getItem('bcQuotes');
+      var existingCount = 0;
+      try { existingCount = existingRaw ? JSON.parse(existingRaw).length : 0; } catch (ex) { existingCount = 0; }
+      var msg = 'Import ' + records.length + ' quote(s)? This will REPLACE the ' + existingCount + ' quote(s) currently in this tracker.';
+      if (!confirm(msg)) { input.value = ''; return; }
+      saveQuotes(records);
+      renderQuoteTracker();
+      if (typeof renderOrdersTracker === 'function') renderOrdersTracker();
+      alert('Imported ' + records.length + ' quote(s).');
+      input.value = '';
     } catch (err) {
       alert('Could not read that CSV file. Make sure it is a BoatCarpet Quotes export.');
       input.value = '';
@@ -1495,14 +1496,15 @@ function importEmailCSV(input) {
           notes: c[9] || ''
         });
       }
-      loadEmails(function(existing) {
-        var msg = 'Import ' + records.length + ' email(s)? This will REPLACE the ' + (existing ? existing.length : 0) + ' email(s) currently in this tracker.';
-        if (!confirm(msg)) { input.value = ''; return; }
-        saveEmails(records);
-        renderEmailTracker();
-        alert('Imported ' + records.length + ' email(s).');
-        input.value = '';
-      });
+      var existingRaw = localStorage.getItem('bc_emails') || localStorage.getItem('bcEmails');
+      var existingCount = 0;
+      try { existingCount = existingRaw ? JSON.parse(existingRaw).length : 0; } catch (ex) { existingCount = 0; }
+      var msg = 'Import ' + records.length + ' email(s)? This will REPLACE the ' + existingCount + ' email(s) currently in this tracker.';
+      if (!confirm(msg)) { input.value = ''; return; }
+      saveEmails(records);
+      renderEmailTracker();
+      alert('Imported ' + records.length + ' email(s).');
+      input.value = '';
     } catch (err) {
       alert('Could not read that CSV file. Make sure it is a BoatCarpet Emails export.');
       input.value = '';
