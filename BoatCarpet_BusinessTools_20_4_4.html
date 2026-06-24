@@ -359,7 +359,11 @@ tbody td{padding:8px 10px;vertical-align:middle;}
 <div class="panel" id="tab-emailtracker">
   <div class="tracker-bar">
     <h2>&#128203; Email Tracker</h2>
-    <button class="xls-btn" onclick="exportEmailCSV()">&#8659; Export CSV</button>
+    <span style="display:inline-flex;gap:6px;">
+      <button class="xls-btn" onclick="exportEmailCSV()">&#8659; Export CSV</button>
+      <button class="xls-btn" onclick="document.getElementById('emailImportInput').click()">&#8657; Import CSV</button>
+      <input type="file" id="emailImportInput" accept=".csv" style="display:none" onchange="importEmailCSV(this)">
+    </span>
   </div>
   <div class="stats stats-6">
     <div class="stat clickable" data-filter="all" onclick="setEmailFilter('all')"><div class="num" id="es-total">0</div><div class="lbl">Total</div></div>
@@ -380,7 +384,11 @@ tbody td{padding:8px 10px;vertical-align:middle;}
 <div class="panel" id="tab-quotetracker">
   <div class="tracker-bar">
     <h2>&#128200; Quote Tracker</h2>
-    <button class="xls-btn" onclick="exportQuoteCSV()">&#8659; Export CSV</button>
+    <span style="display:inline-flex;gap:6px;">
+      <button class="xls-btn" onclick="exportQuoteCSV()">&#8659; Export CSV</button>
+      <button class="xls-btn" onclick="document.getElementById('quoteImportInput').click()">&#8657; Import CSV</button>
+      <input type="file" id="quoteImportInput" accept=".csv" style="display:none" onchange="importQuoteCSV(this)">
+    </span>
   </div>
   <div class="stats">
     <div class="stat clickable" data-filter="all" onclick="setQuoteFilter('all')"><div class="num" id="qs-total">0</div><div class="lbl">Total Quotes</div></div>
@@ -1382,6 +1390,125 @@ function exportOrdersCSV() {
     });
     downloadCSV(rows, 'BoatCarpet_Orders');
   });
+}
+
+// ── CSV IMPORT ──
+function parseCSV(text) {
+  text = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  var rows = [], row = [], field = '', i = 0, inQ = false;
+  while (i < text.length) {
+    var ch = text[i];
+    if (inQ) {
+      if (ch === '"') {
+        if (text[i+1] === '"') { field += '"'; i += 2; continue; }
+        inQ = false; i++; continue;
+      }
+      field += ch; i++; continue;
+    }
+    if (ch === '"') { inQ = true; i++; continue; }
+    if (ch === ',') { row.push(field); field = ''; i++; continue; }
+    if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; i++; continue; }
+    field += ch; i++;
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(function(r) { return r.some(function(c) { return (c||'').trim() !== ''; }); });
+}
+
+function vendorFromLabel(label) {
+  var s = (label || '').trim().toLowerCase();
+  if (s === 'cmc') return 'cmc';
+  if (s === 'matworks') return 'matworks';
+  return '';
+}
+
+function importQuoteCSV(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var rows = parseCSV(e.target.result);
+      if (rows.length < 2) { alert('That CSV has no data rows.'); input.value = ''; return; }
+      var records = [];
+      var base = Date.now();
+      for (var r = 1; r < rows.length; r++) {
+        var c = rows[r];
+        records.push({
+          id: base + r,
+          date: c[0] || todayISO(),
+          quoteNumber: c[1] || '',
+          firstName: c[2] || '',
+          lastName: c[3] || '',
+          email: c[4] || '',
+          phone: c[5] || '',
+          year: c[6] || '',
+          make: c[7] || '',
+          model: c[8] || '',
+          color: c[9] || '',
+          price: c[10] || '',
+          source: vendorFromLabel(c[11]),
+          status: c[12] || 'Sent',
+          followup: c[13] || '',
+          notes: c[14] || ''
+        });
+      }
+      loadQuotes(function(existing) {
+        var msg = 'Import ' + records.length + ' quote(s)? This will REPLACE the ' + (existing ? existing.length : 0) + ' quote(s) currently in this tracker.';
+        if (!confirm(msg)) { input.value = ''; return; }
+        saveQuotes(records);
+        renderQuoteTracker();
+        if (typeof renderOrdersTracker === 'function') renderOrdersTracker();
+        alert('Imported ' + records.length + ' quote(s).');
+        input.value = '';
+      });
+    } catch (err) {
+      alert('Could not read that CSV file. Make sure it is a BoatCarpet Quotes export.');
+      input.value = '';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function importEmailCSV(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var rows = parseCSV(e.target.result);
+      if (rows.length < 2) { alert('That CSV has no data rows.'); input.value = ''; return; }
+      var records = [];
+      var base = Date.now();
+      for (var r = 1; r < rows.length; r++) {
+        var c = rows[r];
+        records.push({
+          id: base + r,
+          date: c[0] || todayISO(),
+          refNumber: c[1] || '',
+          first: c[2] || '',
+          last: c[3] || '',
+          email: c[4] || '',
+          phone: c[5] || '',
+          boat: c[6] || '',
+          status: c[7] || '',
+          followup: c[8] || '',
+          notes: c[9] || ''
+        });
+      }
+      loadEmails(function(existing) {
+        var msg = 'Import ' + records.length + ' email(s)? This will REPLACE the ' + (existing ? existing.length : 0) + ' email(s) currently in this tracker.';
+        if (!confirm(msg)) { input.value = ''; return; }
+        saveEmails(records);
+        renderEmailTracker();
+        alert('Imported ' + records.length + ' email(s).');
+        input.value = '';
+      });
+    } catch (err) {
+      alert('Could not read that CSV file. Make sure it is a BoatCarpet Emails export.');
+      input.value = '';
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ── CSV EXPORT ──
