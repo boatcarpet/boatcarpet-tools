@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.29]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.30]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -264,7 +264,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.29</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.30</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1323,28 +1323,33 @@ const PATTERN_IMGS = {
   "Rinker|340 FV": "patterns/rinker-340-fv.webp",
   "Rinker|342 FV": "patterns/rinker-342-fv.webp",
   "Rinker|360 FV": "patterns/rinker-360-fv.webp",
-  "Rinker|410 FV": "patterns/rinker-410-fv.webp"
+  "Rinker|410 FV": "patterns/rinker-410-fv.webp",
+  /* v10.30 - real images added; these replace the 230 SSi / 250 SLX fallbacks */
+  "Chaparral|196 SSi": "patterns/chaparral-196-ssi.webp",
+  "Chaparral|204 SSi": "patterns/chaparral-204-ssi.webp",
+  "Chaparral|210 SSi": "patterns/chaparral-210-ssi.webp",
+  "Chaparral|216 SSI": "patterns/chaparral-216-ssi.webp",
+  "Chaparral|220 SSI": "patterns/chaparral-220-ssi.webp",
+  "Chaparral|226 SSi": "patterns/chaparral-226-ssi.webp",
+  "Chaparral|256 SSi": "patterns/chaparral-256-ssi.webp",
+  "Chaparral|270 Signature": "patterns/chaparral-270-signature.webp",
+  "Chaparral|236 Sunesta": "patterns/chaparral-236-sunesta.webp",
+  "Sea Ray|205 Sport": "patterns/sea-ray-205-sport.webp",
+  "Sea Ray|400 Express Cruiser": "patterns/sea-ray-400-express-cruiser.webp",
+  "Sea Ray|460 Sundancer": "patterns/sea-ray-460-sundancer.webp"
 
 };
 const PATTERN_FALLBACK={
+  /* v10.30 - 12 entries removed; their real images now live in PATTERN_IMGS above.
+     Remaining entries are models with no real pattern image on file yet:
+     186 SSi / 215 SS / Sea Ray 210 Sundeck / Sea Ray 480 Sundancer show a similar
+     stand-in pattern. 276 SSi is held pending trim verification (only a 276 Signature
+     image exists, which is a different boat). */
   "Chaparral|186 SSi":"Chaparral|230 SSi",
-  "Chaparral|196 SSi":"Chaparral|230 SSi",
-  "Chaparral|204 SSi":"Chaparral|230 SSi",
-  "Chaparral|210 SSi":"Chaparral|230 SSi",
   "Chaparral|215 SS":"Chaparral|230 SSi",
-  "Chaparral|216 SSI":"Chaparral|230 SSi",
-  "Chaparral|220 SSI":"Chaparral|230 SSi",
-  "Chaparral|226 SSi":"Chaparral|230 SSi",
-  "Chaparral|256 SSi":"Chaparral|230 SSi",
-  "Chaparral|270 Signature":"Chaparral|290 Signature",
   "Chaparral|276 SSi":"Chaparral|230 SSi",
-  "Sea Ray|205 Sport":"Sea Ray|250 SLX",
   "Sea Ray|210 Sundeck":"Sea Ray|250 SLX",
-  "Sea Ray|400 Express Cruiser":"Sea Ray|250 SLX",
-  "Sea Ray|460 Sundancer":"Sea Ray|250 SLX",
-  "Sea Ray|480 Sundancer":"Sea Ray|250 SLX",
-  
-  "Chaparral|236 Sunesta":"Chaparral|236 SSi"
+  "Sea Ray|480 Sundancer":"Sea Ray|250 SLX"
 };
 const VINYL_COLORS=[
   /* ── Vinyl ── */
