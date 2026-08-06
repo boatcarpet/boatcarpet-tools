@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.30]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.31]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -36,6 +36,53 @@ header{background:var(--navy);color:#fff;padding:0 24px;height:54px;display:flex
 #make-logo.visible{opacity:1;}
 @media(max-width:820px){.layout{grid-template-columns:1fr}.sidebar{border-top:1px solid var(--border);position:static}}
 .panel{display:none}.panel.active{display:block}
+/* --- SINGLE-FLOW RESHAPE (v10.30 -> v10.31) --- */
+/* Hide the old step tabs and the manual Next/Back buttons. Flow is now one
+   continuous, progressively-revealed page driven by reveal(). */
+.step-tabs{display:none!important}
+.nav-bar{display:none!important}
+/* Give each revealed section a little breathing room as it stacks */
+.panel.active{margin-bottom:10px}
+/* Hidden by default; revealed by JS as prerequisites are met */
+#p1,#p2,#p3,#p-exceptions{display:none}
+#p1.active,#p2.active,#p3.active,#p-exceptions.active{display:block}
+/* Pattern picker (multi-pattern boats) */
+.pat-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin:6px 0 16px}
+.pat-pick-card{background:#fff;border:2px solid #dde8f0;border-radius:9px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.pat-pick-card:hover{border-color:#1a7abf;box-shadow:0 2px 10px rgba(26,122,191,.18)}
+.pat-pick-card.sel{border-color:#1e6e3c;box-shadow:0 0 0 2px rgba(30,110,60,.25)}
+.pat-pick-card img{width:100%;height:auto;display:block}
+.pat-pick-card .ppc-body{padding:9px}
+.pat-pick-card .ppc-lbl{font-size:12px;font-weight:700;color:#1a2e4a;margin-bottom:3px}
+.pat-pick-card .ppc-note{font-size:10px;color:#888;margin-bottom:8px;line-height:1.4}
+.pat-pick-card .ppc-btn{width:100%;background:#1e6e3c;color:#fff;border:none;border-radius:5px;padding:7px 4px;font-size:11px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.pat-pick-card.sel .ppc-btn{background:#155a2e}
+/* Reassurance + exception links */
+.reassure{margin:14px 0 4px;padding:12px 15px;background:#f0f7ff;border:1px solid #b8d8f8;border-radius:8px;font-size:13px;color:#2a4a68;line-height:1.6}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:6px}
+.ex-card{display:block;text-align:left;background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;cursor:pointer;transition:border-color .15s,box-shadow .15s;font-family:inherit}
+.ex-card:hover{border-color:#1a7abf;box-shadow:0 2px 10px rgba(26,122,191,.15)}
+.ex-card .ex-t{font-size:13px;font-weight:700;color:#1a2e4a;margin-bottom:4px}
+.ex-card .ex-d{font-size:11.5px;color:#667788;line-height:1.5}
+.ex-card .ex-arrow{color:#1a7abf;font-weight:700}
+/* --- 3-COLUMN COMPACT CONFIG ROW (v10.31) --- */
+/* The right "Your Custom Carpet" sidebar duplicated the pattern + summary, so it's
+   removed and the main column runs full width with pattern | color | price side by side. */
+.sidebar{display:none!important}
+.layout{grid-template-columns:1fr!important}
+.main{border-right:none!important}
+.cfg-grid{display:grid;grid-template-columns:1.05fr 1fr 1fr;gap:14px;align-items:stretch;margin-top:4px}
+.cfg-grid > .panel{margin-bottom:0}
+.cfg-grid > .panel.active{display:flex;flex-direction:column;margin-bottom:0}
+.cfg-col-hd{font-size:13px;font-weight:800;color:#1a2b3c;letter-spacing:.2px;margin:0 0 8px}
+.cfg-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 13px;flex:1;display:flex;flex-direction:column}
+@media(max-width:900px){.cfg-grid{grid-template-columns:1fr;gap:10px}}
+/* Berber swatches: taller so the texture reads naturally (like the live site),
+   not a thin stretched strip. object-fit:cover keeps the correct aspect ratio. */
+.cfg-card .berber-grid{gap:10px}
+.cfg-card .cc img{height:104px}
+.cfg-card .cc-body{padding:7px 9px}
+.cfg-card .cchk{width:20px;height:20px;font-size:11px}
 .sec-lbl{font-size:17px;font-weight:700;letter-spacing:0;text-transform:none;color:#1a2b3c;margin-bottom:2px}
 .pat-subline{font-size:13px;color:#555;margin:4px 0 16px;line-height:1.5}
 .step-subtitle{font-size:16px;color:#4a5a6a;margin:8px 0 10px;line-height:1.5}
@@ -264,7 +311,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.30</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.31</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -410,7 +457,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
     </div>
 
   </div>
-  <p class="step-subtitle">In just a few easy steps — find your boat below, select your carpet pieces, choose a color, and get your instant quote. We have patterns for <strong>hundreds of makes &amp; models</strong> — and we’re adding more all the time.</p>
+  <p class="step-subtitle">Find your boat below, choose a color, and get your instant price — delivered to your door. We have patterns for <strong>hundreds of makes &amp; models</strong> — and we’re adding more all the time.</p>
   <div class="nav-bar"><div></div><button class="btn-nav bnp" onclick="go(1)">Next: Choose Pieces →</button></div>
     <div class="nopat" id="nopat">
       <h3>⚠ Don’t see your pattern listed? We may still have it!</h3>
@@ -428,200 +475,132 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
     </div>
 </div>
 
-<!-- STEP 2: PIECES -->
+<!-- ===== 3-COLUMN COMPACT CONFIG ROW: Pattern | Color | Price ===== -->
+<div class="cfg-grid">
+
+<!-- COL A: PATTERN -->
 <div class="panel" id="p1">
-  
-  <div class="alert ai" id="pattern-msg" style="display:none">
-    <span>ℹ</span>
-    <div><strong id="pattern-headline"></strong><br>
-    <span style="font-size:11px">Precision-cut to your exact factory specifications — guaranteed to fit.</span><br>
-    <a href="#" onclick="emailPatternReq();return false;" style="color:#0a5578;font-weight:700;font-size:11px;text-decoration:underline">🖼 Want to see your exact pattern before ordering? Click to request it.</a></div>
-  </div>
-  
-  <!-- Two-column layout: pattern image LEFT, piece list RIGHT -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+  <div class="cfg-card">
+    <div class="cfg-col-hd">Your Pattern</div>
 
-    <!-- LEFT: Pattern image (photo only, no interaction) -->
-    <div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Your Exact Cut Pattern</div>
-      <div id="pattern-img-wrap" style="background:#f8fafc;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;text-align:center">
-        <!-- Pattern image injected here by showPattern() -->
-      </div>
-      <div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;font-style:italic" id="pattern-img-label"></div>
+    <!-- One-line message (single vs multi), filled by setPatternMessaging() -->
+    <div id="pattern-msg" style="display:none;font-size:12px;color:#0a5578;line-height:1.5;margin-bottom:8px">
+      <strong id="pattern-headline"></strong>
     </div>
 
-    <!-- RIGHT: Piece selection list -->
-    <div>
-      <div class="kit-bar" id="kit-bar-wrap">
-      <button class="btn-kit" onclick="addKit()">★ Complete Kit — All Pieces</button>
-      <button class="btn-clear" onclick="clearAll()">✕ Clear All</button>
+    <!-- MULTI-PATTERN PICKER: only for boats with more than one pattern on file -->
+    <div id="pattern-pick-wrap" style="display:none;margin-bottom:8px">
+      <div id="pattern-pick-headline" style="font-size:12px;font-weight:700;color:#1a2e4a;margin:0 0 6px"></div>
+      <div class="pat-pick-grid" id="pattern-picker"></div>
     </div>
-    <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Select Your Pieces</div>
-      <div class="kit-bdg" id="kit-bdg">
-        <div style="font-size:16px">⭐</div>
-        <div><div style="font-size:11px;font-weight:600">Complete Kit Selected</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px">All pieces included</div></div>
-      </div>
-      <div id="piece-list"></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center" id="svgCount"></div>
 
-    <div style="margin-top:14px;padding:12px 14px;background:#f0f8f0;border:1px solid #9ed4b0;border-radius:6px;font-size:12px;color:#155a2e;line-height:1.65;">
-      <strong>&#9432; About these pieces:</strong> Our pattern catalog is continuously updated. Some boats show fewer named pieces than the full kit contains — the <strong>Complete Kit</strong> covers <em>all carpet sections for your boat</em> exactly as shown in the pattern drawing. If you’re unsure what’s included, call us at <strong>888.283.0704</strong> and we’ll walk you through it.
-    </div>
-    </div>
-  </div>
+    <!-- Pattern image (rendered by showPattern) -->
+    <div id="pattern-img-wrap" style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;overflow:hidden;text-align:center"></div>
+    <div style="font-size:10px;color:var(--muted);margin-top:6px;text-align:center;font-style:italic" id="pattern-img-label"></div>
 
-  <div class="nav-bar">
-    <button class="btn-nav bno" onclick="go(0)">← Back</button>
-    <button class="btn-nav bnp" onclick="go(2)">Next: Choose Color →</button>
+    <!-- Reassurance / mismatch path -->
+    <div style="font-size:11.5px;color:#2a4a68;line-height:1.5;margin-top:auto;padding-top:10px">
+      Different layout than shown? <a href="#" onclick="openException('pattern');return false;" style="color:#1a7abf;font-weight:700;text-decoration:none">We can still help &rarr;</a>
+    </div>
+
+    <!-- Hidden legacy piece UI (kept in DOM for engine null-safety; kit auto-selected) -->
+    <div style="display:none" aria-hidden="true">
+      <div class="kit-bar" id="kit-bar-wrap"><button class="btn-kit" onclick="addKit()">Complete Kit</button><button class="btn-clear" onclick="clearAll()">Clear</button></div>
+      <div class="kit-bdg" id="kit-bdg"></div><div id="piece-list"></div><div id="svgCount"></div>
+    </div>
   </div>
 </div>
 
-<!-- STEP 3: COLOR -->
+<!-- COL B: COLOR (Berber only) -->
 <div class="panel" id="p2">
-  <div class="nav-bar" style="margin-bottom:8px;padding:2px 0">
-    <button class="btn-nav bno" onclick="go(1)" style="font-size:11px;padding:5px 12px">← Back</button>
-    <button class="btn-nav bnp" onclick="go(3)" style="font-size:11px;padding:5px 12px">Next: Pricing →</button>
-  </div>
-  
-  <div class="card">
-    <div class="csec-hd">Berber Carpet</div>
-    <div class="berber-wrap">
-      <div class="berber-grid">
-        <div class="cc" id="co-o" onclick="selMat('Oatmeal','berber','#ada59a',17.50,'co-o','assets/swatches/oatmeal-berber.jpg')">
-          <img src="assets/swatches/oatmeal-berber.jpg" alt="Oatmeal Berber">
-          <div class="cc-body"><div><div class="cname">Oatmeal</div><div class="cdesc">Warm tan/cream</div></div><div class="cchk">✓</div></div>
-        </div>
-        <div class="cc" id="co-g" onclick="selMat('Gray','berber','#64676c',17.50,'co-g','assets/swatches/gray-berber.jpg')">
-          <img src="assets/swatches/gray-berber.jpg" alt="Gray Berber">
-          <div class="cc-body"><div><div class="cname">Gray</div><div class="cdesc">Medium gray</div></div><div class="cchk">✓</div></div>
-        </div>
+  <div class="cfg-card">
+    <div class="cfg-col-hd">Choose Your Berber Color</div>
+    <div class="berber-grid" style="width:auto">
+      <div class="cc" id="co-o" onclick="selMat('Oatmeal','berber','#ada59a',17.50,'co-o','assets/swatches/oatmeal-berber.jpg')">
+        <img src="assets/swatches/oatmeal-berber.jpg" alt="Oatmeal Berber">
+        <div class="cc-body"><div><div class="cname">Oatmeal</div><div class="cdesc">Warm tan/cream</div></div><div class="cchk">✓</div></div>
       </div>
-      <div class="berber-features">
-        <ul>
-          <li>Made in the USA</li>
-          <li>UV resistant</li>
-          <li>Action-back</li>
-          <li>Snap-in fit</li>
-          <li>Bound with matching binding</li>
-          <li><button class="bf-link" onclick="document.getElementById('bindToggle').click()">Or bound with a different color</button></li>
-        </ul>
+      <div class="cc" id="co-g" onclick="selMat('Gray','berber','#64676c',17.50,'co-g','assets/swatches/gray-berber.jpg')">
+        <img src="assets/swatches/gray-berber.jpg" alt="Gray Berber">
+        <div class="cc-body"><div><div class="cname">Gray</div><div class="cdesc">Medium gray</div></div><div class="cchk">✓</div></div>
       </div>
     </div>
-    <div class="csec-hd" style="margin-top:20px">Marine Vinyl</div>
-    
-    <div class="vinyl-grid" id="vinylGrid"></div>
-    <!-- BINDING SELECTION -->
-    <div class="bind-section">
-      <div class="bind-intro">
-        <strong>About the binding:</strong> Our carpets come bound with a color matched to your carpet — no extra cost.
-        Want a different binding color to make it pop? Pick one below for a $55 upcharge.
-      </div>
+    <ul style="font-size:11px;color:#4a5a6a;margin:10px 0 0;padding-left:16px;line-height:1.7">
+      <li>Made in the USA &middot; UV resistant</li>
+      <li>Action-back &middot; Snap-in fit</li>
+      <li>Bound with matching binding (included)</li>
+    </ul>
+    <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
+    <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
+    <!-- Optional custom binding color -->
+    <div class="bind-section" style="margin-top:auto;padding-top:10px">
       <div class="bind-toggle" id="bindToggle" onclick="toggleBinding(event)">
         <input type="checkbox" id="bindCheck" onclick="event.stopPropagation();toggleBinding(event)">
-        <span class="bt-lbl">Use a different binding color</span>
+        <span class="bt-lbl">Different binding color</span>
         <span class="bt-up">+$55</span>
       </div>
       <div class="bind-grid" id="bindGrid"></div>
     </div>
   </div>
-  
 </div>
 
-<!-- STEP 4: PRICING -->
+<!-- COL C: PRICE -->
 <div class="panel" id="p3">
-  <div class="sec-lbl">Your Pricing</div>
-
-  <!-- Order Summary Card -->
-  <div class="card" style="margin-bottom:14px;">
-    <div style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
-      Here is the carpet you configured. If everything looks right, click <strong>Add to Cart</strong> to order on BoatCarpet.com, or use the <strong>Edit</strong> buttons below to make changes.
+  <div class="cfg-card">
+    <div class="cfg-col-hd">Your Price</div>
+    <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">YOUR ZIP CODE</label>
+    <input type="text" id="zip" placeholder="e.g. 48209" maxlength="5"
+      style="width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:6px;font-size:14px;box-sizing:border-box"
+      oninput="calcAndShow()">
+    <div id="zip-prompt" style="padding:12px 0 4px;color:var(--muted);font-size:12.5px;line-height:1.5">
+      📦 Pick a color and enter your zip for your instant price, delivered to your door.
     </div>
-
-    <!-- Row 1: Boat and Color side by side -->
-    <div class="review-row">
-      <div>
-        <div class="rv-sect-hdr">
-          <span class="rv-sect-lbl">BOAT</span>
-          <button class="rv-edit-btn" onclick="go(0)">Edit Boat</button>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div id="rev-pat-img" style="flex-shrink:0;"></div>
-          <div>
-            <div id="rev-boat-name" style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;"></div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);">PATTERN</div>
-            <div style="font-size:12px;color:#555;">Exact cut pattern for your boat</div>
-          </div>
-        </div>
+    <div id="rev-price-result" style="display:none">
+      <div style="display:flex;align-items:baseline;gap:6px;margin:4px 0 2px">
+        <div id="rev-price-big" style="font-size:30px;font-weight:800;color:var(--navy)"></div>
+        <div style="font-size:12px;color:var(--muted)">delivered</div>
       </div>
-      <div>
-        <div class="rv-sect-hdr">
-          <span class="rv-sect-lbl">MATERIAL &amp; COLOR</span>
-          <button class="rv-edit-btn" onclick="go(2)">Edit Color</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div id="rev-color-swatch" style="width:44px;height:44px;border-radius:6px;border:1px solid var(--border);flex-shrink:0;background:#ccc;"></div>
-          <div>
-            <div id="rev-material" style="font-size:14px;font-weight:700;color:var(--text);"></div>
-            <div id="rev-color" style="font-size:12px;color:var(--muted);"></div>
-          </div>
-        </div>
-      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5">Includes shipping to your door. Snaps included. Ships in ~4 weeks.</div>
+      <div id="rev-year-warn" style="display:none;font-size:11px;color:#b36000;margin-top:4px">&#9888; Year is outside our confirmed range &#8212; we verify fit before cutting.</div>
     </div>
-
-    <!-- Row 2: Pieces and ZIP side by side -->
-    <div class="review-row">
-      <div>
-        <div class="rv-sect-hdr">
-          <span class="rv-sect-lbl">PIECES SELECTED</span>
-          <button class="rv-edit-btn" onclick="go(1)">Edit Pieces</button>
-        </div>
-        <div id="rev-pieces" style="font-size:12px;"></div>
-      </div>
-      <div>
-        <div class="rv-sect-hdr">
-          <span class="rv-sect-lbl">ZIP CODE &amp; PRICE</span>
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;">YOUR ZIP CODE</label>
-          <input type="text" id="zip" placeholder="e.g. 48209" maxlength="5"
-            style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:14px;margin-bottom:10px;"
-            oninput="calcAndShow()">
-        </div>
-        <div id="zip-prompt" style="padding:14px 0 6px;color:var(--muted);font-size:13px;line-height:1.5;">
-          📦 Enter your zip code above to get the price of your custom carpet delivered to you.
-        </div>
-        <div id="rev-price-result" style="display:none;">
-          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px;">
-            <div id="rev-price-big" style="font-size:28px;font-weight:800;color:var(--navy);"></div>
-            <div style="font-size:12px;color:var(--muted);">delivered to your door</div>
-          </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5;">Includes shipping to your door. Snaps included. Ships in approximately 4 weeks.</div>
-          <div id="rev-year-warn" style="display:none;font-size:11px;color:#b36000;margin-top:4px;">&#9888; Year is outside our confirmed template range &#8212; we verify fit before cutting.</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Checkout action bar (shown once price is ready) -->
-  <div id="checkout-bar" style="display:none;padding:0 16px 16px 16px;">
-    <div style="background:#f0f8f0;border:2px solid #2a7a2a;border-radius:10px;padding:16px 18px;">
-      <div style="font-size:13px;font-weight:700;color:#1a5c1a;margin-bottom:12px;text-align:center;">
-        ✓ Your carpet is configured &mdash; ready to order!
-      </div>
-      <button id="add-to-cart-btn" onclick="addToCart()" style="width:100%;padding:14px 10px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;cursor:pointer;letter-spacing:.3px;margin-bottom:10px;display:block;text-align:center;">
+    <div id="checkout-bar" style="display:none;margin-top:12px">
+      <button id="add-to-cart-btn" onclick="addToCart()" style="width:100%;padding:13px 10px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:8px">
         🛒 Add to Cart &nbsp;&mdash;&nbsp; <span id="cart-price-display">$0.00</span>
       </button>
-            <div style="margin-bottom:10px;">
-        <button onclick="openQuoteModal()" style="width:100%;padding:12px 16px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;">&#128203; Get a Quote</button>
-      </div>
-      <div style="text-align:center;font-size:11px;color:#667788;line-height:1.5;">
-        Secure checkout on BoatCarpet.com &nbsp;·&nbsp; Snaps included &nbsp;·&nbsp; Made to order &mdash; tracking info sent when your order ships
-      </div>
+      <button onclick="openQuoteModal()" style="width:100%;padding:10px 14px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">&#128203; Get a Quote</button>
+      <div style="text-align:center;font-size:10.5px;color:#667788;line-height:1.5;margin-top:8px">Secure checkout on BoatCarpet.com &middot; Snaps included &middot; Made to order</div>
+    </div>
+    <!-- Hidden legacy review elements kept for fillPricingReview() null-safety -->
+    <div style="display:none" aria-hidden="true">
+      <span id="rev-boat-name"></span><span id="rev-pat-img"></span><span id="rev-pattern-label"></span>
+      <span id="rev-pieces"></span><span id="rev-material"></span><span id="rev-color"></span><span id="rev-color-swatch"></span>
     </div>
   </div>
-  <div class="nav-bar">
-    <button class="btn-nav bno" onclick="go(2)">← Back</button>
+</div>
+
+</div><!-- .cfg-grid -->
+
+<!-- EXCEPTIONS: three links into the Gravity "Carpet Builder Quote" page -->
+<div class="panel" id="p-exceptions">
+  <div class="card">
+    <div class="sec-lbl" style="margin-bottom:4px">Need something a little different?</div>
+    <div style="font-size:13px;color:#667788;margin-bottom:14px;line-height:1.6">
+      We can help with any of these — just tell us about your boat and we'll take care of the rest.
+    </div>
+    <div class="ex-grid">
+      <button type="button" class="ex-card" onclick="openException('pieces')">
+        <div class="ex-t">I only need certain pieces</div>
+        <div class="ex-d">Not the whole kit — just the piece(s) you need replaced. <span class="ex-arrow">Get a quote &rarr;</span></div>
+      </button>
+      <button type="button" class="ex-card" onclick="openException('material')">
+        <div class="ex-t">I want a different material</div>
+        <div class="ex-d">Marine vinyl, SeaDek, or another material instead of Berber. <span class="ex-arrow">Get a quote &rarr;</span></div>
+      </button>
+      <button type="button" class="ex-card" onclick="openException('pattern')">
+        <div class="ex-t">I don't see my exact pattern</div>
+        <div class="ex-d">Different seating or layout than what's shown — we can still help. <span class="ex-arrow">Get a quote &rarr;</span></div>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -4676,16 +4655,17 @@ function showNotListed(mk){
   }
 }
 function sniff(){
-  /* If make/model/year changed, reset pattern confirmation */
+  /* If make/model/year changed, reset pattern confirmation AND everything below */
   if(S.make!==g("make").value||S.model!==g("model").value||S.year!==g("year").value){
     S.patternConfirmed=false;S.isProbable=false;S.selectedVariantImg=null;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;S.pieceOptions={};
+    resetDownstream();
   }
   S.make=g("make").value;S.year=g("year").value;S.model=g("model").value;
   g("vq").style.display="none";g("prob-warn").style.display="none";
   updSidebar();
-  if(!S.make||!S.model)return;
+  if(!S.make||!S.model){reveal();return;}
   const k=S.make+"|"+S.model,hC=CMC_SET.has(k);
-  if(!hC){showPattern();return}
+  if(!hC){showPattern();reveal();return}
 
   /* Check confirmed year range from CMC_YEARS */
   const yr=parseInt(S.year);
@@ -4746,7 +4726,7 @@ function sniff(){
   /* Show year hint legend if this model has confirmed ranges */
   const yh=g("yr-hint");
   if(yh)yh.style.display=(range&&hC)?"block":"none";
-  updSidebar();showPattern();
+  updSidebar();showPattern();reveal();
 }
 
 /* -- PATTERN DISPLAY  -  Sea Ray approach, pure SVG -- */
@@ -4813,11 +4793,7 @@ function showPattern(){
       if(label)label.textContent=year+' '+make+' '+model;
       wrap.style.opacity="1";
     }
-    if(pm){pm.style.display="flex";
-      g("pattern-headline").textContent=isFallback
-        ?"Similar pattern shown  -  we have an exact template for your "+year+" "+make+" "+model+"."
-        :"We have the exact carpet patterns for your "+year+" "+make+" "+model+".";
-    }
+    /* pattern-msg content is owned by setPatternMessaging() in the single-flow build */
     const kbw2=g("kit-bar-wrap");if(kbw2)kbw2.style.display="";
   }else if(curDef){
     /* SVG line drawing  -  clickable pieces */
@@ -4827,7 +4803,7 @@ function showPattern(){
       if(S.sel[pd.id]){const el=document.getElementById(pd.svgId);if(el){el.classList.add("sel");applyColor(el);}}
     });
     if(label)label.textContent=year+" "+make+" "+model;
-    if(pm){pm.style.display="flex";g("pattern-headline").textContent="We have the exact carpet patterns for your "+year+" "+make+" "+model+".";}
+    /* pattern-msg content is owned by setPatternMessaging() in the single-flow build */
   }else{
     /* No confirmed pattern  -  show helpful message instead of misleading diagram */
     wrap.style.flexDirection='';
@@ -4981,6 +4957,9 @@ function selMat(name,matType,hex,psy,cardId,swatchSrc){
     applyColor(el);
   });
   updSidebar();
+  /* single-flow: refresh the price column now that a color is chosen (no scroll —
+     all three columns are already visible side by side) */
+  if(g("zip"))calcAndShow();
 }
 function selVinyl(name,hex,cardId,swatchSrc){selMat(name,"vinyl",hex,27.50,cardId,swatchSrc);}
 function buildVinylGrid(){
@@ -5072,10 +5051,7 @@ function updSidebar(){
   let sf=0;sp.forEach(function(id){sf+=PIECES[id].sf;});
   
   if(S.price>0){g("sb-price-sec").style.display="block";g("sb-price").textContent="$"+S.price.toFixed(2);}else g("sb-price-sec").style.display="none";
-  if(g("pattern-msg")){
-    if(S.make&&S.model&&CMC_SET.has(S.make+"|"+S.model)){g("pattern-msg").style.display="flex";if(g("pattern-headline"))g("pattern-headline").textContent="We have the exact carpet patterns for your "+S.year+" "+S.make+" "+S.model+"."}
-    else g("pattern-msg").style.display="none";
-  }
+  /* pattern-msg is owned by setPatternMessaging() in the single-flow build (updSidebar no longer writes it) */
   /* -- Pattern image in sidebar (canvas-based color tinting) -- */
   const sbpw=g("sb-pattern-wrap");
   const sbpi=g("sb-pattern-img");
@@ -5629,14 +5605,199 @@ function copyQ(){
     document.body.removeChild(ta);
   }
 }
+/* ============================================================================
+   SINGLE-FLOW CONTROLLER  (v10.31 reshape)
+   One continuous page. Sections reveal as prerequisites are met; changing the
+   boat resets everything below it. The pricing engine, pattern renderer,
+   variant logic and data are all untouched — only the FLOW around them changed.
+   ========================================================================== */
+
+/* Gravity Forms "Carpet Builder Quote" landing page. The three exception links
+   open this page with the boat + request type in the URL so the form can be
+   pre-filled (Gravity field pre-population). PROGRAMMER: set the exact page slug. */
+var QUOTE_PAGE_URL = 'https://boatcarpet.com/carpet-builder-quote/';
+
+function hasPattern(k){
+  var img=(typeof PATTERN_IMGS!=="undefined")&&PATTERN_IMGS[k];
+  var fb=(typeof PATTERN_FALLBACK!=="undefined")&&PATTERN_FALLBACK[k]&&PATTERN_IMGS[PATTERN_FALLBACK[k]];
+  var svg=(typeof SVG_DEFS!=="undefined")&&SVG_DEFS[k];
+  var vr=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k];
+  return !!(img||fb||svg||vr);
+}
+function boatReady(){
+  return !!(S.make && S.model && S.year && hasPattern(S.make+"|"+S.model));
+}
+/* Silent "select the complete kit" — identical piece set to clicking the old
+   "Complete Kit — All Pieces" button, so pricing matches today's full-kit total. */
+function autoSelectKit(){
+  var k=S.make+"|"+S.model;
+  var def=curDef||(typeof SVG_DEFS!=="undefined"?SVG_DEFS[k]:null);
+  var activeP=(S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+  var ids=activeP?activeP.map(function(p){return p.id;}):ALL;
+  ids.forEach(function(id){S.sel[id]=true;});
+  if(typeof updateKitBadge==="function")updateKitBadge();
+}
+/* Number of distinct patterns on file for a boat: standard + any variants. */
+function patternCount(k){
+  var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:null;
+  var hasMain=(typeof PATTERN_IMGS!=="undefined")&&PATTERN_IMGS[k];
+  return (hasMain?1:0)+(variants?variants.length:0);
+}
+/* setPatternMessaging is the SOLE owner of #pattern-msg + the picker (showPattern
+   and updSidebar no longer touch them). Three states:
+   - multi + not yet chosen -> show the picker only (hide the single message + image)
+   - multi + chosen         -> hide picker, show the chosen pattern + a "change" link
+   - single                 -> show the one pattern + a short line                        */
+function setPatternMessaging(){
+  var k=S.make+"|"+S.model;
+  var n=patternCount(k);
+  var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:null;
+  var msg=g("pattern-msg");
+  var pickWrap=g("pattern-pick-wrap"),pickHl=g("pattern-pick-headline");
+  var imgWrap=g("pattern-img-wrap"),imgLbl=g("pattern-img-label");
+  var boat=(S.year?S.year+" ":"")+S.make+" "+S.model;
+  var isMulti=!!(variants && n>1);
+  if(isMulti && !S.patternConfirmed){
+    if(msg)msg.style.display="none";
+    if(pickHl)pickHl.textContent="We have "+n+" patterns for your "+boat+" — pick the one that matches your boat.";
+    if(pickWrap)pickWrap.style.display="block";
+    buildPatternPicker();
+    if(imgWrap)imgWrap.style.display="none";
+    if(imgLbl)imgLbl.style.display="none";
+  }else{
+    if(pickWrap)pickWrap.style.display="none";
+    if(imgWrap)imgWrap.style.display="";
+    if(imgLbl)imgLbl.style.display="";
+    if(msg){
+      msg.style.display="";
+      msg.innerHTML=isMulti
+        ? '<strong>Here’s your selected pattern.</strong> <a href="#" onclick="reopenPicker();return false;" style="color:#1a7abf;font-weight:700;text-decoration:none">Choose a different pattern</a>'
+        : '<strong>Here is your exact cut pattern — precision-cut to fit.</strong>';
+    }
+  }
+}
+/* Multi-pattern: let the customer reopen the picker after choosing. */
+function reopenPicker(){
+  S.patternConfirmed=false;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantImg=null;
+  S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;
+  S.sel={};showPattern();updSidebar();reveal();
+}
+function buildPatternPicker(){
+  var k=S.make+"|"+S.model;
+  var host=g("pattern-picker");if(!host)return;
+  var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:[];
+  var mainImg=(typeof PATTERN_IMGS!=="undefined")&&PATTERN_IMGS[k]?PATTERN_IMGS[k]:null;
+  var html="";
+  if(mainImg){
+    var mainSel=(!S.selectedVariantImg && S.patternConfirmed)?" sel":"";
+    html+='<div class="pat-pick-card'+mainSel+'" data-pid="__main__">'
+      +'<img src="'+mainImg+'" alt="Current pattern">'
+      +'<div class="ppc-body"><div class="ppc-lbl">Current / standard pattern</div>'
+      +'<div class="ppc-note">The pattern most boats of this model use</div>'
+      +'<button type="button" class="ppc-btn" data-pid="__main__">This is my pattern</button></div></div>';
+  }
+  variants.forEach(function(v){
+    if(!v.img)return;
+    var sel=(S.selectedVariantImg===v.img)?" sel":"";
+    html+='<div class="pat-pick-card'+sel+'" data-pid="'+v.id+'">'
+      +'<img src="'+v.img+'" alt="'+(v.label||'')+'">'
+      +'<div class="ppc-body"><div class="ppc-lbl">'+(v.label||'Alternate pattern')+'</div>'
+      +'<div class="ppc-note">'+(v.yearNote||'')+'</div>'
+      +'<button type="button" class="ppc-btn" data-pid="'+v.id+'">This is my pattern</button></div></div>';
+  });
+  host.innerHTML=html;
+  Array.prototype.forEach.call(host.querySelectorAll(".pat-pick-card"),function(card){
+    card.addEventListener("click",function(){pickPattern(card.getAttribute("data-pid"));});
+  });
+}
+function pickPattern(id){
+  var k=S.make+"|"+S.model;
+  if(id==="__main__"){
+    S.selectedVariantImg=null;S.selectedVariant="";S.selectedVariantLabel="";
+    S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;
+  }else{
+    var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:[];
+    var v=variants.filter(function(x){return x.id===id;})[0];
+    if(v){
+      S.selectedVariant=v.id;S.selectedVariantLabel=v.label||"";S.selectedVariantImg=v.img||null;
+      S.selectedVariantPieces=v.pieces||null;
+      S.selectedVariantPieceDefs=(v.pieceDefs&&v.pieceDefs.length>0)?v.pieceDefs:null;
+    }
+  }
+  S.patternConfirmed=true;S.isProbable=false;
+  S.sel={};autoSelectKit();
+  showPattern();updSidebar();buildPatternPicker();reveal();
+  var col=g("p2");if(col){col.classList.add("active");col.scrollIntoView({behavior:"smooth",block:"start"});}
+}
+/* Reset everything downstream of the boat picker (color, binding, zip, price). */
+function resetDownstream(){
+  S.sel={};
+  S.color="";S.colorHex="";S.swatchSrc=null;S.matType="berber";S.pricePerSY=17.50;
+  S.zip="";S.price=0;
+  S.binding={custom:false,color:"",hex:"",upcharge:0};S.addons=[];
+  document.querySelectorAll(".cc,.vc,.bc").forEach(function(el){el.classList.remove("sel");});
+  var z=g("zip");if(z)z.value="";
+  var bc=g("bindCheck");if(bc)bc.checked=false;
+  var bt=g("bindToggle");if(bt)bt.classList.remove("active");
+  var bg=g("bindGrid");if(bg)bg.classList.remove("show");
+  var cbar=g("checkout-bar");if(cbar)cbar.style.display="none";
+  var pr=g("rev-price-result");if(pr)pr.style.display="none";
+  var zp=g("zip-prompt");if(zp)zp.style.display="block";
+  var sps=g("sb-price-sec");if(sps)sps.style.display="none";
+  [g("p2"),g("p3")].forEach(function(el){if(el)el.classList.remove("active");});
+}
+/* The reveal engine — decides which sections are visible from current state. */
+function reveal(){
+  var p1=g("p1"),p2=g("p2"),p3=g("p3"),pex=g("p-exceptions");
+  var ready=boatReady();
+  /* Legacy "don't see your pattern listed" catch-all only shows when the user has
+     actually picked a make+model that has NO pattern on file — not mid-selection. */
+  var np=g("nopat");if(np)np.style.display=(S.make&&S.model&&!hasPattern(S.make+"|"+S.model))?"":"none";
+  if(!ready){
+    [p1,p2,p3,pex].forEach(function(el){if(el)el.classList.remove("active");});
+    return;
+  }
+  autoSelectKit();
+  if(p1)p1.classList.add("active");
+  if(pex)pex.classList.add("active");
+  setPatternMessaging();
+  var k=S.make+"|"+S.model;
+  var multi=patternCount(k)>1 && (typeof PATTERN_VARIANTS!=="undefined") && PATTERN_VARIANTS[k];
+  var patternChosen=!multi || S.patternConfirmed || S.selectedVariantImg;
+  if(!patternChosen){
+    if(p2)p2.classList.remove("active");
+    if(p3)p3.classList.remove("active");
+    return;
+  }
+  /* 3-column layout: once the pattern is settled, show color AND price columns
+     together so everything sits above the fold. The price column self-guides
+     (choose a color, enter zip) until it has what it needs. */
+  if(p2)p2.classList.add("active");
+  if(p3)p3.classList.add("active");
+  fillPricingReview();
+}
+/* Open the Gravity quote page pre-filled for the current boat + request type. */
+function openException(type){
+  var ymm=((S.year||"")+" "+(S.make||"")+" "+(S.model||"")).replace(/\s+/g," ").trim();
+  var params=[
+    'type='+encodeURIComponent(type),
+    'ymm='+encodeURIComponent(ymm),
+    'year='+encodeURIComponent(S.year||''),
+    'make='+encodeURIComponent(S.make||''),
+    'model='+encodeURIComponent(S.model||'')
+  ];
+  window.open(QUOTE_PAGE_URL+'?'+params.join('&'),'_blank');
+}
+
 let cur=0;
+/* go() no longer switches exclusive steps — the flow is one page. It just makes
+   sure the target section is revealed and scrolls to it (used by Edit buttons). */
 function go(n){
-  document.getElementById("p"+cur).classList.remove("active");
-  document.querySelectorAll(".st").forEach(function(b,i){b.classList.remove("active","done");if(i<n)b.classList.add("done");if(i===n)b.classList.add("active")});
-  cur=n;document.getElementById("p"+n).classList.add("active");
-  if(n===1){S.make=g("make").value;S.year=g("year").value;S.model=g("model").value;showPattern();updateKitBadge();}
-  if(n===3)fillPricingReview();if(n===4)fillOrder();
-  window.scrollTo({top:0,behavior:"smooth"});
+  cur=n;
+  var el=document.getElementById("p"+n);
+  if(el){el.classList.add("active");el.scrollIntoView({behavior:"smooth",block:"start"});}
+  if(n===3)fillPricingReview();
+  if(n===4)fillOrder();
 }
 function toast(m){const t=g("toast");t.textContent=m;t.style.display="block";setTimeout(function(){t.style.display="none";},3200)}
 function g(id){return document.getElementById(id)}
@@ -5722,8 +5883,11 @@ function probPatternYes(variantId, variantLabel, variantImg, variantPieces){
   S.selectedVariant=variantId||"single";
   S.selectedVariantLabel=variantLabel||"";
   S.selectedVariantImg=variantImg||null;
+  S.selectedVariantPieces=variantPieces||null;
   g("prob-warn").style.display="none";
-  go(1);
+  /* single-flow: confirm pattern, auto-select the kit, reveal color */
+  S.sel={};autoSelectKit();showPattern();updSidebar();reveal();
+  var col=g("p2");if(col){col.classList.add("active");col.scrollIntoView({behavior:"smooth",block:"start"});}
 }
 function probPatternNo(){
   var boatName=S.year+" "+S.make+" "+S.model;
@@ -5968,9 +6132,18 @@ function fillPricingReview(){
 function calcAndShow(){
   var zipEl = g("zip");
   S.zip = zipEl ? zipEl.value.trim() : "";
-  var zp = g("zip-prompt"); if(zp) zp.style.display = (!S.zip||S.zip.length<5) ? "block" : "none";
-  if(!S.zip||S.zip.length<5){ var pr2=g("rev-price-result"); if(pr2) pr2.style.display="none"; return; }
-    if(!S.pricePerSY){ toast("Please select a color in Step 3 first."); return; }
+  var zp = g("zip-prompt");
+  /* Color-first guard: price needs a color chosen. Guide instead of toast-spamming. */
+  if(!S.color){
+    if(zp){ zp.style.display="block"; zp.innerHTML="📦 Pick a color, then enter your zip for your instant price."; }
+    var pr0=g("rev-price-result"); if(pr0) pr0.style.display="none";
+    var cb0=g("checkout-bar"); if(cb0) cb0.style.display="none";
+    return;
+  }
+  if(zp) zp.style.display = (!S.zip||S.zip.length<5) ? "block" : "none";
+  if(zp && (!S.zip||S.zip.length<5)) zp.innerHTML="📦 Enter your zip code above for your price, delivered to your door.";
+  if(!S.zip||S.zip.length<5){ var pr2=g("rev-price-result"); if(pr2) pr2.style.display="none"; var cb2=g("checkout-bar"); if(cb2) cb2.style.display="none"; return; }
+    if(!S.pricePerSY){ toast("Please select a color first."); return; }
   var sf = 0;
   var k = S.make+"|"+S.model;
   var def = SVG_DEFS[k];
