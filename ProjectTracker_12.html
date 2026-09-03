@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Tracker v12</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #eef2f7;
+    color: #1f2937;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header {
+    background: #fff;
+    border-radius: 8px 8px 0 0;
+    padding: 20px 24px 0 24px;
+    border-bottom: none;
+  }
+  .header h1 {
+    margin: 0 0 4px 0;
+    color: #1e40af;
+    font-size: 24px;
+  }
+  .header p {
+    margin: 0 0 16px 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: #eef2f7;
+    padding: 0 24px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .tab {
+    padding: 12px 20px;
+    background: #dde6f0;
+    border: 1px solid #e5e7eb;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .tab:hover { background: #cfdaeb; }
+  .tab.active {
+    background: #fff;
+    color: #1e40af;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+  }
+  .panel {
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+    padding: 28px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    min-height: 500px;
+  }
+  .panel-title {
+    color: #1e40af;
+    margin: 0 0 6px 0;
+    font-size: 20px;
+  }
+  .panel-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0 0 24px 0;
+  }
+  /* Toolbar */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+  }
+  .toolbar input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  /* Buttons */
+  .btn {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #fff;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { background: #f3f4f6; }
+  .btn-primary {
+    background: #1e40af;
+    color: #fff;
+    border-color: #1e40af;
+  }
+  .btn-primary:hover { background: #1d4ed8; }
+  .btn-success {
+    background: #059669;
+    color: #fff;
+    border-color: #059669;
+  }
+  .btn-success:hover { background: #047857; }
+  .btn-danger {
+    background: #fff;
+    color: #b91c1c;
+    border-color: #fca5a5;
+  }
+  .btn-danger:hover { background: #fef2f2; }
+  .btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+  /* Project cards */
+  .project-list { display: flex; flex-direction: column; gap: 12px; }
+  .project {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    transition: box-shadow 0.15s;
+  }
+  .project:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .project-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .project-toggle {
+    color: #6b7280;
+    font-size: 12px;
+    width: 14px;
+    transition: transform 0.2s;
+  }
+  .project.open .project-toggle { transform: rotate(90deg); }
+  .project-name {
+    flex: 1;
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 15px;
+  }
+  .project-status {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .status-active { background: #dcfce7; color: #166534; }
+  .status-idea { background: #fef3c7; color: #92400e; }
+  .status-paused { background: #f3f4f6; color: #4b5563; }
+  .status-done { background: #dbeafe; color: #1e40af; }
+  .project-meta {
+    font-size: 12px;
+    color: #6b7280;
+  }
+  .project-body {
+    display: none;
+    padding: 0 18px 18px 18px;
+    border-top: 1px solid #f3f4f6;
+  }
+  .project.open .project-body { display: block; }
+  .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 14px 0 6px 0;
+  }
+  .field-content {
+    font-size: 14px;
+    color: #374151;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .summary-entry {
+    background: #f8fafc;
+    border-left: 3px solid #1e40af;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    position: relative;
+  }
+  .summary-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .btn-copy-feedback {
+    background: #059669 !important;
+    color: #fff !important;
+    border-color: #059669 !important;
+  }
+  .summary-date {
+    font-weight: 700;
+    color: #1e40af;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  .summary-text {
+    white-space: pre-wrap;
+    line-height: 1.5;
+    color: #374151;
+  }
+  /* v8: collapsible summary entries */
+  .summary-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 0;
+  }
+  .summary-header:hover .summary-date {
+    color: #1e3a8a;
+    text-decoration: underline;
+  }
+  .summary-caret {
+    display: inline-block;
+    color: #1e40af;
+    font-size: 10px;
+    width: 10px;
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+  }
+  .summary-entry.expanded .summary-caret {
+    transform: rotate(90deg);
+  }
+  .summary-entry .summary-date {
+    margin-bottom: 0;
+  }
+  .summary-body {
+    display: none;
+    margin-top: 8px;
+  }
+  .summary-entry.expanded .summary-body {
+    display: block;
+  }
+  .summary-toolbar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .summary-toolbar .btn-sm {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  .summary-toolbar-label {
+    font-size: 11px;
+    color: #6b7280;
+    margin-right: 4px;
+  }
+  /* v9: collapsible attachments section */
+  .attachments-section {
+    /* wrapper around the heading + list */
+  }
+  .attachments-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .attachments-heading .attachments-caret {
+    display: inline-block;
+    color: #ca8a04;
+    font-size: 10px;
+    width: 10px;
+    transition: transform 0.15s ease;
+  }
+  .attachments-section.expanded .attachments-caret {
+    transform: rotate(90deg);
+  }
+  .attachments-body {
+    display: none;
+    margin-top: 6px;
+  }
+  .attachments-section.expanded .attachments-body {
+    display: block;
+  }
+  .attachments-toolbar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .attachments-toolbar .btn-sm {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  /* Make individual attachment entries collapsible too */
+  .attachment-entry .attachment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .attachment-entry .attachment-caret {
+    display: inline-block;
+    color: #ca8a04;
+    font-size: 10px;
+    width: 10px;
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+  }
+  .attachment-entry.expanded .attachment-caret {
+    transform: rotate(90deg);
+  }
+  .attachment-entry .attachment-body {
+    display: none;
+    margin-top: 8px;
+  }
+  .attachment-entry.expanded .attachment-body {
+    display: block;
+  }
+  /* Attachments — added v6 */
+  .attachment-entry {
+    background: #fefce8;
+    border-left: 3px solid #ca8a04;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    position: relative;
+  }
+  .attachment-label {
+    font-weight: 700;
+    color: #854d0e;
+    font-size: 13px;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .attachment-label .att-date {
+    font-weight: 400;
+    font-size: 11px;
+    color: #92400e;
+    margin-left: auto;
+  }
+  .attachment-url {
+    font-size: 12px;
+    margin-top: 2px;
+    word-break: break-all;
+  }
+  .attachment-url a {
+    color: #1e40af;
+    text-decoration: none;
+  }
+  .attachment-url a:hover { text-decoration: underline; }
+  .attachment-desc {
+    font-size: 12px;
+    color: #57534e;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  .attachment-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .add-attachment-form {
+    background: #fffbeb;
+    border: 1.5px dashed #fbbf24;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  .add-attachment-form input,
+  .add-attachment-form textarea {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-family: inherit;
+  }
+  .add-attachment-form textarea { resize: vertical; min-height: 50px; }
+  .att-form-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .project-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  /* Forms */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="date"],
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+  .form-group textarea.lg { min-height: 150px; }
+  /* Template box */
+  .template-box {
+    background: #f8fafc;
+    border: 1px dashed #93c5fd;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #374151;
+  }
+  .template-box h4 {
+    margin: 0 0 8px 0;
+    color: #1e40af;
+    font-size: 14px;
+  }
+  .template-prompt {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12px;
+    color: #1f2937;
+    margin-top: 6px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  /* Storage banner */
+  .banner {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #92400e;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .banner.saved {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+  }
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+    font-size: 14px;
+  }
+  /* Filter chips */
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .chip {
+    padding: 4px 12px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    font-size: 12px;
+    color: #4b5563;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .chip:hover { background: #e5e7eb; }
+  .chip.active {
+    background: #1e40af;
+    color: #fff;
+    border-color: #1e40af;
+  }
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+  }
+  .modal h2 {
+    color: #1e40af;
+    margin: 0 0 16px 0;
+    font-size: 20px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  /* Notes list (sub-items inside project) */
+  .note-list {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0 0;
+  }
+  .note-list li {
+    padding: 6px 10px;
+    background: #f8fafc;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.4;
+  }
+  .note-list li::before {
+    content: "•";
+    color: #1e40af;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  @media (max-width: 700px) {
+    body { padding: 10px; }
+    .panel { padding: 18px 16px; }
+    .form-row { grid-template-columns: 1fr; }
+    .tabs { padding: 0 10px; flex-wrap: wrap; }
+    .tab { padding: 10px 14px; font-size: 13px; }
+  }
+  /* Highlight when project needs picking */
+  @keyframes flashAttention {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); border-color: #d1d5db; }
+    25%, 75% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.25); border-color: #f59e0b; }
+    50% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0.15); border-color: #f59e0b; }
+  }
+  .needs-pick {
+    border: 2px solid #f59e0b !important;
+    background: #fffbeb !important;
+    animation: flashAttention 1.2s ease-in-out 3;
+  }
+  .needs-pick-label {
+    color: #b45309 !important;
+    font-weight: 800 !important;
+  }
+  .smart-warning {
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    color: #92400e;
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .smart-warning .arrow {
+    font-size: 20px;
+    animation: bounce 1s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+  .smart-success {
+    background: #dcfce7;
+    border: 1px solid #86efac;
+    color: #166534;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📋 Project Tracker <span style="font-size:12px;color:#9ca3af;font-weight:400;">v12</span></h1>
+    <p>Organize projects across all your sites and personal goals. Add session summaries and attach files to pick up where you left off.</p>
+  </div>
+
+  <div id="syncBar" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px 0;padding:10px 14px;border:1px solid #ccd6e0;border-radius:8px;background:#f2f7fc;font-size:13px;"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="projects">📁 Projects</div>
+    <div class="tab" data-tab="summary">📝 Add Session Summary</div>
+    <div class="tab" data-tab="template">📋 Summary Template</div>
+    <div class="tab" data-tab="data">💾 Save / Load</div>
+  </div>
+
+  <div class="panel">
+    <!-- PROJECTS TAB -->
+    <div id="tab-projects" class="tab-content">
+      <h2 class="panel-title">All Projects</h2>
+      <p class="panel-subtitle">Click a project to expand. Edit notes, add summaries, or change status anytime.</p>
+
+      <div id="recovery-banner" class="banner" style="display:none;align-items:center;gap:10px;background:#fff8e1;border:1px solid #f0d060;color:#7a5b00;"></div>
+
+      <div id="autosave-banner" class="banner saved" style="display:none;">
+        <span>💾</span><span id="autosave-msg">Saved to browser storage.</span>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="search" placeholder="🔍 Search projects, notes, summaries...">
+        <button class="btn btn-primary" id="btn-add-project">+ New Project</button>
+        <button class="btn" id="btn-expand-all">Expand All</button>
+        <button class="btn" id="btn-collapse-all">Collapse All</button>
+      </div>
+
+      <div class="filter-chips" id="status-filters">
+        <span class="chip active" data-filter="all">All</span>
+        <span class="chip" data-filter="active">Active</span>
+        <span class="chip" data-filter="idea">Idea</span>
+        <span class="chip" data-filter="paused">Paused</span>
+        <span class="chip" data-filter="done">Done</span>
+      </div>
+
+      <div class="project-list" id="project-list"></div>
+    </div>
+
+    <!-- SUMMARY TAB -->
+    <div id="tab-summary" class="tab-content" style="display:none;">
+      <h2 class="panel-title">Add Session Summary</h2>
+      <p class="panel-subtitle">Paste the summary from your Claude session and attach it to the right project.</p>
+
+      <div class="template-box">
+        <h4>💡 How to use this</h4>
+        At the end of any Claude chat, ask: <em>"Give me a session summary using the standard template."</em>
+        Then either <strong>paste the whole block into Smart Paste below</strong> (it auto-fills everything), or use the flexible form.
+      </div>
+
+      <div class="template-box" style="border-color: #34d399; background: #ecfdf5;">
+        <h4 style="color:#065f46;">⚡ Smart Paste (recommended)</h4>
+        Paste a full template-formatted summary here. PROJECT, DATE, SESSION TITLE, and content will auto-fill below — and any files listed in the <strong>FILES / LINKS</strong> section will be automatically attached to the project when you save. 📎
+        <textarea id="smart-paste" style="width:100%; min-height:100px; margin-top:10px; padding:10px; border:1px solid #d1d5db; border-radius:6px; font-family:inherit; font-size:13px;" placeholder="Paste a summary block starting with PROJECT: ..."></textarea>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <button class="btn btn-success" id="btn-smart-parse">✨ Parse & Fill Form</button>
+          <button class="btn" id="btn-smart-clear">Clear</button>
+        </div>
+        <div id="smart-paste-result" style="margin-top:8px; font-size:12px; color:#065f46; display:none;"></div>
+      </div>
+
+      <div class="form-group">
+        <label id="summary-project-label">Project</label>
+        <select id="summary-project"></select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Session Date</label>
+          <input type="date" id="summary-date">
+        </div>
+        <div class="form-group">
+          <label>Session Title (optional)</label>
+          <input type="text" id="summary-title" placeholder="e.g. CAD builder mobile fixes">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Summary Content (paste anything)</label>
+        <textarea id="summary-content" class="lg" placeholder="Paste your Claude session summary here. Free-form is fine, or use the standard template from the next tab."></textarea>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-success" id="btn-save-summary">💾 Save Summary to Project</button>
+        <button class="btn" id="btn-clear-summary">Clear</button>
+      </div>
+    </div>
+
+    <!-- TEMPLATE TAB -->
+    <div id="tab-template" class="tab-content" style="display:none;">
+      <h2 class="panel-title">Standard Summary Template</h2>
+      <p class="panel-subtitle">Copy this prompt and paste it at the end of any Claude session. Claude will fill it in.</p>
+
+      <div class="template-box">
+        <h4>📋 Copy this prompt and send it to Claude at the end of a session:</h4>
+        <div class="template-prompt" id="template-prompt">Please give me a session summary in this exact format so I can paste it into my Project Tracker:
+
+PROJECT: [which of my projects this relates to]
+DATE: [today's date]
+SESSION TITLE: [short descriptive title]
+
+WHAT WE DID:
+- [bullet point of accomplishments]
+- [bullet point]
+
+DECISIONS MADE:
+- [any key decisions or directions chosen]
+
+OPEN QUESTIONS / BLOCKERS:
+- [anything unresolved]
+
+NEXT STEPS:
+- [what to tackle next session]
+- [follow-up items]
+
+FILES / LINKS:
+- Label | path or URL | short description
+- Label | path or URL | short description
+(One file per line. Use the pipe character | to separate the three fields. Include every file we created or referenced, with the full path or URL.)
+
+CONTEXT TO REMEMBER:
+- [important context for picking this up next time]</div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary" id="btn-copy-template">📋 Copy Template Prompt</button>
+        </div>
+      </div>
+
+      <div class="template-box">
+        <h4>🎯 Why use the template?</h4>
+        Consistent summaries make it much easier to pick up a project weeks later. The "Context to Remember" section is especially useful — it preserves the why and the state-of-mind, not just the what.
+      </div>
+    </div>
+
+    <!-- DATA TAB -->
+    <div id="tab-data" class="tab-content" style="display:none;">
+      <h2 class="panel-title">Save / Load Your Data</h2>
+      <p class="panel-subtitle">Data auto-saves to this browser. Export a backup file to keep it safe or move between computers.</p>
+
+      <div class="template-box">
+        <h4>💾 Backup (Export)</h4>
+        Download all your projects, notes, and summaries as a JSON file. Save it somewhere safe.
+        <div style="margin-top:10px;">
+          <button class="btn btn-success" id="btn-export">⬇️ Download Backup File</button>
+        </div>
+      </div>
+
+      <div class="template-box">
+        <h4>📂 Restore (Import)</h4>
+        <p style="margin:6px 0 12px 0;">Load a previously-exported backup file. Pick the right behavior:</p>
+
+        <div style="border:1px solid #d1fae5; background:#f0fdf4; padding:10px 12px; border-radius:6px; margin-bottom:10px;">
+          <div style="font-weight:600; color:#065f46; margin-bottom:4px;">🔀 Merge (recommended)</div>
+          <div style="font-size:13px; color:#374151; margin-bottom:8px;">
+            Adds new projects, summaries, attachments, sub-tasks, and links from the file <strong>without deleting anything</strong> you already have. Safe to run anytime.
+          </div>
+          <input type="file" id="merge-file" accept=".json" style="display:none;">
+          <button class="btn btn-success" id="btn-merge">🔀 Merge Backup File...</button>
+        </div>
+
+        <div style="border:1px solid #fde68a; background:#fffbeb; padding:10px 12px; border-radius:6px;">
+          <div style="font-weight:600; color:#92400e; margin-bottom:4px;">📁 Replace (full restore)</div>
+          <div style="font-size:13px; color:#374151; margin-bottom:8px;">
+            <strong>Erases</strong> all current data and replaces it with the contents of the file. Use this only when restoring a snapshot to an empty tracker.
+          </div>
+          <input type="file" id="import-file" accept=".json" style="display:none;">
+          <button class="btn btn-primary" id="btn-import">📁 Replace with Backup File...</button>
+        </div>
+      </div>
+
+      <div class="template-box">
+        <h4>⏱️ Restore Points</h4>
+        Automatic snapshots taken before any replace, reset, merge or delete. The last 12 are kept.
+        <div id="restore-list" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="template-box">
+        <h4>🔄 Reset to Starter Projects</h4>
+        Replace all data with the original starter project list (from your uploaded doc).
+        <div style="margin-top:10px;">
+          <button class="btn btn-danger" id="btn-reset">↺ Reset to Starter Data</button>
+        </div>
+      </div>
+
+      <div class="template-box">
+        <h4>📊 Storage Info</h4>
+        <div id="storage-info" style="font-family: monospace; font-size: 12px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Project Edit Modal -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <h2 id="modal-title">New Project</h2>
+    <div class="form-group">
+      <label>Project Name *</label>
+      <input type="text" id="m-name" placeholder="e.g. BoatCarpet — CAD Builder">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Category</label>
+        <input type="text" id="m-category" placeholder="e.g. BoatCarpet, Personal, Amazon">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="m-status">
+          <option value="active">Active</option>
+          <option value="idea">Idea</option>
+          <option value="paused">Paused</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description / Goal</label>
+      <textarea id="m-description" placeholder="What is this project about?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Sub-tasks / Notes (one per line)</label>
+      <textarea id="m-notes" class="lg" placeholder="- Sub-task 1&#10;- Sub-task 2"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Links (one per line)</label>
+      <textarea id="m-links" placeholder="https://example.com"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="m-cancel">Cancel</button>
+      <button class="btn btn-primary" id="m-save">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+const STORAGE_KEY = 'projectTrackerData_v1';
+
+const STARTER_DATA = {
+  projects: [
+    { id: 'p1', name: 'BoatCarpet — Website & CAD Builder', category: 'BoatCarpet', status: 'active',
+      description: 'Build out the website and CAD builder system.',
+      notes: ['Proprietary FlexiSign vector files', 'Path to import directly from CMC once a system is set up', 'Clean images and label parts correctly'],
+      links: [], summaries: [] },
+    { id: 'p2', name: 'BoatCarpet — CMC Patterns', category: 'BoatCarpet', status: 'idea',
+      description: 'CMC pattern system — currently sparse, needs build-out.',
+      notes: ['This currently holds little information'],
+      links: [], summaries: [] },
+    { id: 'p3', name: 'BoatCarpet — Quotes & Orders', category: 'BoatCarpet', status: 'active',
+      description: 'Quote and order flow tools.',
+      notes: ['Work on a way to have the email check for patterns and create either email or quote', 'Tie into WooCommerce?'],
+      links: ['file:///C:/Users/kevin/Downloads/BoatCarpet_BusinessTools_19.html'], summaries: [] },
+    { id: 'p4', name: 'BoatCarpet — Business Tools (HTML)', category: 'BoatCarpet', status: 'active',
+      description: 'The live testing page — improvements needed.',
+      notes: ['This is the current live testing page', 'Get to work on mobile devices', 'Layout of page', 'Clean up images', 'Image show color of material selected', 'Highlight the image customer selects'],
+      links: [], summaries: [] },
+    { id: 'p5', name: 'BoatCarpet — Future Site Ideas', category: 'BoatCarpet', status: 'idea',
+      description: 'Future product/feature additions.',
+      notes: ['Add embroidery', 'Add FlexDek', 'RVs/campers for custom carpet'],
+      links: [], summaries: [] },
+    { id: 'p6', name: 'boatvinyl.com', category: 'New Sites', status: 'idea',
+      description: 'New e-commerce site for vinyl flooring/upholstery for boats.',
+      notes: ['Sell vinyl flooring for boats', 'Sell vinyl upholstery for boats', 'Build e-commerce site'],
+      links: [], summaries: [] },
+    { id: 'p7', name: 'meadedistributing.com', category: 'New Sites', status: 'active',
+      description: 'Update existing site — main competition is Miami Corp.',
+      notes: ['Update site', 'This site is main competition', 'Choose products to sell', 'E-commerce site'],
+      links: ['https://miamicorp.com/'], summaries: [] },
+    { id: 'p8', name: 'snap-inboatcarpet.com', category: 'New Sites', status: 'idea',
+      description: 'Clone boatcarpet.com snap-in for new domain.',
+      notes: ['Clone boatcarpet.com websites snap-in', 'E-commerce site', 'Sell RVs and campers and explore other paths'],
+      links: [], summaries: [] },
+    { id: 'p9', name: 'seadekflooring.com', category: 'New Sites', status: 'idea',
+      description: 'Decide if this site is worth making.',
+      notes: ['Decide if this is worth making a site'],
+      links: [], summaries: [] },
+    { id: 'p10', name: 'Amazon Listings Cleanup', category: 'Marketplaces', status: 'active',
+      description: 'Review and clean up Amazon product listings.',
+      notes: ['Check how our products are listed', 'Find out what products Marine Carpet is on our pages', 'Come up with plan to get Marine Carpet off our site'],
+      links: [], summaries: [] },
+    { id: 'p11', name: 'Walmart Listings', category: 'Marketplaces', status: 'active',
+      description: 'Improve Walmart listing visibility.',
+      notes: ['Work on listing', 'Find out why only a small number of items are showing up'],
+      links: [], summaries: [] },
+    { id: 'p12', name: 'Sell Machines', category: 'Business', status: 'active',
+      description: 'Sell off unused machines.',
+      notes: ['Find out where to list/sell machine', 'Claude looks to find who may use machine', 'Target email of other ways to sell the machine', 'Come up with a good listing for machine'],
+      links: [], summaries: [] },
+    { id: 'p13', name: 'Tennis Tracker', category: 'Personal', status: 'active',
+      description: 'Tennis tracking page + automation.',
+      notes: ['Find way to automate weekly emails'],
+      links: ['file:///C:/Users/kevin/Downloads/tennis-tracker_1.html'], summaries: [] },
+    { id: 'p14', name: 'Paddle Tracker', category: 'Personal', status: 'idea',
+      description: 'Build paddle tracking page (mirror of tennis).',
+      notes: ['Build same page for paddle', 'Find way to automate weekly emails'],
+      links: [], summaries: [] }
+  ]
+};
+
+let data = { projects: [] };
+let currentFilter = 'all';
+let editingProjectId = null;
+
+// ============ STORAGE ============
+function loadData() {
+  let stored = null;
+  try { stored = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+  if (stored) {
+    try { data = normalizeDoc(JSON.parse(stored)); return; }
+    catch (e) {
+      // Stored data exists but will not parse. NEVER overwrite it with
+      // starter data — that is exactly how a whole tracker gets erased.
+      // Fall back to the newest restore point and leave the bad value alone.
+      recoveryState = 'corrupt';
+      for (const k of listRestorePoints()) {
+        try { data = normalizeDoc(JSON.parse(localStorage.getItem(k))); return; } catch (e2) {}
+      }
+      data = { projects: [] };
+      return;
+    }
+  }
+
+  // Nothing in storage at all: either a genuine first run, or the browser
+  // cleared site data. Both look identical from here, so we do NOT guess
+  // and we do NOT write anything. An automatic reseed would overwrite the
+  // cloud copy before it has had a chance to load.
+  const pts = listRestorePoints();
+  if (pts.length) {
+    recoveryState = 'wiped';
+    for (const k of pts) {
+      try { data = normalizeDoc(JSON.parse(localStorage.getItem(k))); return; } catch (e) {}
+    }
+  }
+  data = { projects: [] };
+  recoveryState = 'empty';
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showBanner(fbReady() ? '💾 Saved · ☁ synced' : '💾 Saved');
+  } catch (e) {
+    showBanner('⚠️ Could not save to browser storage — export a backup now.', 'warn');
+  }
+  pushToCloud();
+}
+
+function showBanner(msg, type) {
+  const b = document.getElementById('autosave-banner');
+  const m = document.getElementById('autosave-msg');
+  m.textContent = msg;
+  b.className = 'banner ' + (type === 'warn' ? '' : 'saved');
+  b.style.display = 'flex';
+  clearTimeout(showBanner._t);
+  showBanner._t = setTimeout(() => { b.style.display = 'none'; }, 2000);
+}
+
+
+// ══════════════════════════════════════════════════════════════════
+//  RESTORE POINTS  —  local undo history
+//  A snapshot is taken before anything destructive (replace, reset,
+//  merge, delete). Twelve are kept; the oldest is dropped.
+// ══════════════════════════════════════════════════════════════════
+const RESTORE_PREFIX = STORAGE_KEY + '__restore_';
+const TOMB_KEY = STORAGE_KEY + '__deleted';
+const MAX_RESTORE_POINTS = 12;
+let recoveryState = '';
+
+function normalizeDoc(d) {
+  if (!d || !Array.isArray(d.projects)) throw new Error('not a tracker document');
+  d.projects.forEach(p => {
+    if (!Array.isArray(p.attachments)) p.attachments = [];
+    if (!Array.isArray(p.summaries)) p.summaries = [];
+    if (!Array.isArray(p.notes)) p.notes = [];
+    if (!Array.isArray(p.links)) p.links = [];
+    p.summaries.sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+  });
+  return d;
+}
+
+function listRestorePoints() {
+  const out = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.indexOf(RESTORE_PREFIX) === 0) out.push(k);
+    }
+  } catch (e) {}
+  return out.sort().reverse();
+}
+
+function makeRestorePoint(label) {
+  try {
+    const current = localStorage.getItem(STORAGE_KEY);
+    if (!current) return;
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    localStorage.setItem(RESTORE_PREFIX + stamp + '__' + (label || 'auto'), current);
+    const pts = listRestorePoints();
+    for (let i = MAX_RESTORE_POINTS; i < pts.length; i++) localStorage.removeItem(pts[i]);
+  } catch (e) { /* a full quota must never block the real save */ }
+}
+
+function restoreFromPoint(key) {
+  let doc;
+  try { doc = normalizeDoc(JSON.parse(localStorage.getItem(key))); }
+  catch (e) { alert('That restore point could not be read.'); return; }
+  const n = doc.projects.length;
+  const s = doc.projects.reduce((a, p) => a + p.summaries.length, 0);
+  if (!confirm('Restore ' + n + ' projects and ' + s + ' summaries from this point?\n\nYour current data is snapshotted first, so this is reversible.')) return;
+  makeRestorePoint('before-restore');
+  data = doc;
+  saveData(); renderProjects(); rebuildProjectSelect(); updateStorageInfo(); renderRestorePoints();
+  alert('Restored.');
+}
+
+function renderRestorePoints() {
+  const el = document.getElementById('restore-list');
+  if (!el) return;
+  const pts = listRestorePoints();
+  if (!pts.length) { el.innerHTML = '<em style="color:#6b7280;">No restore points yet. One is saved automatically before any replace, reset, merge or delete.</em>'; return; }
+  el.innerHTML = pts.map(k => {
+    const rest = k.slice(RESTORE_PREFIX.length);
+    const stamp = rest.slice(0, 19).replace('T', ' ').replace(/-/g, function (m, i) { return i < 10 ? '-' : ':'; });
+    const label = rest.slice(21) || 'auto';
+    let n = '?', s = '?';
+    try { const d = JSON.parse(localStorage.getItem(k)); n = d.projects.length; s = d.projects.reduce((a, p) => a + (p.summaries || []).length, 0); } catch (e) {}
+    return '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #eef2f7;">' +
+      '<code style="font-size:12px;color:#374151;">' + stamp + '</code>' +
+      '<span style="font-size:12px;color:#6b7280;">' + label + ' · ' + n + ' projects · ' + s + ' summaries</span>' +
+      '<button class="btn" style="margin-left:auto;padding:4px 10px;font-size:12px;" onclick="restoreFromPoint(' + JSON.stringify(k).replace(/"/g, '&quot;') + ')">Restore</button>' +
+      '</div>';
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CLOUD SYNC  —  Firebase Realtime Database (boatcarpet-quotes)
+//  Same project and sign-in as the BoatCarpet Business Tools page.
+//  Signed out, everything still works; the data just stays local.
+// ══════════════════════════════════════════════════════════════════
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAUl5cDgtDlsy_PG_UM9NaLqDVKBPh7QAc",
+  authDomain: "boatcarpet-quotes.firebaseapp.com",
+  databaseURL: "https://boatcarpet-quotes-default-rtdb.firebaseio.com",
+  projectId: "boatcarpet-quotes",
+  storageBucket: "boatcarpet-quotes.firebasestorage.app",
+  messagingSenderId: "772275319434",
+  appId: "1:772275319434:web:949a718dd0b877a07eb373"
+};
+var fbAuth = null, fbDB = null, fbUser = null;
+const CLOUD_DOC = 'projectTracker/doc';
+const CLOUD_DEL = 'projectTracker/deleted';
+
+function fbReady() { return !!(fbDB && fbUser); }
+
+function readTombstones() {
+  try { return JSON.parse(localStorage.getItem(TOMB_KEY) || '[]'); } catch (e) { return []; }
+}
+function addTombstone(id) {
+  const t = readTombstones();
+  if (t.indexOf(id) === -1) t.push(id);
+  try { localStorage.setItem(TOMB_KEY, JSON.stringify(t)); } catch (e) {}
+  if (fbReady()) { try { fbDB.ref(CLOUD_DEL).set(t); } catch (e) {} }
+}
+
+function initCloud() {
+  if (location.protocol === 'file:') {
+    setSyncBar('local', 'Running as a file on this computer — data is saved in this browser only, and a browser cleanup can erase it. Put this page on boatcarpet.github.io to turn on cloud backup.');
+    return;
+  }
+  if (typeof firebase === 'undefined') { setSyncBar('local', 'Cloud sync unavailable (offline) — data is saved in this browser.'); return; }
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    fbAuth = firebase.auth();
+    fbDB = firebase.database();
+    fbAuth.onAuthStateChanged(function (u) {
+      fbUser = u;
+      if (u) { setSyncBar('on', u.email || 'signed in'); pullFromCloud(); }
+      else { setSyncBar('off', ''); }
+    });
+  } catch (e) {
+    setSyncBar('local', 'Cloud sync could not start — data is saved in this browser.');
+  }
+}
+
+function cloudSignIn() {
+  if (!fbAuth) { alert('Cloud sync is not available on this page. Your data is still saved in this browser.'); return; }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  fbAuth.signInWithPopup(provider).catch(function (err) {
+    const code = (err && err.code) || '';
+    let msg;
+    if (code === 'auth/unauthorized-domain') msg = 'Firebase is blocking this web address.\n\nFix: Firebase console → Authentication → Settings → Authorized domains → Add domain → boatcarpet.github.io';
+    else if (code === 'auth/operation-not-allowed') msg = 'Google sign-in is turned off for this Firebase project.\n\nFix: Firebase console → Authentication → Sign-in method → enable Google.';
+    else if (code === 'auth/popup-blocked') msg = 'Your browser blocked the sign-in popup. Allow popups for this page and try again.';
+    else if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+    else msg = 'Sign-in failed: ' + ((err && err.message) || code);
+    alert(msg + '\n\nYour data is safe either way — it is saved in this browser.');
+  });
+}
+
+function cloudSignOut() { if (fbAuth) fbAuth.signOut(); }
+
+// Merge rule: keep everything from both sides. Projects match on id, then
+// on name. Summaries dedupe on date + title + first 100 chars, the same key
+// the Merge Backup File button uses. Deleted project ids never come back.
+function mergeDocs(local, cloud) {
+  const dead = readTombstones();
+  const out = JSON.parse(JSON.stringify(local || { projects: [] }));
+  if (!Array.isArray(out.projects)) out.projects = [];
+  out.projects = out.projects.filter(p => dead.indexOf(p.id) === -1);
+
+  const findLocal = inc => out.projects.find(p => p.id === inc.id) ||
+    out.projects.find(p => (p.name || '').trim().toLowerCase() === (inc.name || '').trim().toLowerCase());
+
+  const sumKey = s => (s.date || '') + '|' + (s.title || '') + '|' + ((s.content || '').slice(0, 100));
+
+  ((cloud && cloud.projects) || []).forEach(inc => {
+    if (!inc || dead.indexOf(inc.id) !== -1) return;
+    const ex = findLocal(inc);
+    if (!ex) { out.projects.push(JSON.parse(JSON.stringify(inc))); return; }
+    const have = new Set((ex.summaries || []).map(sumKey));
+    (inc.summaries || []).forEach(s => { if (!have.has(sumKey(s))) { ex.summaries.push(s); have.add(sumKey(s)); } });
+    const hn = new Set(ex.notes || []);
+    (inc.notes || []).forEach(n => { if (!hn.has(n)) { ex.notes.push(n); hn.add(n); } });
+    const hl = new Set(ex.links || []);
+    (inc.links || []).forEach(l => { if (!hl.has(l)) { ex.links.push(l); hl.add(l); } });
+    (inc.attachments || []).forEach(a => {
+      const dup = (ex.attachments || []).find(x =>
+        (a.url && x.url && a.url === x.url) ||
+        (!a.url && !x.url && a.label && x.label && a.label.toLowerCase() === x.label.toLowerCase()));
+      if (!dup) ex.attachments.push(a);
+    });
+  });
+  return normalizeDoc(out);
+}
+
+function pullFromCloud() {
+  if (!fbReady()) return;
+  setSyncBar('sync', '');
+  fbDB.ref(CLOUD_DEL).once('value').then(function (dsnap) {
+    const cd = dsnap.val();
+    if (Array.isArray(cd)) {
+      const t = readTombstones();
+      cd.forEach(id => { if (t.indexOf(id) === -1) t.push(id); });
+      try { localStorage.setItem(TOMB_KEY, JSON.stringify(t)); } catch (e) {}
+    }
+    return fbDB.ref(CLOUD_DOC).once('value');
+  }).then(function (snap) {
+    const cloud = snap.val();
+    const before = JSON.stringify(data);
+    const merged = mergeDocs(data, cloud);
+    if (JSON.stringify(merged) !== before) makeRestorePoint('before-cloud-merge');
+    data = merged;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+    fbDB.ref(CLOUD_DOC).set(data).catch(function () {});
+    if (recoveryState) { recoveryState = ''; renderRecoveryBanner(); }
+    setSyncBar('on', (fbUser && fbUser.email) || 'signed in');
+    renderProjects(); rebuildProjectSelect(); updateStorageInfo(); renderRestorePoints();
+  }).catch(function (err) { setSyncBar('error', cloudErrorText(err)); });
+}
+
+function pushToCloud() {
+  if (!fbReady()) return;
+  fbDB.ref(CLOUD_DOC).set(data).catch(function (err) { setSyncBar('error', cloudErrorText(err)); });
+}
+
+function cloudErrorText(err) {
+  const m = (err && err.message) ? err.message : 'cloud request failed';
+  if (/permission|denied/i.test(m)) {
+    const who = (fbUser && fbUser.email) || 'this account';
+    return 'the database rules do not allow <strong>' + who + '</strong>. Add a projectTracker rule for this address (Firebase console → Realtime Database → Rules)';
+  }
+  return m;
+}
+
+function setSyncBar(state, detail) {
+  const bar = document.getElementById('syncBar');
+  if (!bar) return;
+  let html = '';
+  if (state === 'on') {
+    bar.style.background = '#e8f5e9'; bar.style.borderColor = '#a5d6a7';
+    html = '<span style="color:#2e7d32;"><strong>☁ Synced</strong> — saved in this browser and to the cloud as ' + detail + '</span>' +
+      '<button class="btn" style="margin-left:auto;padding:5px 12px;font-size:12px;" onclick="pullFromCloud()">Sync now</button>' +
+      '<button class="btn" style="padding:5px 12px;font-size:12px;" onclick="cloudSignOut()">Sign out</button>';
+  } else if (state === 'sync') {
+    bar.style.background = '#e8f5e9'; bar.style.borderColor = '#a5d6a7';
+    html = '<span style="color:#2e7d32;">↻ Syncing…</span>';
+  } else if (state === 'error') {
+    bar.style.background = '#fff8e1'; bar.style.borderColor = '#f0d060';
+    html = '<span style="color:#7a5b00;"><strong>Cloud sync problem:</strong> ' + detail + ' — your data is still saved in this browser.</span>' +
+      '<button class="btn" style="margin-left:auto;padding:5px 12px;font-size:12px;" onclick="pullFromCloud()">Retry</button>';
+  } else if (state === 'local') {
+    bar.style.background = '#fff8e1'; bar.style.borderColor = '#f0d060';
+    html = '<span style="color:#7a5b00;">⚠ ' + detail + '</span>';
+  } else {
+    bar.style.background = '#f2f7fc'; bar.style.borderColor = '#ccd6e0';
+    html = '<span style="color:#374151;"><strong>Saved in this browser.</strong> Sign in to back this up to the cloud and reach it from any device.</span>' +
+      '<button class="btn btn-primary" style="margin-left:auto;padding:6px 14px;font-size:12px;" onclick="cloudSignIn()">Sign in with Google</button>';
+  }
+  bar.innerHTML = html;
+}
+
+function renderRecoveryBanner() {
+  const el = document.getElementById('recovery-banner');
+  if (!el) return;
+  if (!recoveryState) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  let msg;
+  if (recoveryState === 'corrupt') msg = '<strong>Your saved data could not be read.</strong> The damaged copy has been left untouched — nothing was overwritten. Restore from a point below, load a backup file, or sign in to pull the cloud copy.';
+  else if (recoveryState === 'wiped') msg = '<strong>Browser storage was empty.</strong> This usually means site data was cleared. A restore point was loaded — check it looks right, then save. Nothing was overwritten with starter data.';
+  else msg = '<strong>No data found.</strong> This tracker starts empty on purpose — it will never overwrite a cloud or backup copy with starter projects. Load a backup file, sign in to pull the cloud copy, or start the starter list below.';
+  el.innerHTML = '<span>⚠️</span><span>' + msg + '</span>' +
+    (recoveryState === 'empty' ? '<button class="btn" style="margin-left:auto;padding:5px 12px;font-size:12px;" onclick="loadStarter()">Load starter projects</button>' : '');
+}
+
+function loadStarter() {
+  if (!confirm('Load the built-in starter project list? Only do this if you have no backup and no cloud copy.')) return;
+  makeRestorePoint('before-starter');
+  data = normalizeDoc(JSON.parse(JSON.stringify(STARTER_DATA)));
+  recoveryState = ''; renderRecoveryBanner();
+  saveData(); renderProjects(); rebuildProjectSelect(); updateStorageInfo();
+}
+
+// ============ RENDER ============
+function statusLabel(s) {
+  return { active: 'Active', idea: 'Idea', paused: 'Paused', done: 'Done' }[s] || s;
+}
+
+function renderProjects() {
+  const list = document.getElementById('project-list');
+  const search = document.getElementById('search').value.toLowerCase();
+
+  let filtered = data.projects.filter(p => {
+    if (currentFilter !== 'all' && p.status !== currentFilter) return false;
+    if (search) {
+      const hay = (p.name + ' ' + p.description + ' ' + p.category + ' ' +
+                   (p.notes || []).join(' ') + ' ' +
+                   (p.summaries || []).map(s => s.title + ' ' + s.content).join(' ')).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty">No projects match your filter.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
+    const summaryCount = (p.summaries || []).length;
+    const noteCount = (p.notes || []).length;
+    const attachCount = (p.attachments || []).length;
+    return `
+      <div class="project" data-id="${p.id}">
+        <div class="project-header" onclick="toggleProject('${p.id}')">
+          <span class="project-toggle">▶</span>
+          <span class="project-name">${escapeHtml(p.name)}</span>
+          <span class="project-meta">${noteCount} task${noteCount===1?'':'s'} · ${summaryCount} summar${summaryCount===1?'y':'ies'}${attachCount>0?' · '+attachCount+' file'+(attachCount===1?'':'s'):''}</span>
+          <span class="project-status status-${p.status}">${statusLabel(p.status)}</span>
+        </div>
+        <div class="project-body">
+          ${p.category ? `<div class="field-label">Category</div><div class="field-content">${escapeHtml(p.category)}</div>` : ''}
+          ${p.description ? `<div class="field-label">Description</div><div class="field-content">${escapeHtml(p.description)}</div>` : ''}
+          ${noteCount > 0 ? `
+            <div class="field-label">Sub-tasks / Notes</div>
+            <ul class="note-list">
+              ${p.notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}
+            </ul>` : ''}
+          ${(p.links || []).length > 0 ? `
+            <div class="field-label">Links</div>
+            <div class="field-content">${p.links.map(l => `<a href="${escapeHtml(l)}" target="_blank">${escapeHtml(l)}</a>`).join('<br>')}</div>` : ''}
+
+          <div class="attachments-section" data-project="${p.id}">
+            <div class="field-label attachments-heading" onclick="toggleAttachmentsSection(this)">
+              <span class="attachments-caret">▶</span>
+              <span>📎 Files &amp; Attachments${attachCount > 0 ? ` (${attachCount})` : ''}</span>
+            </div>
+            <div class="attachments-body">
+              ${attachCount > 0 ? `
+                <div class="attachments-toolbar">
+                  <button class="btn btn-sm" onclick="expandAllAttachments('${p.id}')">▼ Expand All</button>
+                  <button class="btn btn-sm" onclick="collapseAllAttachments('${p.id}')">▶ Collapse All</button>
+                </div>
+                ${[...p.attachments].reverse().map((a, idx) => {
+                  const realIdx = p.attachments.length - 1 - idx;
+                  return `
+                  <div class="attachment-entry" data-project="${p.id}" data-att-idx="${realIdx}">
+                    <div class="attachment-header" onclick="toggleAttachment(this)">
+                      <span class="attachment-caret">▶</span>
+                      <div class="attachment-label" style="flex:1;">
+                        <span>${escapeHtml(a.label || 'Untitled file')}</span>
+                        ${a.addedDate ? `<span class="att-date">added ${escapeHtml(a.addedDate)}</span>` : ''}
+                      </div>
+                    </div>
+                    <div class="attachment-body">
+                      ${a.url ? `<div class="attachment-url"><a href="${escapeHtml(a.url)}" target="_blank">${escapeHtml(a.url)}</a></div>` : ''}
+                      ${a.description ? `<div class="attachment-desc">${escapeHtml(a.description)}</div>` : ''}
+                      <div class="attachment-actions">
+                        <button class="btn btn-sm" onclick="copyAttachmentUrl('${p.id}', ${realIdx}, this)">📋 Copy Link</button>
+                        <button class="btn btn-sm btn-primary" onclick="editAttachment('${p.id}', ${realIdx})">✏️ Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteAttachment('${p.id}', ${realIdx})">🗑️ Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                }).join('')}` : `<div class="field-content" style="font-style:italic; color:#9ca3af; font-size:13px;">No files attached yet.</div>`}
+            </div>
+          </div>
+
+          <div id="add-att-form-${p.id}" class="add-attachment-form" style="display:none;">
+            <input type="text" id="att-label-${p.id}" placeholder="Label (e.g. 'Latest builder v9.59' or 'CMC photo zip')">
+            <input type="text" id="att-url-${p.id}" placeholder="Link or path (https://... or file:///C:/Users/...)">
+            <textarea id="att-desc-${p.id}" placeholder="Optional description / notes"></textarea>
+            <div class="att-form-actions">
+              <button class="btn btn-sm" onclick="cancelAddAttachment('${p.id}')">Cancel</button>
+              <button class="btn btn-sm btn-success" onclick="saveAttachment('${p.id}')">💾 Save File</button>
+            </div>
+          </div>
+
+          ${summaryCount > 0 ? `
+            <div class="field-label">Session Summaries (most recent first)</div>
+            <div class="summary-toolbar">
+              <span class="summary-toolbar-label">${summaryCount} summar${summaryCount===1?'y':'ies'}:</span>
+              <button class="btn btn-sm" onclick="expandAllSummaries('${p.id}')">▼ Expand All</button>
+              <button class="btn btn-sm" onclick="collapseAllSummaries('${p.id}')">▶ Collapse All</button>
+            </div>
+            ${[...p.summaries].reverse().map((s, idx) => {
+              const realIdx = p.summaries.length - 1 - idx;
+              return `
+              <div class="summary-entry" data-project="${p.id}" data-idx="${realIdx}">
+                <div class="summary-header" onclick="toggleSummary(this)">
+                  <span class="summary-caret">▶</span>
+                  <div class="summary-date">${s.date}${s.title ? ' — ' + escapeHtml(s.title) : ''}</div>
+                </div>
+                <div class="summary-body">
+                  <div class="summary-text">${escapeHtml(s.content)}</div>
+                  <div class="summary-actions">
+                    <button class="btn btn-sm btn-primary" onclick="copyForNewChat('${p.id}', ${realIdx}, this)">📋 Copy for New Chat</button>
+                    <button class="btn btn-sm" onclick="copySummaryOnly('${p.id}', ${realIdx}, this)">📄 Copy Summary Only</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteSummary('${p.id}', ${realIdx})">Delete</button>
+                  </div>
+                </div>
+              </div>
+            `;
+            }).join('')}` : ''}
+          <div class="project-actions">
+            <button class="btn btn-sm btn-primary" onclick="editProject('${p.id}')">✏️ Edit</button>
+            <button class="btn btn-sm" onclick="quickAddSummary('${p.id}')">+ Add Summary</button>
+            <button class="btn btn-sm" onclick="showAddAttachment('${p.id}')" style="background:#fef3c7; color:#854d0e; border-color:#fbbf24;">📎 + Add File</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteProject('${p.id}')">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // restore open state
+  document.querySelectorAll('.project').forEach(el => {
+    if (openProjects.has(el.dataset.id)) el.classList.add('open');
+  });
+}
+
+const openProjects = new Set();
+function toggleProject(id) {
+  const el = document.querySelector(`.project[data-id="${id}"]`);
+  if (!el) return;
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) openProjects.add(id); else openProjects.delete(id);
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ============ PROJECT CRUD ============
+function openProjectModal(project) {
+  editingProjectId = project ? project.id : null;
+  document.getElementById('modal-title').textContent = project ? 'Edit Project' : 'New Project';
+  document.getElementById('m-name').value = project ? project.name : '';
+  document.getElementById('m-category').value = project ? project.category || '' : '';
+  document.getElementById('m-status').value = project ? project.status : 'active';
+  document.getElementById('m-description').value = project ? project.description || '' : '';
+  document.getElementById('m-notes').value = project ? (project.notes || []).map(n => '- ' + n).join('\n') : '';
+  document.getElementById('m-links').value = project ? (project.links || []).join('\n') : '';
+  document.getElementById('project-modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('project-modal').classList.remove('show');
+  editingProjectId = null;
+}
+
+function saveProjectFromModal() {
+  const name = document.getElementById('m-name').value.trim();
+  if (!name) { alert('Project name is required'); return; }
+  const notes = document.getElementById('m-notes').value.split('\n')
+    .map(l => l.replace(/^-\s*/, '').trim()).filter(l => l);
+  const links = document.getElementById('m-links').value.split('\n')
+    .map(l => l.trim()).filter(l => l);
+
+  const proj = {
+    name,
+    category: document.getElementById('m-category').value.trim(),
+    status: document.getElementById('m-status').value,
+    description: document.getElementById('m-description').value.trim(),
+    notes,
+    links
+  };
+
+  if (editingProjectId) {
+    const existing = data.projects.find(p => p.id === editingProjectId);
+    Object.assign(existing, proj);
+  } else {
+    proj.id = 'p' + Date.now();
+    proj.summaries = [];
+    proj.attachments = [];
+    data.projects.push(proj);
+    openProjects.add(proj.id);
+  }
+  saveData();
+  renderProjects();
+  rebuildProjectSelect();
+  closeModal();
+}
+
+function editProject(id) {
+  const p = data.projects.find(x => x.id === id);
+  if (p) openProjectModal(p);
+}
+
+function deleteProject(id) {
+  const p = data.projects.find(x => x.id === id);
+  if (!p) return;
+  if (confirm(`Delete project "${p.name}"?\n\nA restore point is saved first, so this can be undone from the Save / Load tab.`)) {
+    makeRestorePoint('before-delete');
+    addTombstone(id);
+    data.projects = data.projects.filter(x => x.id !== id);
+    openProjects.delete(id);
+    saveData();
+    renderProjects();
+    rebuildProjectSelect();
+  }
+}
+
+// ============ ATTACHMENTS (v6) ============
+function showAddAttachment(projectId) {
+  // Make sure the project body is open before showing the form
+  const projEl = document.querySelector(`.project[data-id="${projectId}"]`);
+  if (projEl && !projEl.classList.contains('open')) {
+    projEl.classList.add('open');
+    openProjects.add(projectId);
+  }
+  const form = document.getElementById('add-att-form-' + projectId);
+  if (!form) return;
+  form.style.display = 'block';
+  // Clear any old values
+  const labelEl = document.getElementById('att-label-' + projectId);
+  const urlEl = document.getElementById('att-url-' + projectId);
+  const descEl = document.getElementById('att-desc-' + projectId);
+  if (labelEl) { labelEl.value = ''; labelEl.focus(); }
+  if (urlEl) urlEl.value = '';
+  if (descEl) descEl.value = '';
+  // Clear edit flag if there was one
+  form.dataset.editIdx = '';
+}
+
+function cancelAddAttachment(projectId) {
+  const form = document.getElementById('add-att-form-' + projectId);
+  if (form) {
+    form.style.display = 'none';
+    form.dataset.editIdx = '';
+  }
+}
+
+function saveAttachment(projectId) {
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p) return;
+  if (!Array.isArray(p.attachments)) p.attachments = [];
+
+  const label = document.getElementById('att-label-' + projectId).value.trim();
+  const url = document.getElementById('att-url-' + projectId).value.trim();
+  const description = document.getElementById('att-desc-' + projectId).value.trim();
+
+  if (!label && !url) {
+    alert('Please enter at least a label or a link.');
+    return;
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const form = document.getElementById('add-att-form-' + projectId);
+  const editIdx = form && form.dataset.editIdx !== '' ? parseInt(form.dataset.editIdx) : -1;
+
+  if (editIdx >= 0 && p.attachments[editIdx]) {
+    // Editing existing
+    p.attachments[editIdx].label = label;
+    p.attachments[editIdx].url = url;
+    p.attachments[editIdx].description = description;
+    // don't overwrite addedDate on edit
+  } else {
+    // New attachment
+    p.attachments.push({
+      id: 'a' + Date.now(),
+      label,
+      url,
+      description,
+      addedDate: today
+    });
+  }
+
+  saveData();
+  renderProjects();
+}
+
+function editAttachment(projectId, attIdx) {
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p || !p.attachments[attIdx]) return;
+  const a = p.attachments[attIdx];
+
+  showAddAttachment(projectId);
+  document.getElementById('att-label-' + projectId).value = a.label || '';
+  document.getElementById('att-url-' + projectId).value = a.url || '';
+  document.getElementById('att-desc-' + projectId).value = a.description || '';
+
+  const form = document.getElementById('add-att-form-' + projectId);
+  if (form) form.dataset.editIdx = String(attIdx);
+}
+
+function deleteAttachment(projectId, attIdx) {
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p || !p.attachments[attIdx]) return;
+  const a = p.attachments[attIdx];
+  const label = a.label || a.url || 'this file';
+  if (!confirm(`Remove "${label}" from this project? This cannot be undone.`)) return;
+  p.attachments.splice(attIdx, 1);
+  saveData();
+  renderProjects();
+}
+
+function copyAttachmentUrl(projectId, attIdx, btn) {
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p || !p.attachments[attIdx]) return;
+  const a = p.attachments[attIdx];
+  if (!a.url) { alert('No link/path to copy.'); return; }
+  copyToClipboardWithFeedback(a.url, btn, '✓ Link copied');
+}
+// ============ END ATTACHMENTS ============
+
+
+function copyForNewChat(projectId, summaryIdx, btn) {
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p) return;
+  const s = p.summaries[summaryIdx];
+  if (!s) return;
+
+  const text = `I'm continuing work on "${p.name}". Here is the most recent session summary so you have full context:
+
+DATE: ${s.date}${s.title ? '\nSESSION TITLE: ' + s.title : ''}
+
+${s.content}
+
+---
+Please review this context and let me know you're ready to pick up where we left off. I'll tell you what I want to work on next.`;
+
+  copyToClipboardWithFeedback(text, btn, '✓ Copied! Paste into new chat');
+}
+
+function copySummaryOnly(projectId, summaryIdx, btn) {
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p) return;
+  const s = p.summaries[summaryIdx];
+  if (!s) return;
+
+  const text = `PROJECT: ${p.name}
+DATE: ${s.date}${s.title ? '\nSESSION TITLE: ' + s.title : ''}
+
+${s.content}`;
+
+  copyToClipboardWithFeedback(text, btn, '✓ Copied');
+}
+
+function copyToClipboardWithFeedback(text, btn, successMsg) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = successMsg;
+    btn.classList.add('btn-copy-feedback');
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove('btn-copy-feedback');
+    }, 1800);
+  }).catch(() => {
+    // Fallback: select text in a temp textarea
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    const orig = btn.innerHTML;
+    btn.innerHTML = successMsg;
+    btn.classList.add('btn-copy-feedback');
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove('btn-copy-feedback');
+    }, 1800);
+  });
+}
+
+function deleteSummary(projectId, summaryIdx) {
+  if (!confirm('Delete this summary?')) return;
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p) return;
+  p.summaries.splice(summaryIdx, 1);
+  saveData();
+  renderProjects();
+}
+
+function quickAddSummary(projectId) {
+  switchTab('summary');
+  document.getElementById('summary-project').value = projectId;
+  document.getElementById('summary-content').focus();
+}
+
+// v8: collapsible summaries
+function toggleSummary(headerEl) {
+  const entry = headerEl.closest('.summary-entry');
+  if (entry) entry.classList.toggle('expanded');
+}
+function expandAllSummaries(projectId) {
+  document
+    .querySelectorAll('.summary-entry[data-project="' + projectId + '"]')
+    .forEach(el => el.classList.add('expanded'));
+}
+function collapseAllSummaries(projectId) {
+  document
+    .querySelectorAll('.summary-entry[data-project="' + projectId + '"]')
+    .forEach(el => el.classList.remove('expanded'));
+}
+
+// v9: collapsible attachments
+function toggleAttachmentsSection(headingEl) {
+  const sec = headingEl.closest('.attachments-section');
+  if (sec) sec.classList.toggle('expanded');
+}
+function toggleAttachment(headerEl) {
+  const entry = headerEl.closest('.attachment-entry');
+  if (entry) entry.classList.toggle('expanded');
+}
+function expandAllAttachments(projectId) {
+  document
+    .querySelectorAll('.attachment-entry[data-project="' + projectId + '"]')
+    .forEach(el => el.classList.add('expanded'));
+}
+function collapseAllAttachments(projectId) {
+  document
+    .querySelectorAll('.attachment-entry[data-project="' + projectId + '"]')
+    .forEach(el => el.classList.remove('expanded'));
+}
+
+// ============ SUMMARY TAB ============
+function rebuildProjectSelect() {
+  const sel = document.getElementById('summary-project');
+  const cur = sel.value;
+  sel.innerHTML = data.projects.map(p =>
+    `<option value="${p.id}">${escapeHtml(p.name)}</option>`
+  ).join('');
+  if (cur && data.projects.find(p => p.id === cur)) sel.value = cur;
+}
+
+// ============ SMART PASTE PARSER ============
+// v7: Holds files parsed from the most recent smart-paste, applied when summary saves
+let pendingParsedFiles = [];
+
+// v7: Extract structured file entries from a pasted summary.
+// Looks for a "FILES / LINKS:" section and parses each bullet line under it
+// until the next section header is reached.
+// Supports clean "Label | path | description" format and loose fallback
+// (any bullet line containing a URL or file:/// path).
+function extractFilesFromSummary(raw) {
+  if (!raw) return [];
+  const lines = raw.split('\n');
+  // Find the FILES section (tolerant of markdown bold and various separators)
+  let startIdx = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^\s*\**\s*FILES\s*\/?\s*LINKS?\s*\**\s*:?\s*\**\s*$/i.test(lines[i])) {
+      startIdx = i + 1;
+      break;
+    }
+  }
+  if (startIdx < 0) return [];
+
+  // Collect lines until we hit another all-caps section header or end of text
+  // (also tolerant of markdown bold)
+  const sectionEndRe = /^\s*\**\s*(WHAT WE DID|DECISIONS MADE|OPEN QUESTIONS|BLOCKERS|NEXT STEPS|CONTEXT TO REMEMBER|PROJECT|DATE|SESSION TITLE)\b/i;
+  const sectionLines = [];
+  for (let i = startIdx; i < lines.length; i++) {
+    if (sectionEndRe.test(lines[i])) break;
+    sectionLines.push(lines[i]);
+  }
+
+  const files = [];
+  const urlOrPathRe = /(https?:\/\/\S+|file:\/\/\/\S+|[A-Z]:[\\\/][^\s|]*|\/[^\s|]+\.[a-zA-Z0-9]{1,5})/;
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Recognize template placeholder lines so we don't store them as real attachments
+  const isTemplatePlaceholder = (label, url, desc) => {
+    const placeholders = [
+      /^label$/i,
+      /^path or url$/i,
+      /^short description$/i,
+      /^path$/i,
+      /^url$/i,
+      /^description$/i,
+      /^any files? created or referenced$/i
+    ];
+    const checkVal = (v) => placeholders.some(re => re.test(v.trim()));
+    // If the whole entry is just template tokens, skip it
+    if (checkVal(label) && (!url || checkVal(url))) return true;
+    return false;
+  };
+
+  for (const rawLine of sectionLines) {
+    let line = rawLine.trim();
+    if (!line) continue;
+    // Skip parenthetical instruction lines from the template
+    if (/^\(.*\)$/.test(line)) continue;
+    // Skip bracketed placeholders like [any files created or referenced]
+    if (/^[-*•]?\s*\[.*\]\s*$/.test(line)) continue;
+    // Strip leading bullet/dash markers
+    line = line.replace(/^[-*•]\s*/, '').trim();
+    if (!line) continue;
+
+    let label = '', url = '', description = '';
+
+    if (line.includes('|')) {
+      // Clean structured format: Label | path | description
+      const parts = line.split('|').map(s => s.trim());
+      label = parts[0] || '';
+      url = parts[1] || '';
+      description = parts.slice(2).join(' | ').trim();
+    } else {
+      // Loose fallback — try to detect a URL/path anywhere in the line
+      const m = line.match(urlOrPathRe);
+      if (m) {
+        url = m[1];
+        // Remaining text becomes the label (best-effort), strip separators
+        let remaining = line.replace(m[1], '').trim();
+        remaining = remaining.replace(/^[-–—:•·,]\s*/, '').replace(/\s*[-–—:•·,]\s*$/, '').trim();
+        label = remaining || url;
+      } else {
+        // Plain text bullet — treat whole thing as a label/note (no URL)
+        label = line;
+      }
+    }
+
+    if (isTemplatePlaceholder(label, url, description)) continue;
+    if (!label && !url) continue;
+
+    files.push({
+      id: 'a' + Date.now() + '_' + files.length,
+      label: label || '(no label)',
+      url: url || '',
+      description: description || '',
+      addedDate: today
+    });
+  }
+  return files;
+}
+
+function smartParse() {
+  const raw = document.getElementById('smart-paste').value.trim();
+  const resultEl = document.getElementById('smart-paste-result');
+  if (!raw) {
+    resultEl.style.display = 'block';
+    resultEl.style.color = '#b91c1c';
+    resultEl.textContent = 'Nothing to parse — paste a summary first.';
+    return;
+  }
+
+  // Extract single-line fields with regex (case-insensitive, tolerates ** markdown bolding)
+  const grab = (label) => {
+    const re = new RegExp('\\**\\s*' + label + '\\s*\\**\\s*:?\\s*(.+)', 'i');
+    const lines = raw.split('\n');
+    for (const line of lines) {
+      const m = line.match(re);
+      if (m) return m[1].trim().replace(/^\[|\]$/g, '').trim();
+    }
+    return '';
+  };
+
+  const projectStr = grab('PROJECT');
+  const dateStr = grab('DATE');
+  const titleStr = grab('SESSION TITLE');
+
+  // Match project by fuzzy name lookup
+  let matchedId = null;
+  if (projectStr) {
+    const needle = projectStr.toLowerCase();
+    // Try exact match first
+    let match = data.projects.find(p => p.name.toLowerCase() === needle);
+    // Then substring match
+    if (!match) match = data.projects.find(p => p.name.toLowerCase().includes(needle) || needle.includes(p.name.toLowerCase()));
+    // Then word-overlap match (any major word)
+    if (!match) {
+      const words = needle.split(/[\s—\-,]+/).filter(w => w.length > 3);
+      match = data.projects.find(p => {
+        const pn = p.name.toLowerCase();
+        return words.some(w => pn.includes(w));
+      });
+    }
+    if (match) matchedId = match.id;
+  }
+
+  // Parse date — accept YYYY-MM-DD, M/D/YYYY, "Month D, YYYY"
+  let parsedDate = '';
+  if (dateStr) {
+    const isoMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    const slashMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (isoMatch) {
+      parsedDate = `${isoMatch[1]}-${isoMatch[2].padStart(2,'0')}-${isoMatch[3].padStart(2,'0')}`;
+    } else if (slashMatch) {
+      parsedDate = `${slashMatch[3]}-${slashMatch[1].padStart(2,'0')}-${slashMatch[2].padStart(2,'0')}`;
+    } else {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) parsedDate = d.toISOString().slice(0,10);
+    }
+  }
+
+  // Build the body content — strip the metadata header lines so they don't duplicate
+  const bodyLines = raw.split('\n').filter(line => {
+    return !/^\s*\**\s*(PROJECT|DATE|SESSION TITLE)\s*\**\s*:/i.test(line);
+  });
+  // Trim leading blank lines
+  while (bodyLines.length && !bodyLines[0].trim()) bodyLines.shift();
+  const body = bodyLines.join('\n').trim();
+
+  // v7: Extract files from the FILES / LINKS section
+  const parsedFiles = extractFilesFromSummary(raw);
+  pendingParsedFiles = parsedFiles; // stash for saveSummary to use
+
+  // Apply to form
+  const successMessages = [];
+  let needsPick = false;
+  let unmatchedProjectName = '';
+
+  if (matchedId) {
+    document.getElementById('summary-project').value = matchedId;
+    const matchedName = data.projects.find(p => p.id === matchedId).name;
+    successMessages.push(`✓ Project: ${matchedName}`);
+  } else if (projectStr) {
+    needsPick = true;
+    unmatchedProjectName = projectStr;
+  } else {
+    needsPick = true;
+  }
+
+  if (parsedDate) {
+    document.getElementById('summary-date').value = parsedDate;
+    successMessages.push(`✓ Date: ${parsedDate}`);
+  }
+  if (titleStr) {
+    document.getElementById('summary-title').value = titleStr;
+    successMessages.push(`✓ Title: ${titleStr}`);
+  }
+  document.getElementById('summary-content').value = body;
+  successMessages.push(`✓ Content: ${body.length} characters`);
+  if (parsedFiles.length > 0) {
+    successMessages.push(`✓ Found ${parsedFiles.length} file${parsedFiles.length===1?'':'s'} to attach`);
+  }
+
+  // Render feedback
+  resultEl.style.display = 'block';
+  resultEl.style.color = '';
+  const select = document.getElementById('summary-project');
+  const label = document.getElementById('summary-project-label');
+
+  if (needsPick) {
+    resultEl.innerHTML = `
+      <div class="smart-success">${successMessages.join(' &nbsp;·&nbsp; ')}</div>
+      <div class="smart-warning">
+        <span class="arrow">⬇️</span>
+        <span>
+          ${unmatchedProjectName
+            ? `Couldn't find a matching project for <strong>"${escapeHtml(unmatchedProjectName)}"</strong>.`
+            : `No PROJECT line was found in the pasted text.`}
+          Please pick the right project from the dropdown below before saving.
+        </span>
+      </div>
+    `;
+    // Flash + scroll
+    select.classList.add('needs-pick');
+    label.classList.add('needs-pick-label');
+    setTimeout(() => {
+      select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      select.focus();
+    }, 50);
+    // Remove the flash class after animation finishes so it can re-trigger next time
+    setTimeout(() => {
+      select.classList.remove('needs-pick');
+      label.classList.remove('needs-pick-label');
+    }, 5000);
+    // Also clear highlight as soon as user makes a pick
+    select.addEventListener('change', function clearHighlight() {
+      select.classList.remove('needs-pick');
+      label.classList.remove('needs-pick-label');
+      select.removeEventListener('change', clearHighlight);
+    });
+  } else {
+    resultEl.innerHTML = `<div class="smart-success">${successMessages.join(' &nbsp;·&nbsp; ')}</div>`;
+    // Gently scroll so user can see the filled fields
+    setTimeout(() => {
+      document.getElementById('btn-save-summary').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+  }
+}
+
+function saveSummary() {
+  const projectId = document.getElementById('summary-project').value;
+  const date = document.getElementById('summary-date').value;
+  const title = document.getElementById('summary-title').value.trim();
+  const content = document.getElementById('summary-content').value.trim();
+  if (!content) { alert('Please paste summary content'); return; }
+  const p = data.projects.find(x => x.id === projectId);
+  if (!p) { alert('Pick a project'); return; }
+  p.summaries = p.summaries || [];
+  p.summaries.push({
+    date: date || new Date().toISOString().slice(0,10),
+    title,
+    content
+  });
+
+  // v7: Attach any files that were parsed by smart-paste, skipping duplicates
+  let attachedCount = 0;
+  if (Array.isArray(pendingParsedFiles) && pendingParsedFiles.length > 0) {
+    if (!Array.isArray(p.attachments)) p.attachments = [];
+    for (const f of pendingParsedFiles) {
+      // Avoid duplicating an attachment that already exists (same URL or same label)
+      const dup = p.attachments.find(a =>
+        (f.url && a.url && a.url === f.url) ||
+        (f.label && a.label && a.label.toLowerCase() === f.label.toLowerCase() && !f.url && !a.url)
+      );
+      if (dup) continue;
+      p.attachments.push({
+        id: 'a' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+        label: f.label,
+        url: f.url,
+        description: f.description,
+        addedDate: f.addedDate
+      });
+      attachedCount++;
+    }
+    pendingParsedFiles = []; // clear after use
+  }
+
+  saveData();
+  document.getElementById('summary-content').value = '';
+  document.getElementById('summary-title').value = '';
+  document.getElementById('smart-paste').value = '';
+  document.getElementById('smart-paste-result').style.display = 'none';
+  openProjects.add(projectId);
+  renderProjects();
+  const msg = 'Summary saved to: ' + p.name +
+    (attachedCount > 0 ? '\n\n📎 ' + attachedCount + ' file' + (attachedCount===1?'':'s') + ' attached to this project.' : '');
+  alert(msg);
+  switchTab('projects');
+}
+
+// ============ TABS ============
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  document.getElementById('tab-' + name).style.display = 'block';
+}
+
+// ============ EXPORT/IMPORT ============
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `project-tracker-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.projects || !Array.isArray(imported.projects)) throw new Error('Invalid file');
+      if (!confirm(`This will replace all current data with ${imported.projects.length} projects. Continue?`)) return;
+      makeRestorePoint('before-replace');
+      data = normalizeDoc(imported);
+      saveData();
+      renderProjects();
+      rebuildProjectSelect();
+      updateStorageInfo();
+      alert('Backup loaded successfully.');
+    } catch (err) {
+      alert('Could not read backup file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// v10: merge a backup file into existing data without deleting anything
+function mergeData(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.projects || !Array.isArray(imported.projects)) throw new Error('Invalid file');
+
+      // Build a preview of what will change so the confirm dialog is honest
+      const stats = {
+        newProjects: 0,
+        updatedProjects: 0,
+        newSummaries: 0,
+        newAttachments: 0,
+        newNotes: 0,
+        newLinks: 0
+      };
+
+      // Helper: dedupe-aware merge for a single project
+      function mergeIntoExisting(existing, incoming, applyChanges) {
+        let touched = false;
+
+        // Summaries: dedupe by (date + title + first 100 chars of content)
+        if (Array.isArray(incoming.summaries)) {
+          existing.summaries = existing.summaries || [];
+          const sumKey = s => (s.date || '') + '|' + (s.title || '') + '|' + ((s.content || '').slice(0, 100));
+          const existingKeys = new Set(existing.summaries.map(sumKey));
+          for (const s of incoming.summaries) {
+            if (!existingKeys.has(sumKey(s))) {
+              if (applyChanges) existing.summaries.push(s);
+              stats.newSummaries++;
+              touched = true;
+            }
+          }
+        }
+
+        // Attachments: dedupe by url, fallback to lowercase label
+        if (Array.isArray(incoming.attachments)) {
+          existing.attachments = existing.attachments || [];
+          for (const a of incoming.attachments) {
+            const dup = existing.attachments.find(x =>
+              (a.url && x.url && a.url === x.url) ||
+              (!a.url && !x.url && a.label && x.label && a.label.toLowerCase() === x.label.toLowerCase())
+            );
+            if (!dup) {
+              if (applyChanges) existing.attachments.push(a);
+              stats.newAttachments++;
+              touched = true;
+            }
+          }
+        }
+
+        // Notes (sub-tasks): dedupe by exact string match
+        if (Array.isArray(incoming.notes)) {
+          existing.notes = existing.notes || [];
+          const existingNotes = new Set(existing.notes);
+          for (const n of incoming.notes) {
+            if (!existingNotes.has(n)) {
+              if (applyChanges) existing.notes.push(n);
+              stats.newNotes++;
+              touched = true;
+            }
+          }
+        }
+
+        // Links: dedupe by exact string match
+        if (Array.isArray(incoming.links)) {
+          existing.links = existing.links || [];
+          const existingLinks = new Set(existing.links);
+          for (const l of incoming.links) {
+            if (!existingLinks.has(l)) {
+              if (applyChanges) existing.links.push(l);
+              stats.newLinks++;
+              touched = true;
+            }
+          }
+        }
+
+        return touched;
+      }
+
+      // Helper: find local project that matches an incoming one
+      // First try id, then fall back to case-insensitive name match
+      function findLocalMatch(incoming) {
+        let match = data.projects.find(p => p.id === incoming.id);
+        if (match) return match;
+        if (incoming.name) {
+          const targetName = incoming.name.trim().toLowerCase();
+          match = data.projects.find(p => (p.name || '').trim().toLowerCase() === targetName);
+        }
+        return match || null;
+      }
+
+      // PASS 1: dry run to compute stats for the confirm dialog
+      for (const inc of imported.projects) {
+        const existing = findLocalMatch(inc);
+        if (!existing) {
+          stats.newProjects++;
+          // Count nested items inside the brand-new project too
+          stats.newSummaries += (inc.summaries || []).length;
+          stats.newAttachments += (inc.attachments || []).length;
+          stats.newNotes += (inc.notes || []).length;
+          stats.newLinks += (inc.links || []).length;
+        } else {
+          const touched = mergeIntoExisting(existing, inc, false);
+          if (touched) stats.updatedProjects++;
+        }
+      }
+
+      const summaryLines = [];
+      if (stats.newProjects) summaryLines.push(`• ${stats.newProjects} new project${stats.newProjects === 1 ? '' : 's'}`);
+      if (stats.updatedProjects) summaryLines.push(`• ${stats.updatedProjects} existing project${stats.updatedProjects === 1 ? '' : 's'} updated`);
+      if (stats.newSummaries) summaryLines.push(`• ${stats.newSummaries} new summar${stats.newSummaries === 1 ? 'y' : 'ies'}`);
+      if (stats.newAttachments) summaryLines.push(`• ${stats.newAttachments} new attachment${stats.newAttachments === 1 ? '' : 's'}`);
+      if (stats.newNotes) summaryLines.push(`• ${stats.newNotes} new sub-task${stats.newNotes === 1 ? '' : 's'}`);
+      if (stats.newLinks) summaryLines.push(`• ${stats.newLinks} new link${stats.newLinks === 1 ? '' : 's'}`);
+
+      if (summaryLines.length === 0) {
+        alert('Nothing new to merge — your tracker already has everything in this file.');
+        return;
+      }
+
+      const msg = 'Merge will apply the following changes:\n\n' + summaryLines.join('\n') +
+                  '\n\nNothing existing will be deleted. Continue?';
+      if (!confirm(msg)) return;
+
+      makeRestorePoint('before-merge');
+
+      // PASS 2: apply for real
+      for (const inc of imported.projects) {
+        const existing = findLocalMatch(inc);
+        if (!existing) {
+          // Brand new project — clone it in. Ensure it has an id and the expected arrays.
+          const copy = JSON.parse(JSON.stringify(inc));
+          if (!copy.id) copy.id = 'p' + Date.now() + Math.floor(Math.random() * 1000);
+          // Avoid id collision with existing local projects
+          while (data.projects.find(p => p.id === copy.id)) {
+            copy.id = 'p' + Date.now() + Math.floor(Math.random() * 1000);
+          }
+          if (!Array.isArray(copy.summaries)) copy.summaries = [];
+          if (!Array.isArray(copy.attachments)) copy.attachments = [];
+          if (!Array.isArray(copy.notes)) copy.notes = [];
+          if (!Array.isArray(copy.links)) copy.links = [];
+          data.projects.push(copy);
+        } else {
+          mergeIntoExisting(existing, inc, true);
+        }
+      }
+
+      saveData();
+      renderProjects();
+      rebuildProjectSelect();
+      updateStorageInfo();
+      alert('Merge complete.\n\n' + summaryLines.join('\n'));
+    } catch (err) {
+      alert('Could not read backup file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetToStarter() {
+  const projCount = data.projects.length;
+  const sumCount = data.projects.reduce((a, p) => a + p.summaries.length, 0);
+  const typed = prompt('This erases ' + projCount + ' projects and ' + sumCount + ' summaries and replaces them with the starter list.\n\nA restore point is saved first, and you can undo it from the Restore Points box.\n\nType RESET to confirm:');
+  if (typed !== 'RESET') return;
+  makeRestorePoint('before-reset');
+  data = normalizeDoc(JSON.parse(JSON.stringify(STARTER_DATA)));
+  saveData();
+  renderProjects();
+  rebuildProjectSelect();
+  updateStorageInfo();
+}
+
+function updateStorageInfo() {
+  const info = document.getElementById('storage-info');
+  const size = new Blob([JSON.stringify(data)]).size;
+  const projCount = data.projects.length;
+  const sumCount = data.projects.reduce((a, p) => a + (p.summaries || []).length, 0);
+  info.innerHTML = `Projects: ${projCount}<br>Summaries: ${sumCount}<br>Storage size: ${(size/1024).toFixed(1)} KB`;
+}
+
+// ============ COPY TEMPLATE ============
+function copyTemplate() {
+  const text = document.getElementById('template-prompt').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('btn-copy-template');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('btn-success');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('btn-success'); }, 1500);
+  }).catch(() => alert('Could not copy. Select and copy manually.'));
+}
+
+// ============ INIT ============
+function init() {
+  loadData();
+  renderRecoveryBanner();
+  renderRestorePoints();
+  initCloud();
+  renderProjects();
+  rebuildProjectSelect();
+  updateStorageInfo();
+  document.getElementById('summary-date').value = new Date().toISOString().slice(0, 10);
+
+  // tabs
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', () => switchTab(t.dataset.tab));
+  });
+
+  // filters
+  document.querySelectorAll('#status-filters .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('#status-filters .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      currentFilter = c.dataset.filter;
+      renderProjects();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', renderProjects);
+
+  document.getElementById('btn-add-project').addEventListener('click', () => openProjectModal(null));
+  document.getElementById('btn-expand-all').addEventListener('click', () => {
+    data.projects.forEach(p => openProjects.add(p.id));
+    renderProjects();
+  });
+  document.getElementById('btn-collapse-all').addEventListener('click', () => {
+    openProjects.clear();
+    renderProjects();
+  });
+
+  document.getElementById('m-cancel').addEventListener('click', closeModal);
+  document.getElementById('m-save').addEventListener('click', saveProjectFromModal);
+
+  document.getElementById('btn-save-summary').addEventListener('click', saveSummary);
+  document.getElementById('btn-clear-summary').addEventListener('click', () => {
+    document.getElementById('summary-content').value = '';
+    document.getElementById('summary-title').value = '';
+    pendingParsedFiles = [];
+  });
+
+  document.getElementById('btn-smart-parse').addEventListener('click', smartParse);
+  document.getElementById('btn-smart-clear').addEventListener('click', () => {
+    document.getElementById('smart-paste').value = '';
+    document.getElementById('smart-paste-result').style.display = 'none';
+    pendingParsedFiles = [];
+  });
+
+  document.getElementById('btn-copy-template').addEventListener('click', copyTemplate);
+
+  document.getElementById('btn-export').addEventListener('click', exportData);
+  document.getElementById('btn-import').addEventListener('click', () => document.getElementById('import-file').click());
+  document.getElementById('import-file').addEventListener('change', e => {
+    if (e.target.files[0]) importData(e.target.files[0]);
+    e.target.value = '';
+  });
+  // v10: merge backup
+  document.getElementById('btn-merge').addEventListener('click', () => document.getElementById('merge-file').click());
+  document.getElementById('merge-file').addEventListener('change', e => {
+    if (e.target.files[0]) mergeData(e.target.files[0]);
+    e.target.value = '';
+  });
+  document.getElementById('btn-reset').addEventListener('click', resetToStarter);
+
+  // close modal on overlay click
+  document.getElementById('project-modal').addEventListener('click', e => {
+    if (e.target.id === 'project-modal') closeModal();
+  });
+}
+
+init();
+</script>
+</body>
+</html>
