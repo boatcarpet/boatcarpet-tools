@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.33]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.35]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -311,7 +311,7 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.33</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.35</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1683,7 +1683,7 @@ const SVG_DEFS={/* v10.23 - brand year fixes pt2 modal for Business Tools button
   "Four Winns|S215":{
     svg:'',
     pieces:[
-      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Single-piece cockpit floor with seat-post holes", sf:24, numPos:{x:50,y:52}}
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Single-piece cockpit floor with seat-post holes", sf:55, numPos:{x:50,y:52}}
     ]
   },
   "Four Winns|V375 Vista":{
@@ -3320,6 +3320,484 @@ const SVG_DEFS={/* v10.23 - brand year fixes pt2 modal for Business Tools button
   "Sea Doo|210 Wake":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:14,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
   "Sea Doo|230 Challenger SE":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:17,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:7,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:29,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:7,numPos:{x:75,y:48}}]},
   "Chris-Craft|200":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:12,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:10,numPos:{x:65,y:74}}]}
+,
+  /* v10.34 - year-variant models that had NO piece data and fell through to the
+     generic 110 sq ft default. Each one below reuses, verbatim, the piece data
+     already verified on its own base model - no new figures are introduced. */
+  "Four Winns|205 Sundowner (1996-2006)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Cockpit & Cabin Sole", desc:"Single-piece cockpit/cabin floor with post hole", sf:52, numPos:{x:50,y:50}}
+    ]
+  },
+  "Sea Ray|200 Sport (2003-2005)":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward bow area",    sf:16,numPos:{x:50,y:14}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Main cockpit floor",  sf:24,numPos:{x:50,y:56}},
+      {id:"swim",    svgId:"", name:"Swim Platform", desc:"Exterior platform",   sf:10,numPos:{x:50,y:92}}
+    ]
+  },
+  "Sea Ray|240 Sundancer (1999)":{
+    svg:'',
+    pieces:[
+      {id:"main", svgId:"", name:"Cabin & Cockpit Floor", desc:"One-piece L-shape floor with seat cutout", sf:61, numPos:{x:50,y:50}}
+    ]
+  },
+  "Sea Ray|240 Sundancer (2000-2004)":{
+    svg:'',
+    pieces:[
+      {id:"main", svgId:"", name:"Cabin & Cockpit Floor", desc:"One-piece L-shape floor with seat cutout", sf:61, numPos:{x:50,y:50}}
+    ]
+  },
+  "Sea Ray|240 Sundancer (2006-2010)":{
+    svg:'',
+    pieces:[
+      {id:"main", svgId:"", name:"Cabin & Cockpit Floor", desc:"One-piece L-shape floor with seat cutout", sf:61, numPos:{x:50,y:50}}
+    ]
+  },
+  "Sea Ray|240 Sundeck (1996-1999)":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Walk-Through",  desc:"Small tear-drop bow piece",                sf:11,  numPos:{x:50,y:13}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",   sf:50, numPos:{x:50,y:65}}
+    ]
+  },
+  "Sea Ray|240 Sundeck (1998-1999)":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Walk-Through",  desc:"Small tear-drop bow piece",                sf:11,  numPos:{x:50,y:13}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",   sf:50, numPos:{x:50,y:65}}
+    ]
+  },
+  "Sea Ray|240 Sundeck (2004-2008)":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Walk-Through",  desc:"Small tear-drop bow piece",                sf:11,  numPos:{x:50,y:13}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",   sf:50, numPos:{x:50,y:65}}
+    ]
+  },
+  "Sea Ray|240 Sundeck (2010-2013)":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Walk-Through",  desc:"Small tear-drop bow piece",                sf:11,  numPos:{x:50,y:13}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",   sf:50, numPos:{x:50,y:65}}
+    ]
+  },
+  "Sea Ray|240 Sundeck (2014-2016)":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Walk-Through",  desc:"Small tear-drop bow piece",                sf:11,  numPos:{x:50,y:13}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",   sf:50, numPos:{x:50,y:65}}
+    ]
+  },
+  "Sea Ray|260 Sundancer (2005-2008)":{
+    svg:'',
+    pieces:[
+      {id:"cabin",   svgId:"", name:"Cabin Floor",   desc:"Forward cabin floor section",         sf:24, numPos:{x:48,y:25}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Aft cockpit floor with seat cutout", sf:37, numPos:{x:48,y:75}}
+    ]
+  },
+  "Sea Ray|260 Sundancer (2011-2013)":{
+    svg:'',
+    pieces:[
+      {id:"cabin",   svgId:"", name:"Cabin Floor",   desc:"Forward cabin floor section",         sf:24, numPos:{x:48,y:25}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Aft cockpit floor with seat cutout", sf:37, numPos:{x:48,y:75}}
+    ]
+  },
+  "Sea Ray|260 Sundancer (2014-2018)":{
+    svg:'',
+    pieces:[
+      {id:"cabin",   svgId:"", name:"Cabin Floor",   desc:"Forward cabin floor section",         sf:24, numPos:{x:48,y:25}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Aft cockpit floor with seat cutout", sf:37, numPos:{x:48,y:75}}
+    ]
+  },
+  "Sea Ray|270 Sundancer (1988)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:35,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:26,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|270 Sundancer (1991)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:35,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:26,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|270 Sundancer (2000)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:35,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:26,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|290 Sundancer (1996)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:35,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:26,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|290 Sundancer (1998)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:35,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:26,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|290 Sundancer (2007)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:35,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:26,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|300 Sundancer (1987-1989)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:55,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:41,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|300 Sundancer (1995)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:55,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:41,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|300 Sundancer (2002-2007)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:55,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:41,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|310 Sundancer (1990)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:57,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:42,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|310 Sundancer (1998-2002)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:57,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:42,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|310 Sundancer (2007)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:57,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:42,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|310 Sundancer (2010-2017)":{
+    svg:'',
+    pieces:[
+      {id:"cockpit", svgId:"", name:"Upper Cockpit", desc:"Main deck area",   sf:57,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Lower Aft",     desc:"Aft cockpit area", sf:42,numPos:{x:65,y:74}}
+    ]
+  },
+  "Sea Ray|330 Sundancer (1994)":{
+    svg:'',
+    pieces:[
+      {id:"hatch",   svgId:"", name:"Hatch Pieces",  desc:"Two small upper hatch pieces",          sf:15,  numPos:{x:25,y:13}},
+      {id:"cabin",   svgId:"", name:"Cabin Floor",   desc:"Forward cabin floor section",           sf:34, numPos:{x:25,y:55}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Bottom cockpit with seat cutout",       sf:57, numPos:{x:30,y:80}}
+    ]
+  },
+  "Sea Ray|330 Sundancer (2008-2014)":{
+    svg:'',
+    pieces:[
+      {id:"hatch",   svgId:"", name:"Hatch Pieces",  desc:"Two small upper hatch pieces",          sf:15,  numPos:{x:25,y:13}},
+      {id:"cabin",   svgId:"", name:"Cabin Floor",   desc:"Forward cabin floor section",           sf:34, numPos:{x:25,y:55}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Bottom cockpit with seat cutout",       sf:57, numPos:{x:30,y:80}}
+    ]
+  },
+  "Sea Ray|340 Sundancer (1999-2002)":{
+    svg:'',
+    pieces:[
+      {id:"cabin",   svgId:"", name:"Cabin Floor",   desc:"Top cabin L-shape with cutout",         sf:46, numPos:{x:50,y:25}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Bottom cockpit with seat post cutout",  sf:63, numPos:{x:48,y:75}}
+    ]
+  },
+  "Sea Ray|350 Sundancer (1991)":{
+    svg:'',
+    pieces:[
+      {id:"hatch1",  svgId:"", name:"Hatch Cover",     desc:"Top hatch piece",                      sf:9,  numPos:{x:48,y:10}},
+      {id:"hatch2",  svgId:"", name:"Step Cover",      desc:"Middle step/walkway piece",            sf:9,  numPos:{x:48,y:25}},
+      {id:"cabin",   svgId:"", name:"Cabin Floor",     desc:"Tall left cabin floor",                sf:33, numPos:{x:18,y:50}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor",   desc:"Large cockpit floor with seat cutout", sf:54, numPos:{x:35,y:80}},
+      {id:"strip",   svgId:"", name:"Side Strip",      desc:"Narrow vertical strip",                sf:7,  numPos:{x:75,y:75}}
+    ]
+  },
+  "Sea Ray|350 Sundancer (2009)":{
+    svg:'',
+    pieces:[
+      {id:"hatch1",  svgId:"", name:"Hatch Cover",     desc:"Top hatch piece",                      sf:9,  numPos:{x:48,y:10}},
+      {id:"hatch2",  svgId:"", name:"Step Cover",      desc:"Middle step/walkway piece",            sf:9,  numPos:{x:48,y:25}},
+      {id:"cabin",   svgId:"", name:"Cabin Floor",     desc:"Tall left cabin floor",                sf:33, numPos:{x:18,y:50}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor",   desc:"Large cockpit floor with seat cutout", sf:54, numPos:{x:35,y:80}},
+      {id:"strip",   svgId:"", name:"Side Strip",      desc:"Narrow vertical strip",                sf:7,  numPos:{x:75,y:75}}
+    ]
+  },
+  "Sea Ray|350 Sundancer (2014-2016)":{
+    svg:'',
+    pieces:[
+      {id:"hatch1",  svgId:"", name:"Hatch Cover",     desc:"Top hatch piece",                      sf:9,  numPos:{x:48,y:10}},
+      {id:"hatch2",  svgId:"", name:"Step Cover",      desc:"Middle step/walkway piece",            sf:9,  numPos:{x:48,y:25}},
+      {id:"cabin",   svgId:"", name:"Cabin Floor",     desc:"Tall left cabin floor",                sf:33, numPos:{x:18,y:50}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor",   desc:"Large cockpit floor with seat cutout", sf:54, numPos:{x:35,y:80}},
+      {id:"strip",   svgId:"", name:"Side Strip",      desc:"Narrow vertical strip",                sf:7,  numPos:{x:75,y:75}}
+    ]
+  },
+  "Sea Ray|370 Sundancer (1996)":{
+    svg:'',
+    pieces:[
+      {id:"cabin", svgId:"", name:"Cabin Walkway", desc:"Top-left T-shape cabin walkway", sf:34, numPos:{x:25,y:25}},
+      {id:"step", svgId:"", name:"Galley Step", desc:"Top-right rectangular step piece", sf:15, numPos:{x:72,y:18}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Large cockpit floor with seat post", sf:69, numPos:{x:50,y:75}}
+    ]
+  },
+  "Sea Ray|370 Sundancer (1998)":{
+    svg:'',
+    pieces:[
+      {id:"cabin", svgId:"", name:"Cabin Walkway", desc:"Top-left T-shape cabin walkway", sf:34, numPos:{x:25,y:25}},
+      {id:"step", svgId:"", name:"Galley Step", desc:"Top-right rectangular step piece", sf:15, numPos:{x:72,y:18}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Large cockpit floor with seat post", sf:69, numPos:{x:50,y:75}}
+    ]
+  },
+  "Sea Ray|370 Sundancer (2012)":{
+    svg:'',
+    pieces:[
+      {id:"cabin", svgId:"", name:"Cabin Walkway", desc:"Top-left T-shape cabin walkway", sf:34, numPos:{x:25,y:25}},
+      {id:"step", svgId:"", name:"Galley Step", desc:"Top-right rectangular step piece", sf:15, numPos:{x:72,y:18}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Large cockpit floor with seat post", sf:69, numPos:{x:50,y:75}}
+    ]
+  },
+  "Sea Ray|500 Sundancer (2005)":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:93,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:67,numPos:{x:65,y:74}}]},
+
+  /* v10.35 - models offered in the dropdown that had NO piece data anywhere and
+     fell through to the generic 110 sq ft default. Each entry below is an ESTIMATE:
+     total square footage from the validated curve (3.2 sq ft/ft at 30ft+, 2.6 below),
+     split across the piece layout of the closest sibling pattern named in the comment.
+     These are starting points to be replaced as real CMC invoices come in. */
+  /* est. 52 sq ft from Chaparral|204 SSi */ "Chaparral|200 SSi":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward bow section",  sf:14,numPos:{x:50,y:14}},
+      {id:"locker",  svgId:"", name:"Locker",        desc:"Storage locker piece", sf:5,numPos:{x:50,y:32}},
+      {id:"cockpit", svgId:"", name:"Main Section",  desc:"Main cockpit floor",   sf:22,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Rear Piece",    desc:"Lower aft section",    sf:8,numPos:{x:65,y:74}},
+      {id:"pstep",   svgId:"", name:"Step",          desc:"Corner step",          sf:3,numPos:{x:62,y:78}}
+    ]
+  },
+  /* est. 57 sq ft from Chaparral|222 Sunesta */ "Chaparral|224 Sunesta":{svg:'',pieces:[{"id":"aisle","svgId":"","name":"Bow Walkway / Aisle","desc":"Center bow walkway","sf":12,numPos:{x:50,y:14}},{"id":"stbd_helm","svgId":"","name":"Starboard Helm Floor","desc":"Starboard helm floor section","sf":17,numPos:{x:68,y:50}},{"id":"port_floor","svgId":"","name":"Port Cockpit Floor","desc":"Port cockpit floor section","sf":16,numPos:{x:32,y:50}},{"id":"aft","svgId":"","name":"Aft / Stern Section","desc":"Aft stern section","sf":12,numPos:{x:50,y:82}}]},
+  /* est. 62 sq ft from Chaparral|256 SSi */ "Chaparral|246 SSi":{
+    svg:'',
+    pieces:[
+      {id:"bow",     svgId:"", name:"Bow Carpet",    desc:"Forward bow section",  sf:17,numPos:{x:50,y:14}},
+      {id:"locker",  svgId:"", name:"Locker",        desc:"Storage locker piece", sf:6,numPos:{x:50,y:32}},
+      {id:"cockpit", svgId:"", name:"Main Section",  desc:"Main cockpit floor",   sf:26,numPos:{x:50,y:56}},
+      {id:"helm",    svgId:"", name:"Rear Piece",    desc:"Lower aft section",    sf:9,numPos:{x:65,y:74}},
+      {id:"pstep",   svgId:"", name:"Step",          desc:"Corner step",          sf:4,numPos:{x:62,y:78}}
+    ]
+  },
+  /* est. 99 sq ft from Chaparral|300 Signature */ "Chaparral|310 Signature":{svg:'',pieces:[{"id":"bow","svgId":"","name":"Bow Carpet","desc":"Forward bow section","sf":32,numPos:{x:50,y:14}},{"id":"cockpit","svgId":"","name":"Cockpit Floor","desc":"Main cockpit floor","sf":51,numPos:{x:50,y:56}},{"id":"helm","svgId":"","name":"Helm Station","desc":"Helm station area","sf":16,numPos:{x:65,y:74}}]},
+  /* est. 49 sq ft from Cobalt|190 */ "Cobalt|190 BR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:13,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:24,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
+  /* est. 52 sq ft from Cobalt|200S */ "Cobalt|200":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:14,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:26,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
+  /* est. 52 sq ft from Cobalt|200S */ "Cobalt|206":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:14,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:26,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
+  /* est. 55 sq ft from Cobalt|212 */ "Cobalt|210":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:14,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:7,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:27,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:7,numPos:{x:75,y:48}}]},
+  /* est. 57 sq ft from Cobalt|226 Bow Rider */ "Cobalt|220":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:15,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:7,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:7,numPos:{x:75,y:48}}]},
+  /* est. 57 sq ft from Cobalt|226 Bow Rider */ "Cobalt|220 SS (2005-2007)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:15,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:7,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:7,numPos:{x:75,y:48}}]},
+  /* est. 57 sq ft from Cobalt|226 Bow Rider */ "Cobalt|220 SS (2012-2014)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:15,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:7,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:7,numPos:{x:75,y:48}}]},
+  /* est. 62 sq ft from Cobalt|240 Bow Rider */ "Cobalt|240":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:16,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:8,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:30,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:8,numPos:{x:75,y:48}}]},
+  /* est. 62 sq ft from Cobalt|240 Bow Rider */ "Cobalt|242 (2000)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:16,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:8,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:30,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:8,numPos:{x:75,y:48}}]},
+  /* est. 62 sq ft from Cobalt|240 Bow Rider */ "Cobalt|242 (2012)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:16,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:8,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:30,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:8,numPos:{x:75,y:48}}]},
+  /* est. 65 sq ft from Cobalt|252 */ "Cobalt|250":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:16,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:8,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:33,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:8,numPos:{x:75,y:48}}]},
+  /* est. 68 sq ft from Cobalt|260 Sun Deck */ "Cobalt|262 (2000)":{svg:'',pieces:[{id:"aisle",svgId:"",name:"Bow Walkway / Aisle",desc:"Center walkway and bow aisle area",sf:14,numPos:{x:50,y:14}},{id:"stbd_helm",svgId:"",name:"Starboard Helm Floor",desc:"Starboard helm and driver area",sf:20,numPos:{x:68,y:50}},{id:"port_floor",svgId:"",name:"Port Cockpit Floor",desc:"Port side seating and floor area",sf:18,numPos:{x:32,y:50}},{id:"aft",svgId:"",name:"Aft / Stern Section",desc:"Aft deck and stern carpet area",sf:16,numPos:{x:50,y:82}}]},
+  /* est. 68 sq ft from Cobalt|260 Sun Deck */ "Cobalt|262 (2010)":{svg:'',pieces:[{id:"aisle",svgId:"",name:"Bow Walkway / Aisle",desc:"Center walkway and bow aisle area",sf:14,numPos:{x:50,y:14}},{id:"stbd_helm",svgId:"",name:"Starboard Helm Floor",desc:"Starboard helm and driver area",sf:20,numPos:{x:68,y:50}},{id:"port_floor",svgId:"",name:"Port Cockpit Floor",desc:"Port side seating and floor area",sf:18,numPos:{x:32,y:50}},{id:"aft",svgId:"",name:"Aft / Stern Section",desc:"Aft deck and stern carpet area",sf:16,numPos:{x:50,y:82}}]},
+  /* est. 70 sq ft from Cobalt|272 Bow Rider */ "Cobalt|270":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:18,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:9,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:34,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:9,numPos:{x:75,y:48}}]},
+  /* est. 47 sq ft from Crownline|202 BR */ "Crownline|180 BR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:12,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:23,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
+  /* est. 49 sq ft from Crownline|202 BR */ "Crownline|190 BR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:12,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:25,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
+  /* est. 52 sq ft from Crownline|220 LS */ "Crownline|200 LS":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:14,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:6,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:26,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:6,numPos:{x:75,y:48}}]},
+  /* est. 55 sq ft from Crownline|255 CCR (2006) */ "Crownline|210 CCR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Cabin Carpet",desc:"Forward cabin carpet area",sf:15,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:12,numPos:{x:65,y:74}}]},
+  /* est. 57 sq ft from Crownline|230 BR */ "Crownline|225 BR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow carpet section",sf:15,numPos:{x:50,y:14}},{id:"port",svgId:"",name:"Port Side Floor",desc:"Port side cockpit area",sf:7,numPos:{x:25,y:48}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"star",svgId:"",name:"Starboard Side",desc:"Starboard side cockpit area",sf:7,numPos:{x:75,y:48}}]},
+  /* est. 62 sq ft from Crownline|250 CR (1993-1996) */ "Crownline|240 CR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Cabin Carpet",desc:"Forward cabin carpet area",sf:16,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:32,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:14,numPos:{x:65,y:74}}]},
+  /* est. 65 sq ft from Crownline|255 CCR (2006) */ "Crownline|256 CCR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Cabin Carpet",desc:"Forward cabin carpet area",sf:18,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:33,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:14,numPos:{x:65,y:74}}]},
+  /* est. 44 sq ft from Ebbtide|200 Campione */ "Ebbtide|170 SE":{
+    svg:'',
+    pieces:[
+      {id:"port",    svgId:"", name:"Port Side",       desc:"Left section",        sf:9, numPos:{x:43,y:30}},
+      {id:"bow",     svgId:"", name:"Forward Deck",    desc:"Top right section",   sf:6, numPos:{x:22,y:50}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit",    desc:"Center oval piece",   sf:14, numPos:{x:53,y:53}},
+      {id:"star",    svgId:"", name:"Starboard Side",  desc:"Right side piece",    sf:8, numPos:{x:80,y:53}},
+      {id:"helm",    svgId:"", name:"Aft Section",     desc:"Lower center piece",  sf:7, numPos:{x:52,y:78}}
+    ]
+  },
+  /* est. 47 sq ft from Ebbtide|200 Campione */ "Ebbtide|180 SE":{
+    svg:'',
+    pieces:[
+      {id:"port",    svgId:"", name:"Port Side",       desc:"Left section",        sf:10, numPos:{x:43,y:30}},
+      {id:"bow",     svgId:"", name:"Forward Deck",    desc:"Top right section",   sf:6, numPos:{x:22,y:50}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit",    desc:"Center oval piece",   sf:16, numPos:{x:53,y:53}},
+      {id:"star",    svgId:"", name:"Starboard Side",  desc:"Right side piece",    sf:8, numPos:{x:80,y:53}},
+      {id:"helm",    svgId:"", name:"Aft Section",     desc:"Lower center piece",  sf:7, numPos:{x:52,y:78}}
+    ]
+  },
+  /* est. 49 sq ft from Ebbtide|200 Campione */ "Ebbtide|192 SE":{
+    svg:'',
+    pieces:[
+      {id:"port",    svgId:"", name:"Port Side",       desc:"Left section",        sf:11, numPos:{x:43,y:30}},
+      {id:"bow",     svgId:"", name:"Forward Deck",    desc:"Top right section",   sf:7, numPos:{x:22,y:50}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit",    desc:"Center oval piece",   sf:14, numPos:{x:53,y:53}},
+      {id:"star",    svgId:"", name:"Starboard Side",  desc:"Right side piece",    sf:9, numPos:{x:80,y:53}},
+      {id:"helm",    svgId:"", name:"Aft Section",     desc:"Lower center piece",  sf:8, numPos:{x:52,y:78}}
+    ]
+  },
+  /* est. 55 sq ft from Ebbtide|210 Campione */ "Ebbtide|210 SE":{
+    svg:'',
+    pieces:[
+      {id:"p1", svgId:"", name:"Cockpit Carpet", desc:"One-piece full cockpit", sf:55, numPos:{x:45,y:45}}
+    ]
+  },
+  /* est. 57 sq ft from Ebbtide|210 Campione */ "Ebbtide|220 SE":{
+    svg:'',
+    pieces:[
+      {id:"p1", svgId:"", name:"Cockpit Carpet", desc:"One-piece full cockpit", sf:57, numPos:{x:45,y:45}}
+    ]
+  },
+  /* est. 57 sq ft from Ebbtide|210 Campione */ "Ebbtide|2200 SC":{
+    svg:'',
+    pieces:[
+      {id:"p1", svgId:"", name:"Cockpit Carpet", desc:"One-piece full cockpit", sf:57, numPos:{x:45,y:45}}
+    ]
+  },
+  /* est. 47 sq ft from Four Winns|180 Horizon */ "Four Winns|180 Freedom":{
+    svg:'',
+    pieces:[
+      {id:"bow", svgId:"", name:"Bow Walkway", desc:"Forward tongue-shape bow piece", sf:9, numPos:{x:50,y:14}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor", desc:"Main floor with engine box cutout", sf:38, numPos:{x:50,y:68}}
+    ]
+  },
+  /* est. 49 sq ft from Four Winns|22 Funship */ "Four Winns|194 Funship":{
+    svg:'',
+    pieces:[
+      {id:"bow", svgId:"", name:"Forward Sun Pad", desc:"Forward sun-pad / bow deck piece", sf:11, numPos:{x:50,y:15}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor", desc:"Main deck-boat cockpit floor with post holes", sf:38, numPos:{x:50,y:68}}
+    ]
+  },
+  /* est. 62 sq ft from Four Winns|230 Horizon (Port Back-to-Back) */ "Four Winns|240 Horizon":{
+    svg:'',
+    pieces:[
+      {id:"bow", svgId:"", name:"Bow Walkway", desc:"Top tongue-shape bow piece", sf:12, numPos:{x:50,y:14}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor", desc:"Main floor, port back-to-back seat variant, engine cutout", sf:50, numPos:{x:50,y:70}}
+    ]
+  },
+  /* est. 73 sq ft from Four Winns|260 Horizon */ "Four Winns|280 Horizon":{svg:'',pieces:[
+    {id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow section",sf:20, numPos:{x:18,y:30}},
+    {id:"helm",svgId:"",name:"Helm Platform",desc:"Helm area carpet",sf:11, numPos:{x:53,y:12}},
+    {id:"cockpit",svgId:"",name:"Main Cockpit",desc:"Main cockpit floor",sf:42, numPos:{x:64,y:63}}
+  ]},
+  /* est. 106 sq ft from Four Winns|348 Vista */ "Four Winns|338 Vista":{
+    svg:'',
+    pieces:[
+      {id:"companion", svgId:"", name:"Companionway", desc:"Upper companionway step piece", sf:18, numPos:{x:24,y:14}},
+      {id:"galley", svgId:"", name:"Galley / Settee", desc:"Galley / settee piece", sf:18, numPos:{x:72,y:12}},
+      {id:"sole", svgId:"", name:"Main Cabin Sole", desc:"Main cabin floor with post holes", sf:70, numPos:{x:50,y:74}}
+    ]
+  },
+  /* est. 47 sq ft from Four Winns|H240 */ "Four Winns|H180":{
+    svg:'',
+    pieces:[
+      {id:"bow", svgId:"", name:"Bow Walkway", desc:"Long forward bow walkway piece", sf:10, numPos:{x:50,y:12}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor", desc:"Wide main floor, engine cutout, post holes", sf:37, numPos:{x:50,y:70}}
+    ]
+  },
+  /* est. 57 sq ft from Four Winns|H240 */ "Four Winns|H220":{
+    svg:'',
+    pieces:[
+      {id:"bow", svgId:"", name:"Bow Walkway", desc:"Long forward bow walkway piece", sf:12, numPos:{x:50,y:12}},
+      {id:"cockpit", svgId:"", name:"Main Cockpit Floor", desc:"Wide main floor, engine cutout, post holes", sf:45, numPos:{x:50,y:70}}
+    ]
+  },
+  /* est. 47 sq ft from Maxum|2100 SD */ "Maxum|1800 SR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:13,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:24,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:10,numPos:{x:65,y:74}}]},
+  /* est. 49 sq ft from Maxum|2100 SD */ "Maxum|1900 SR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:14,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:24,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:11,numPos:{x:65,y:74}}]},
+  /* est. 52 sq ft from Maxum|2100 SD */ "Maxum|2000 SR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:14,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:26,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:12,numPos:{x:65,y:74}}]},
+  /* est. 55 sq ft from Maxum|2100 SD */ "Maxum|2100 SR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:15,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:28,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:12,numPos:{x:65,y:74}}]},
+  /* est. 75 sq ft from Maxum|2700 SCR */ "Maxum|2900 SCR":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:21,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:37,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:17,numPos:{x:65,y:74}}]},
+  /* est. 62 sq ft from Regal|2220 Fasdeck */ "Regal|24 Fasdeck (2012-2018)":{svg:'',pieces:[{id:"aisle",svgId:"",name:"Bow Walkway / Aisle",desc:"Center walkway and bow aisle area",sf:13,numPos:{x:50,y:14}},{id:"stbd_helm",svgId:"",name:"Starboard Helm Floor",desc:"Starboard helm and driver area",sf:18,numPos:{x:68,y:50}},{id:"port_floor",svgId:"",name:"Port Cockpit Floor",desc:"Port side seating and floor area",sf:17,numPos:{x:32,y:50}},{id:"aft",svgId:"",name:"Aft / Stern Section",desc:"Aft deck and stern carpet area",sf:14,numPos:{x:50,y:82}}]},
+  /* est. 47 sq ft from Sea Ray|180 Sport */ "Sea Ray|185 Fish & Ski":{
+    svg:'',
+    pieces:[
+      {id:"bow",       svgId:"", name:"Bow Cushion / Walk-Through", desc:"Spade-shaped piece at the bow",       sf:7,  numPos:{x:51,y:18}},
+      {id:"engine_cover", svgId:"", name:"Engine Box Cover",        desc:"Center pad covering the engine box",  sf:11, numPos:{x:51,y:53}},
+      {id:"port_floor",  svgId:"", name:"Port Cockpit Floor",       desc:"Left side floor with seat cutout",    sf:14, numPos:{x:22,y:68}},
+      {id:"stbd_floor",  svgId:"", name:"Starboard Cockpit Floor",  desc:"Right side floor with seat cutout",   sf:15, numPos:{x:78,y:68}}
+    ]
+  },
+  /* est. 52 sq ft from Sea Ray|190 Sundeck */ "Sea Ray|200 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:17,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:25,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:10,numPos:{x:50,y:88}}]},
+  /* est. 55 sq ft from Sea Ray|245 Weekender */ "Sea Ray|215 Weekender":{svg:'',pieces:[{id:"main",svgId:"",name:"Cabin & Cockpit Floor",desc:"One-piece L-shape floor with seat cutout",sf:55,numPos:{x:50,y:50}}]},
+  /* est. 57 sq ft from Sea Ray|200 Select */ "Sea Ray|220 Select":{
+    svg:'',
+    pieces:[
+      {id:"bow",          svgId:"", name:"Bow Cushion",          desc:"Spade-shaped bow piece",                       sf:12, numPos:{x:50,y:20}},
+      {id:"engine_cover", svgId:"", name:"Engine Box Cover",     desc:"Small rectangular engine cover with notch",   sf:9,  numPos:{x:50,y:48}},
+      {id:"cockpit",      svgId:"", name:"Main Cockpit Floor",   desc:"Large floor with two seat cutouts and tail",  sf:36, numPos:{x:43,y:72}}
+    ]
+  },
+  /* est. 57 sq ft from Sea Ray|245 Weekender */ "Sea Ray|225 Weekender":{svg:'',pieces:[{id:"main",svgId:"",name:"Cabin & Cockpit Floor",desc:"One-piece L-shape floor with seat cutout",sf:57,numPos:{x:50,y:50}}]},
+  /* est. 60 sq ft from Sea Ray|230 Bow Rider */ "Sea Ray|230 Overnighter (1997)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Walkway",desc:"Long top walk-through piece",sf:11,numPos:{x:50,y:14}},{id:"engine_cover",svgId:"",name:"Engine Box Cover",desc:"Center step-shaped engine cover",sf:11,numPos:{x:50,y:68}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",sf:38,numPos:{x:50,y:56}}]},
+  /* est. 60 sq ft from Sea Ray|230 Bow Rider */ "Sea Ray|230 Overnighter (1999)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Walkway",desc:"Long top walk-through piece",sf:11,numPos:{x:50,y:14}},{id:"engine_cover",svgId:"",name:"Engine Box Cover",desc:"Center step-shaped engine cover",sf:11,numPos:{x:50,y:68}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",sf:38,numPos:{x:50,y:56}}]},
+  /* est. 60 sq ft from Sea Ray|210 SLX */ "Sea Ray|230 SLX (2011)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward section",sf:19,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main floor",sf:29,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:12,numPos:{x:50,y:88}}]},
+  /* est. 60 sq ft from Sea Ray|210 SLX */ "Sea Ray|230 SLX (2012-2016)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward section",sf:19,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main floor",sf:29,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:12,numPos:{x:50,y:88}}]},
+  /* est. 60 sq ft from Sea Ray|200 Select */ "Sea Ray|230 Select":{
+    svg:'',
+    pieces:[
+      {id:"bow",          svgId:"", name:"Bow Cushion",          desc:"Spade-shaped bow piece",                       sf:12, numPos:{x:50,y:20}},
+      {id:"engine_cover", svgId:"", name:"Engine Box Cover",     desc:"Small rectangular engine cover with notch",   sf:10,  numPos:{x:50,y:48}},
+      {id:"cockpit",      svgId:"", name:"Main Cockpit Floor",   desc:"Large floor with two seat cutouts and tail",  sf:38, numPos:{x:43,y:72}}
+    ]
+  },
+  /* est. 60 sq ft from Sea Ray|220 Signature */ "Sea Ray|230 Signature (1996)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Walkway",desc:"Long top walk-through piece",sf:11,numPos:{x:50,y:14}},{id:"engine_cover",svgId:"",name:"Engine Box Cover",desc:"Center step-shaped engine cover",sf:11,numPos:{x:50,y:68}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",sf:38,numPos:{x:50,y:56}}]},
+  /* est. 60 sq ft from Sea Ray|220 Signature */ "Sea Ray|230 Signature (1999-2000)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Walkway",desc:"Long top walk-through piece",sf:11,numPos:{x:50,y:14}},{id:"engine_cover",svgId:"",name:"Engine Box Cover",desc:"Center step-shaped engine cover",sf:11,numPos:{x:50,y:68}},{id:"cockpit",svgId:"",name:"Main Cockpit Floor",desc:"Large floor with two seat post cutouts",sf:38,numPos:{x:50,y:56}}]},
+  /* est. 62 sq ft from Sea Ray|245 Weekender */ "Sea Ray|240 Overnighter (1995)":{svg:'',pieces:[{id:"main",svgId:"",name:"Cabin & Cockpit Floor",desc:"One-piece L-shape floor with seat cutout",sf:62,numPos:{x:50,y:50}}]},
+  /* est. 62 sq ft from Sea Ray|245 Weekender */ "Sea Ray|240 Overnighter (1997)":{svg:'',pieces:[{id:"main",svgId:"",name:"Cabin & Cockpit Floor",desc:"One-piece L-shape floor with seat cutout",sf:62,numPos:{x:50,y:50}}]},
+  /* est. 70 sq ft from Sea Ray|280 SLX */ "Sea Ray|270 SLX":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward section",sf:23,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main floor",sf:32,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:15,numPos:{x:50,y:88}}]},
+  /* est. 75 sq ft from Sea Ray|260 Bow Rider */ "Sea Ray|290 Bow Rider":{svg:'',pieces:[{id:"cabin",svgId:"",name:"Cabin Floor",desc:"Forward cabin floor section",sf:30,numPos:{x:50,y:38}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Aft cockpit floor with seat cutout",sf:45,numPos:{x:50,y:56}}]},
+  /* est. 75 sq ft from Sea Ray|280 SLX */ "Sea Ray|290 SLX":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward section",sf:24,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main floor",sf:35,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:16,numPos:{x:50,y:88}}]},
+  /* est. 75 sq ft from Sea Ray|280 Sundeck */ "Sea Ray|290 Sundeck (2008)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow / Forward Cockpit",desc:"Top T-shape forward area",sf:33,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Aft Cockpit Floor",desc:"Bottom L-shape aft cockpit floor",sf:42,numPos:{x:50,y:56}}]},
+  /* est. 75 sq ft from Sea Ray|280 Sundeck */ "Sea Ray|290 Sundeck (2014-2017)":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow / Forward Cockpit",desc:"Top T-shape forward area",sf:33,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Aft Cockpit Floor",desc:"Bottom L-shape aft cockpit floor",sf:42,numPos:{x:50,y:56}}]},
+  /* est. 96 sq ft from Sea Ray|280 SLX */ "Sea Ray|300 SLX":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward section",sf:31,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main floor",sf:45,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:20,numPos:{x:50,y:88}}]},
+  /* est. 118 sq ft from Sea Ray|370 Express Cruiser */ "Sea Ray|370 Aft Cabin":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:68,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:50,numPos:{x:65,y:74}}]},
+  /* est. 134 sq ft from Sea Ray|410 Sundancer */ "Sea Ray|420 Sundancer (1990)":{
+    svg:'',
+    pieces:[
+      {id:"cabin", svgId:"", name:"Cabin Walkway", desc:"Top-left U-shape cabin walkway", sf:42, numPos:{x:25,y:25}},
+      {id:"step", svgId:"", name:"Galley Step", desc:"Top-right step piece", sf:18, numPos:{x:72,y:15}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Large cockpit floor with seat cutout", sf:74, numPos:{x:50,y:75}}
+    ]
+  },
+  /* est. 134 sq ft from Sea Ray|410 Sundancer */ "Sea Ray|420 Sundancer (2002-2003)":{
+    svg:'',
+    pieces:[
+      {id:"cabin", svgId:"", name:"Cabin Walkway", desc:"Top-left U-shape cabin walkway", sf:42, numPos:{x:25,y:25}},
+      {id:"step", svgId:"", name:"Galley Step", desc:"Top-right step piece", sf:18, numPos:{x:72,y:15}},
+      {id:"cockpit", svgId:"", name:"Cockpit Floor", desc:"Large cockpit floor with seat cutout", sf:74, numPos:{x:50,y:75}}
+    ]
+  },
+  /* est. 144 sq ft from Sea Ray|440 Sundancer */ "Sea Ray|450 Sundancer":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:83,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:61,numPos:{x:65,y:74}}]},
+  /* est. 163 sq ft from Sea Ray|500 Sundancer */ "Sea Ray|510 Sundancer (1999-2003)":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:95,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:68,numPos:{x:65,y:74}}]},
+  /* est. 163 sq ft from Sea Ray|500 Sundancer */ "Sea Ray|510 Sundancer (2013-2017)":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:95,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:68,numPos:{x:65,y:74}}]},
+  /* est. 173 sq ft from Sea Ray|500 Sundancer */ "Sea Ray|540 Sundancer":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:101,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:72,numPos:{x:65,y:74}}]},
+  /* est. 173 sq ft from Sea Ray|500 Sundancer */ "Sea Ray|540 Sundancer (2000)":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:101,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:72,numPos:{x:65,y:74}}]},
+  /* est. 173 sq ft from Sea Ray|500 Sundancer */ "Sea Ray|540 Sundancer (2010-2016)":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:101,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:72,numPos:{x:65,y:74}}]},
+  /* est. 179 sq ft from Sea Ray|480 Sedan Bridge */ "Sea Ray|560 Sedan Bridge":{svg:'',pieces:[{id:"cockpit",svgId:"",name:"Upper Cockpit",desc:"Main deck area",sf:103,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Lower Aft",desc:"Aft cockpit area",sf:76,numPos:{x:65,y:74}}]},
 };
 
 const MD={
