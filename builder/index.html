@@ -674,6 +674,193 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 /* -- PRICING -- */
 const S_BERBER=17.50,S_VINYL=27.50,S_LABOR_SY=57.50,S_CMC_MULT=1.30,S_RET_MULT=1.55;
 
+/* -- CMC KIT PRICING (added 2026-09-29) ---------------------------------------
+   Online orders are COMPLETE KITS ONLY. Individual pieces are quoted by phone/email.
+   CMC charges a flat price per kit, so for boats CMC sells online we price off
+   CMC's own website price:
+     CMC list   = CMC base price x CMC material upcharge
+     kit price  = CMC list x S_PRICE_VS_CMC
+     delivered  = kit price + estUPS(zip)  (+ add-ons)
+     our cost   = CMC list x (1 - S_CMC_DISC) + actual UPS
+   Boats not in CMC_BASE keep the old sq-yd formula + estUPS().
+   CMC base = price on snapincarpet.com BEFORE a material is chosen (scraped
+   2026-09-29). Where CMC has several year versions for one builder entry, the
+   highest is used.
+   ------------------------------------------------------------------------- */
+const S_PRICE_VS_CMC=1.03;               // kit price vs CMC's website price, BEFORE freight ("just over CMC")
+const S_CMC_DISC=0.25;                   // our dealer discount off CMC website price
+const S_CMC_UP={berber:1.18,vinyl:1.70}; // CMC's own upcharges: Berber +18%, Marine Weave (woven vinyl) +70%
+const PIECES_CONTACT="For individual pieces, call 888.283.0704 or email info@boatcarpet.com.";
+const CMC_BASE={
+  "Sea Ray|SeaRayder F-14":498,                     // Sea Rayder F-14 (1996 +-)
+  "Four Winns|264 Funship":1452.5,                  // Four Winns 264 Funship carpet kit 03-07
+  "Chaparral|H2O 21 Sport":898,                     // Chaparral H20 21 Sport 17-19 +-
+  "Four Winns|H210 (2012-2014)":855,                // Four Winns H210 carpet kit 12-14 +-
+  "Four Winns|H210 (2006)":848,                     // Four Winns H210 SS carpet kit 2006/10+-
+  "Four Winns|H210 SS":848,                         // Four Winns H210 SS carpet kit 2006/10+-
+  "Sea Ray|SeaRayder F-16":468,                     // Sea Rayder F-16 (1996-1998 +-)
+  "Four Winns|180 Horizon":848,                     // Four Winns 180 Horizon carpet kit 1998+-
+  "Sea Ray|175 Sport":781,                          // 175 Sport 07-09+-
+  "Four Winns|H240":878,                            // Four Winns H240 06-11+-
+  "Four Winns|190 SS":855,                          // Four Winns 190 SS carpet kit 2012+-
+  "Sea Ray|185 Sport":795,                          // 185 Sport 2006+-
+  "Sea Ray|180 Sport":775,                          // 180 Sport 2004/05+-
+  "Rinker|192 Captiva BR":879,                      // Rinker cockpit carpet kit 192 Captiva BR 06-08
+  "Four Winns|190 Horizon":842,                     // Four Winns 190 Horizon carpet kit 03-07+-
+  "Chaparral|196 SSi":842,                          // Chaparral 196 SSi 01+-
+  "Sea Ray|200 Select":874,                         // 200 Select 04-07+-
+  "Sea Ray|200 Sport":887,                          // 200 Sport 03-05+-
+  "Sea Ray|200 Sport (2003-2005)":887,              // 200 Sport 03-05+-
+  "Monterey|194 FS":828,                            // Monterey 194 FS cockpit kit 04-07+-
+  "Sea Ray|190 Sport":798,                          // 190 Sport 2012/13+-
+  "Sea Ray|195 Sport":828,                          // 195 Sport 06-09+-
+  "Sea Ray|205 Sport":887,                          // 205 Sport 2006-08 +-; 205 Sport 2012 +-
+  "Rinker|276 Captiva BR":995,                      // Rinker cockpit carpet kit 276 Captiva BR 07-16
+  "Sea Ray|210 Sundeck":858,                        // 210 SD 1999+-
+  "Sea Ray|190 SPX":740,                            // 190 SPX 15-24+-
+  "Rinker|212 Captiva BR":868,                      // Rinker cockpit carpet kit 212 Captiva BR 2000-2004+-
+  "Cobalt|292":978,                                 // Cobalt cockpit carpet kit 292 1999-2000+-
+  "Four Winns|210 Horizon":865,                     // Four Winns 210 Horizon carpet kit 04+-
+  "Sea Ray|220 Sundeck":898,                        // 220 Sundeck 02-08+-; 220 Sundeck OB 14-17+-
+  "Chaparral|210 SSi":844,                          // Chaparral 210 SSI 04-08 +-
+  "Rinker|282 BR":942,                              // Rinker cockpit carpet kit 282 Captiva BR 03-06
+  "Four Winns|V375 Vista":878,                      // Four Winns V375 carpet kit 11-19+-
+  "Chaparral|204 SSi":798,                          // Chaparral 204 SSI 04-05 +-
+  "Sea Ray|280 Sundancer":935,                      // 280 DA (FULL AFT OPTION) 01-07+-; 280 DA (TAIL OPTION) 01-07+-; 280 DA 10-16+-
+  "Four Winns|220 Horizon":868,                     // Four Winns H220 carpet kit 06-10 +-
+  "Sea Ray|270 Sundeck":923,                        // 270 Sundeck 2002-2006+-; 270 Sundeck (SDX) 15 - 23 +-
+  "Chaparral|220 SSI":855,                          // Chaparral 220 SSi 01-08+-
+  "Chaparral|216 SSI":824,                          // Chaparral 216 SSI 01-02 +-
+  "Rinker|270 FV":889,                              // Rinker cockpit carpet kit 270 FV 00; Rinker cockpit carpet kit 270 FV 01; Rinker cockpit c
+  "Four Winns|298 Vista":884,                       // Four Winns 298 Vista carpet kit 99-04+-
+  "Rinker|246 BR":898,                              // Rinker cockpit carpet kit 246 Captiva BR 06-08
+  "Rinker|290 FV":898,                              // Rinker cockpit carpet kit 290 FV
+  "Sea Ray|240 Sundeck":898,                        // 240 Sundeck 96-99+-; 240 SD 00-03; 240 Sundeck 04-08+-; 240 Sundeck 09-11+-; 240 Sundeck 1
+  "Sea Ray|240 Sundeck (2004-2008)":898,            // 240 Sundeck 04-08+-
+  "Chaparral|226 SSi":864,                          // Chaparral 226 SSI 09-15 +-; Chaparral 226 SSi 09-15+-
+  "Rinker|243 Siesta":889,                          // Rinker cockpit carpet kit 243 Siesta 00-02
+  "Sea Ray|260 Sundeck":889,                        // 260 Sundeck 07-09+-; 260 Sundeck 2011+-
+  "Sea Ray|240 Sundeck (1996-1999)":889,            // 240 Sundeck 96-99+-
+  "Sea Ray|240 Sundeck (1998-1999)":889,            // 240 Sundeck 96-99+-
+  "Sea Ray|320 Sundancer":1485,                     // 320 DA 03-07+-; 320 DA 17-25+-
+  "Sea Ray|270 Sundancer":885,                      // 270 DA 94-97+-; 270 DA SE 98+-; 270 DA 98+-; 270 DA 00-02+-
+  "Sea Ray|270 Sundancer (2000)":885,               // 270 DA 00-02+-
+  "Rinker|282 CC":878,                              // Rinker cockpit carpet kit 282 Captiva CC 03-06 +-
+  "Sea Ray|260 Sundancer":878,                      // 260 DA 99-04+-; 260 DA 05-08+-; 260 DA 2011-2013+-; 260 DA 2014-2018+-
+  "Rinker|232 Captiva BR":878,                      // Rinker cockpit carpet kit 232 Captiva BR 05; Rinker cockpit carpet kit 232 Captiva BR 2000
+  "Sea Ray|260 Sundancer (2014-2018)":878,          // 260 DA 2014-2018+-
+  "Rinker|226 Captiva BR":858,                      // Rinker cockpit carpet kit 226 Captiva BR 06-11
+  "Four Winns|285 Sundowner":868,                   // Four Winns 285 Sundowner Cuddy carpet kit 00-04+-
+  "Rinker|262 Captiva":868,                         // Rinker cockpit carpet kit 262 Captiva BR 04
+  "Sea Ray|290 Sundancer":868,                      // 290 DA 93+-; 290 DA 94-97+-; 290 DA 98+-; 290 DA 01+-; 290 DA 06 - 08 +-
+  "Sea Ray|240 Sundeck (2014-2016)":868,            // 240 Sundeck 14-16+-
+  "Chaparral|290 Signature":864,                    // Chaparral 290 Signature 04+-; Chaparral 290 Signature 06+-
+  "Chaparral|256 SSi":878,                          // Chaparral 256 ssi 04-09+-
+  "Sea Ray|250 SLX":878,                            // 250 SLX 06-13+-
+  "Rinker|280 EC":874,                              // Rinker cockpit carpet kit 280 EC
+  "Rinker|272 Captiva BR":858,                      // Rinker cockpit carpet kit 272 Captiva BR 99-00
+  "Chaparral|230 SSi":858,                          // Chaparral 230 SSi 00-05+-
+  "Sea Ray|260 Sundancer (2011-2013)":858,          // 260 DA 2011-2013+-
+  "Rinker|250 FV":855,                              // Rinker cockpit carpet kit 250 FV 2002-2007+-
+  "Sea Ray|290 Sundancer (2007)":855,               // 290 DA 06 - 08 +-
+  "Rinker|260 EC":868,                              // Rinker cockpit carpet kit 260 EC 08-13
+  "Rinker|23 QX BR":854,                            // Rinker cockpit carpet kit 23 QX BR 17-20
+  "Monterey|214 FS":768,                            // Monterey 214 FS 2006+-
+  "Chaparral|270 Signature":848,                    // Chaparral 270 Signature 05+-
+  "Rinker|232 Captiva Cuddy":848,                   // Rinker cockpit carpet kit 232 Captiva Cuddy 98-06
+  "Sea Ray|240 Sundeck (2010-2013)":848,            // 240 Sundeck 09-11+-
+  "Sea Ray|290 Sundancer (1996)":845,               // 290 DA 94-97+-
+  "Four Winns|278 Vista":838,                       // Four Winns 278 Vista carpet kit 07+-
+  "Sea Ray|240 Sundancer":838,                      // 240 DA 96-99+-; 240 DA 00-04+-; 240 DA 06-10+-
+  "Sea Ray|240 Sundancer (2000-2004)":838,          // 240 DA 00-04+-
+  "Sea Ray|240 Sundancer (2006-2010)":838,          // 240 DA 06-10+-
+  "Sea Ray|290 Sundancer (1998)":838,               // 290 DA 98+-
+  "Maxum|2400 SCR":835,                             // Maxum 2400 SCR carpet kit 94-01+-
+  "Four Winns|248 Vista":834,                       // Four Winns 248 Vista carpet kit 03+-
+  "Rinker|265 FV":828,                              // Rinker cockpit carpet kit 265 FV 93-95
+  "Sea Ray|260 Sundancer (2005-2008)":828,          // 260 DA 05-08+-
+  "Monterey|263 Explorer":824,                      // Monterey 263 cockpit kit 04-06
+  "Sea Ray|270 Sundancer (1988)":824,               // 270 DA 94-97+-
+  "Sea Ray|270 Sundancer (1991)":824,               // 270 DA 94-97+-
+  "Rinker|242 FV":804,                              // Rinker cockpit carpet kit 242 FV 00-01
+  "Sea Ray|240 Sundancer (1999)":795,               // 240 DA 96-99+-
+  "Four Winns|S215":598,                            // Four Winns S215carpet kit 12-15+-
+  "Sea Ray|310 Sundancer":1058,                     // 310 DA 1990/91+-; 310 DA 98+-; 310 DA 99+-; 310 DA 2000+-; 310 DA 01-02+-; 310 DA 07-09+-;
+  "Sea Ray|310 Sundancer (1990)":1058,              // 310 DA 1990/91+-
+  "Sea Ray|400 Express Cruiser":1315,               // 400 EC 92-97+-; 400 EC 92-97+-
+  "Four Winns|310 Horizon":974,                     // Four Winns H310 (Horizon) carpet kit 07-09+-
+  "Sea Ray|300 Sundancer":904,                      // 300 DA 87-89+-; 300 DA 95-99+-; 300 DA 02-07+-
+  "Sea Ray|300 Sundancer (1987-1989)":904,          // 300 DA 87-89+-
+  "Sea Ray|310 Sundancer (1998-2002)":928,          // 310 DA 98+-; 310 DA 99+-; 310 DA 2000+-; 310 DA 01-02+-
+  "Sea Ray|330 Sundancer":989,                      // 330 DA 1992-1994+-; 330 DA 95-99+-; 330 DA 08-10+-; 330 DA 12+-
+  "Sea Ray|330 Sundancer (1994)":989,               // 330 DA 1992-1994+-
+  "Rinker|300 FV EC":889,                           // Rinker cockpit carpet kit 300 EC (FV)
+  "Sea Ray|300 Sundancer (1995)":889,               // 300 DA 95-99+-
+  "Rinker|310 FV":915,                              // Rinker cockpit carpet kit 310 FV
+  "Sea Ray|460 Sundancer":1338,                     // 460 DA 00-05+-
+  "Rinker|312 FV":898,                              // Rinker cockpit carpet kit 312 FV
+  "Four Winns|318 Vista":889,                       // Four Winns 318 Vista carpet kit 06+-
+  "Sea Ray|340 Sundancer":964,                      // 340 DA 88+-; 340 DA 99-02+-; (SPORTSMAN PACKAGE) 340 DA 03-09+-; 340 DA 03-08+-
+  "Rinker|320 FV":898,                              // Rinker cockpit carpet kit 320 EC (FV)
+  "Sea Ray|300 Sundancer (2002-2007)":838,          // 300 DA 02-07+-
+  "Sea Ray|310 Sundancer (2007)":855,               // 310 DA 07-09+-
+  "Sea Ray|310 Sundancer (2010-2017)":842,          // 310 DA 10-17 +-
+  "Sea Ray|330 Sundancer (2008-2014)":889,          // 330 DA 08-10+-; 330 DA 12+-
+  "Rinker|350 FV":914,                              // Rinker cockpit carpet kit 350 FV 07+-
+  "Rinker|340 FV":889,                              // Rinker cockpit carpet kit 340 FV 00/01
+  "Rinker|342 FV":878,                              // Rinker cockpit carpet kit 342 FV
+  "Sea Ray|350 Sundancer":895,                      // 350 DA 08-09+-; 350 DA 14 - 16+-
+  "Sea Ray|350 Sundancer (2014-2016)":895,          // 350 DA 14 - 16+-
+  "Rinker|360 FV":918,                              // Rinker cockpit carpet kit 360 FV 05/06 +-
+  "Four Winns|348 Vista":868,                       // Four Winns 348 Vista carpet kit 06+-
+  "Sea Ray|340 Sundancer (1999-2002)":868,          // 340 DA 99-02+-
+  "Sea Ray|350 Sundancer (1991)":885,               // 350 DA 08-09+-
+  "Sea Ray|350 Sundancer (2009)":885,               // 350 DA 08-09+-
+  "Rinker|370 EC":928,                              // Rinker cockpit carpet kit 370 EC 07/08 +-
+  "Rinker|370 EX":928,                              // Rinker cockpit carpet kit 370 EX 17 - 20+-
+  "Rinker|410 FV":998,                              // Rinker cockpit carpet kit 410 FV
+  "Sea Ray|360 Sundancer":885,                      // 360 DA 02-05+-
+  "Rinker|400 EC":984,                              // Rinker cockpit carpet kit 400 EC
+  "Sea Ray|370 Sundancer":898,                      // 370 DA 95-97+-; 370 DA 98-99+-; 370 DA 2010-2017+-
+  "Sea Ray|370 Sundancer (1998)":898,               // 370 DA 98-99+-
+  "Sea Ray|370 Sundancer (2012)":889,               // 370 DA 2010-2017+-
+  "Sea Ray|380 Sundancer":898,                      // 380 DA 99-04+-; 380 DA 06-09+-
+  "Sea Ray|370 Sundancer (1996)":868,               // 370 DA 95-97+-
+  "Sea Ray|410 Sundancer":928,                      // 410 DA 00-02+-; 410 DA 12-15+-
+  "Sea Ray|400 Sundancer":898,                      // 400 DA 97-00+-
+  "Sea Ray|390 Sundancer":874,                      // 390 DA 03-05+-
+};
+function activeKitPieces(){
+  var def=SVG_DEFS[S.make+"|"+S.model];
+  return (S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+}
+/* true only when every piece of the kit is selected */
+function isFullKit(){
+  var ap=activeKitPieces();
+  var ids=ap?ap.map(function(p){return p.id;}):ALL;
+  return ids.length>0&&ids.every(function(id){return !!S.sel[id];});
+}
+/* Full-kit DELIVERED price (kit + UPS estimate), before add-ons. */
+function kitDelivered(totalSf){
+  var base=CMC_BASE[S.make+"|"+S.model];
+  if(base){
+    var up=S_CMC_UP[S.matType]||S_CMC_UP.berber;
+    return base*up*S_PRICE_VS_CMC+estUPS(S.zip,totalSf/9);
+  }
+  var sy=totalSf/9;                                        // legacy sq-yd formula + UPS estimate
+  return (sy*S.pricePerSY+sy*S_LABOR_SY)*S_CMC_MULT*S_RET_MULT+estUPS(S.zip,sy);
+}
+function showPiecesContact(){
+  var msg='<div style="font-size:14px;font-weight:600">Online pricing is for the complete kit.</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-top:4px">'+PIECES_CONTACT+' Or select all pieces for your instant kit price.</div>';
+  S.price=null;
+  var bc=g("bc-body"); if(bc) bc.innerHTML=msg;
+  var sp=g("sb-price-sec"); if(sp) sp.style.display="none";
+  var pr=g("rev-price-result"); if(pr){ pr.style.display="block"; var pb=g("rev-price-big"); if(pb) pb.innerHTML=msg; }
+  var cb=g("checkout-bar"); if(cb) cb.style.display="none";
+  var btn=g("add-to-cart-btn"); if(btn){ btn.style.opacity="0.4"; btn.style.pointerEvents="none"; }
+}
+
 /* ============================================================================
    ADD-ONS SYSTEM
    ----------------------------------------------------------------------------
@@ -5395,7 +5582,7 @@ function updateKitBadge(){
   const allSel=ids.every(function(id){return !!S.sel[id];});
   const bdg=g("kit-bdg");if(bdg)bdg.style.display=allSel?"flex":"none";
   const cnt=g("svgCount");const n=ids.filter(function(id){return !!S.sel[id];}).length;
-  if(cnt)cnt.textContent=n===0?"Click a piece or add complete kit":n+" piece"+(n===1?"":"s")+" selected";
+  if(cnt)cnt.textContent=n===0?"Click a piece or add complete kit":n+" piece"+(n===1?"":"s")+" selected"+(allSel?"":" \u2014 online pricing is for the complete kit; call or email for individual pieces");
 }
 function addKit(){
   const k2=S.make+"|"+S.model;
@@ -5930,7 +6117,8 @@ function calc(){
   } else {
     ALL.forEach(function(id){if(S.sel[id])sf+=PIECES[id].sf;});
   }
-  const sy=sf/9,ups=estUPS(S.zip,sy),base=sy*S.pricePerSY+sy*S_LABOR_SY,addonsTotal=calcAddonsTotal({pieces:Object.keys(S.sel).filter(function(id){return S.sel[id];}).length,sqft:sf}),bcPrice=Math.round(base*S_CMC_MULT*S_RET_MULT)+ups+addonsTotal;
+  if(!isFullKit()){showPiecesContact();return;}
+  const addonsTotal=calcAddonsTotal({pieces:Object.keys(S.sel).filter(function(id){return S.sel[id];}).length,sqft:sf}),bcPrice=Math.round(kitDelivered(sf))+addonsTotal;
   g("bc-body").innerHTML='<div class="pbig">$'+bcPrice.toFixed(2)+'</div>'
     +'<div style="font-size:12px;color:var(--muted);margin-top:4px">'
     +(S.color?(S.matType==="vinyl"?"Marine Vinyl":"Berber Carpet")+"  -  "+S.color:"")
@@ -5943,9 +6131,13 @@ function calc(){
   g("sb-price").textContent="$"+bcPrice.toFixed(2);
 }
 
-/* UPS Ground from Detroit MI -- Box 52x14x14in, 35lb actual / 73lb dim weight */
-/* Additional Handling Surcharge included (longest side 52" > 48" threshold) */
-function estUPS(zip,sy){var z=[118,118,128,142,98,108,118,128,158,168];var ahs=[36,36,36,38,28,31,36,38,38,38];var d=zip?parseInt(zip[0]):4;var base=z[d]||128;var surcharge=ahs[d]||36;var extra=sy>15?20:0;return base+surcharge+extra;}
+/* UPS Ground estimate by first digit of destination ZIP.
+   Box 48x13x13in, ~20 lb actual -> 59 lb dim weight (48*13*13/139). Updated 2026-09-29 per Kevin.
+   Additional Handling Surcharge applies to these boxes (confirmed by Kevin 2026-09-29).
+   PROVISIONAL: base = old 73-lb table scaled by 59/73 - replace with real charges from UPS/ShipStation. */
+const UPS_BY_ZIP1=[96,96,104,115,79,87,96,104,128,136];
+const UPS_AHS_BY_ZIP1=[36,36,36,38,28,31,36,38,38,38];
+function estUPS(zip,sy){var d=zip?parseInt(zip[0]):4;var base=UPS_BY_ZIP1[d];if(base==null)base=104;var ahs=UPS_AHS_BY_ZIP1[d];if(ahs==null)ahs=36;var extra=sy>15?20:0;return base+ahs+extra;}
 function fillOrder(){
   if(g("cn").value){g("on").value=g("cn").value;g("onb").style.display="inline"}
   if(g("ce").value){g("oe").value=g("ce").value;g("oeb").style.display="inline"}
@@ -6039,7 +6231,7 @@ function dlPDF(){
     +'<tr><td>Pieces</td><td>'+pieces+'</td></tr>'
     +'</table>'
     +'<div class="price">Total: $'+S.price.toFixed(2)+'</div>'
-    +'<p style="font-size:12px;color:#888;">* Shipping not included. Price valid 30 days.</p>'
+    +'<p style="font-size:12px;color:#888;">* Price includes shipping to the ZIP shown. Price valid 30 days.</p>'
     +'<div class="footer">BoatCarpet.com &nbsp; 888.283.0704 &nbsp; info@boatcarpet.com &nbsp; www.boatcarpet.com</div>'
     +'<br><button class="noprint" onclick="window.print()" style="background:#1a2e4a;color:#fff;border:none;padding:12px 28px;border-radius:7px;font-size:14px;cursor:pointer;margin-top:8px;">Print / Save as PDF</button>'
     +'</body></html>';
@@ -6632,14 +6824,13 @@ function calcAndShow(){
     ALL.forEach(function(id){ if(S.sel[id]) sf+=PIECES[id].sf; });
   }
   if(sf===0){ toast("No pieces selected — go back and select pieces."); return; }
+  if(!isFullKit()){ showPiecesContact(); return; }
   var sy = sf/9;
-  var ups = estUPS(S.zip, sy);
-  var base = sy*S.pricePerSY + sy*S_LABOR_SY;
   var selPieceCount = 0;
   if(activePieces){ activePieces.forEach(function(p){ if(S.sel[p.id]) selPieceCount++; }); }
   else { ALL.forEach(function(id){ if(S.sel[id]) selPieceCount++; }); }
   var addonsTotal = calcAddonsTotal({pieces:selPieceCount, sqft:sf});
-  var bcPrice = Math.round(base*S_CMC_MULT*S_RET_MULT)+ups+addonsTotal;
+  var bcPrice = Math.round(kitDelivered(sf))+addonsTotal;
   S.price = bcPrice;
   g("sb-price-sec").style.display = "block";
   g("sb-price").textContent = "$"+bcPrice.toFixed(2);
