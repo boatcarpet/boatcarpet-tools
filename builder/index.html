@@ -5167,7 +5167,15 @@ function autoFill(){
     }
     updModels(year,model);f=true;
   }
-  if(f)g("af-alert").style.display="flex";
+  if(f){
+    var al=g("af-alert"), mk=g("make").value;
+    if(!(name||email||phone)){
+      /* Came from a site search (make only), not a form */
+      if(mk){var t=al.querySelectorAll("span")[1];if(t)t.textContent="Showing "+mk+" patterns. Choose your model and year below.";}
+      else f=false;
+    }
+    if(f)al.style.display="flex";
+  }
   buildVinylGrid();buildBindingGrid();loadSavedQuotes();
 }
 
