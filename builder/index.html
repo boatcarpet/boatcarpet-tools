@@ -3,7 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BoatCarpet.com — Custom Carpet Builder [v10.35]</title>
+<script>
+/* v10.36 - optional skin for embedding on snapinboatcarpets.com. Off unless the URL has ?skin=snapin. */
+(function(){try{
+  if(new URLSearchParams(window.location.search).get('skin')==='snapin'){
+    document.documentElement.className+=' skin-snapin';
+    var l=document.createElement('link');l.rel='stylesheet';
+    l.href='https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap';
+    document.head.appendChild(l);
+  }
+}catch(e){}})();
+</script>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.36]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -306,12 +317,54 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 .rv-edit-btn{font-size:11px;font-weight:600;color:var(--blue);background:none;border:1px solid var(--blue);padding:4px 12px;border-radius:5px;cursor:pointer;white-space:nowrap;}
 .rv-edit-btn:hover{background:var(--sel-bg);}
 </style>
+<style id="skin-snapin-css">
+/* ===== v10.36 SKIN: snapinboatcarpets.com embed (only when <html class="skin-snapin">) ===== */
+html.skin-snapin{--navy:#0f2233;--gold:#9a6b3f;--blue:#0f2233;--light:#fff;--border:#e3ddd3;--text:#1d2a36;--muted:#5b6670;--cream:#f6f2ec;--sel:#0f2233;--sel-bg:rgba(15,34,51,.07);--vp-top:0px;--vp-h:600px}
+html.skin-snapin body{background:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden}
+html.skin-snapin header,html.skin-snapin #p0>.sec-lbl,html.skin-snapin .step-subtitle{display:none}
+html.skin-snapin .layout{min-height:0}
+html.skin-snapin .main{padding:0 0 4px;border-right:0}
+html.skin-snapin .btn,html.skin-snapin .btn-nav,html.skin-snapin .btn-kit,html.skin-snapin .btn-clear,html.skin-snapin .st,html.skin-snapin select,html.skin-snapin input,html.skin-snapin textarea,html.skin-snapin button{font-family:inherit}
+html.skin-snapin .card{border-radius:6px;border-color:var(--border);padding:18px 20px;margin-bottom:14px}
+html.skin-snapin .sec-lbl,html.skin-snapin .cfg-grid h3,html.skin-snapin .nopat h3{font-family:Fraunces,Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.01em;color:var(--navy)}
+html.skin-snapin .sec-lbl{font-size:20px}
+html.skin-snapin label{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--navy);margin-bottom:6px}
+html.skin-snapin select,html.skin-snapin input[type=text],html.skin-snapin input[type=email],html.skin-snapin input[type=tel],html.skin-snapin textarea{font-size:16px;padding:12px 14px;border:1px solid #cfc8bb;border-radius:4px;color:var(--text)}
+html.skin-snapin select{padding-right:34px;background-position:right 14px center}
+html.skin-snapin select:focus,html.skin-snapin input:focus,html.skin-snapin textarea:focus{border-color:var(--navy);outline:2px solid var(--navy);outline-offset:1px}
+/* the make / model / year row is the first thing people see: give it room */
+html.skin-snapin #p0>.sec-lbl+.card{background:var(--cream);border:0;padding:26px 28px 14px}
+html.skin-snapin #p0>.sec-lbl+.card .fg{gap:16px}
+html.skin-snapin .cfg-grid{margin-top:16px;margin-bottom:16px;gap:16px}
+html.skin-snapin .cfg-grid .card{margin-bottom:0}
+html.skin-snapin .alert{border-radius:6px;font-size:14px}
+html.skin-snapin .ai{background:#fff;color:var(--navy);border:1px solid var(--border)}
+html.skin-snapin .bp{background:var(--navy);border-radius:4px}
+html.skin-snapin .bp:hover{background:#1c3a55}
+/* "don't see your boat" request: a calm panel, not a warning */
+html.skin-snapin .nopat{background:#fff;border:1px solid var(--border);border-radius:6px;padding:24px 28px;margin-top:16px}
+html.skin-snapin .nopat h3{font-size:22px;margin-bottom:8px}
+html.skin-snapin .nopat p{font-size:15px!important;color:var(--muted)!important;margin-bottom:16px!important}
+html.skin-snapin .nopat p strong{font-weight:400}
+html.skin-snapin .nopat label{color:var(--navy);font-weight:600}
+html.skin-snapin .nopat input{background:#fff;border:1px solid #cfc8bb;border-radius:4px;font-size:16px;padding:12px 14px}
+html.skin-snapin .nopat-form-row{gap:16px;margin-bottom:14px}
+html.skin-snapin .nopat .btn.bp{width:auto!important;font-size:16px!important;padding:14px 28px!important;font-weight:600}
+/* overlays follow the part of the frame the visitor can actually see */
+html.skin-snapin #toast{position:absolute;bottom:auto;top:calc(var(--vp-top) + var(--vp-h) - 72px)}
+html.skin-snapin #quote-modal{position:absolute!important;inset:auto!important;left:0!important;right:0!important;top:var(--vp-top)!important;height:var(--vp-h)!important}
+@media(max-width:820px){
+html.skin-snapin #p0>.sec-lbl+.card{padding:20px 18px 8px}
+html.skin-snapin .nopat{padding:20px 18px}
+html.skin-snapin .nopat .btn.bp{width:100%!important}
+}
+</style>
 </head>
 <body>
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.35</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.36</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -7094,6 +7147,33 @@ function fallbackCopy(txt){
   } else {
     console.warn('[QUOTE CAPTURE] submitQuoteModal not found.');
   }
+})();
+</script>
+<script>
+/* v10.36 - skin runtime (only runs with ?skin=snapin). */
+(function(){
+  if(!/\bskin-snapin\b/.test(document.documentElement.className)) return;
+  try{
+    var h3=document.querySelector('#nopat h3'); if(h3) h3.textContent='Don’t see your boat? We may still have the pattern.';
+    var nb=document.querySelector('#nopat .btn.bp'); if(nb) nb.textContent='Check for my pattern';
+  }catch(e){}
+  if(window.parent===window) return;
+  var last=0;
+  function send(){
+    var h=Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if(h&&h!==last){last=h;window.parent.postMessage({sibBuilder:1,height:h},'*');}
+  }
+  if(window.ResizeObserver){new ResizeObserver(send).observe(document.documentElement);}
+  window.addEventListener('load',send);
+  setInterval(send,1000);
+  send();
+  window.addEventListener('message',function(e){
+    var d=e.data;
+    if(!d||d.sibHost!==1) return;
+    var st=document.documentElement.style;
+    if(typeof d.top==='number') st.setProperty('--vp-top',Math.max(0,Math.round(d.top))+'px');
+    if(typeof d.height==='number') st.setProperty('--vp-h',Math.max(200,Math.round(d.height))+'px');
+  });
 })();
 </script>
 </body>
