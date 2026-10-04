@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.36]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.37]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -364,7 +364,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.36</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.37</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -585,8 +585,10 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
     <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
-    <!-- Optional custom binding color -->
-    <div class="bind-section" style="margin-top:auto;padding-top:10px">
+    <!-- v10.37 - custom binding color option hidden: the +$55 upcharge confused customers
+         (they thought binding was sold separately). Matching binding is always included.
+         Markup kept in the DOM so buildBindingGrid()/toggleBinding() stay null-safe. -->
+    <div class="bind-section" style="display:none">
       <div class="bind-toggle" id="bindToggle" onclick="toggleBinding(event)">
         <input type="checkbox" id="bindCheck" onclick="event.stopPropagation();toggleBinding(event)">
         <span class="bt-lbl">Different binding color</span>
