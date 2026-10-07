@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.38]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.39]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -364,7 +364,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.38</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.39</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -585,6 +585,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
     <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
+    <!-- v10.39 - Add to Cart hidden until checkout is live; Get a Quote is the main button. With ?skin=snapin the quote request is sent to snapinboatcarpets.com (saved in its admin and emailed to the shop). -->
     <!-- v10.38 - lead time wording changed from about 4 weeks to 1 to 3 weeks (matches the manufacturer) -->
     <!-- v10.37 - custom binding color option hidden: the +$55 upcharge confused customers
          (they thought binding was sold separately). Matching binding is always included.
@@ -620,11 +621,11 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
       <div id="rev-year-warn" style="display:none;font-size:11px;color:#b36000;margin-top:4px">&#9888; Year is outside our confirmed range &#8212; we verify fit before cutting.</div>
     </div>
     <div id="checkout-bar" style="display:none;margin-top:12px">
-      <button id="add-to-cart-btn" onclick="addToCart()" style="width:100%;padding:13px 10px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:8px">
+      <button id="add-to-cart-btn" onclick="addToCart()" style="display:none;width:100%;padding:13px 10px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:8px">
         🛒 Add to Cart &nbsp;&mdash;&nbsp; <span id="cart-price-display">$0.00</span>
       </button>
-      <button onclick="openQuoteModal()" style="width:100%;padding:10px 14px;background:#fff;color:#2a7a2a;border:2px solid #2a7a2a;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">&#128203; Get a Quote</button>
-      <div style="text-align:center;font-size:10.5px;color:#667788;line-height:1.5;margin-top:8px">Secure checkout on BoatCarpet.com &middot; Snaps included &middot; Made to order</div>
+      <button id="get-quote-btn" onclick="openQuoteModal()" style="width:100%;padding:13px 10px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer">&#128203; Get a Quote</button>
+      <div style="text-align:center;font-size:10.5px;color:#667788;line-height:1.5;margin-top:8px">Snaps included &middot; Made to order</div>
     </div>
     <!-- Hidden legacy review elements kept for fillPricingReview() null-safety -->
     <div style="display:none" aria-hidden="true">
@@ -6935,6 +6936,8 @@ function openQuoteModal(){
   if(pPhone)g("qm-phone").value=pPhone;
   g("qm-msg").style.display="none";
   g("qm-msg").textContent="";
+  var sb=g("qm-submit");
+  if(sb){sb.style.display="";sb.disabled=false;sb.style.opacity="1";if(sb.getAttribute("data-label"))sb.textContent=sb.getAttribute("data-label");}
 }
 function closeQuoteModal(){
   g("quote-modal").style.display="none";
@@ -6946,6 +6949,7 @@ function submitQuoteModal(){
   const notes=(g("qm-notes")&&g("qm-notes").value||"").trim();
   if(!name){toast("Please enter your name.");g("qm-name").focus();return;}
   if(!email||!email.includes("@")){toast("Please enter a valid email.");g("qm-email").focus();return;}
+  const SNAP=/\bskin-snapin\b/.test(document.documentElement.className);
   const qn=qNum();
   const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
   const validUntil=new Date(Date.now()+30*24*60*60*1000).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
@@ -6968,7 +6972,7 @@ function submitQuoteModal(){
   const patImgUrl=patImgSrc?(BASE+"/"+patImgSrc):null;
   const swatchFull=colorImgUrl?(colorImgUrl.startsWith("http")?colorImgUrl:(BASE+"/"+colorImgUrl)):null;
   const logoUrl="https://boatcarpet.com/wp-content/uploads/boatcarpet-logo.svg";
-  const quoteHtml='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Marine Carpet Quote '+qn+'<\/title>'+
+  let quoteHtml='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Marine Carpet Quote '+qn+'<\/title>'+
     '<style>*{box-sizing:border-box;}body{margin:0;padding:16px;font-family:Arial,sans-serif;background:#f4f6f8;}'+
     '.page{max-width:760px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.12);}'+
     '.hdr{background:#1b3a6b;color:#fff;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}'+
@@ -7032,15 +7036,82 @@ function submitQuoteModal(){
     '<div class="cta">To order, call <strong>888.283.0704<\/strong> or visit <a href="https:\/\/boatcarpet.com">boatcarpet.com<\/a> &mdash; reference quote <strong>'+qn+'<\/strong>.<br><a href="mailto:info@boatcarpet.com?subject=Quote%20'+encodeURIComponent(qn)+'%20Order&body=Hi%2C%20I%20have%20quote%20'+encodeURIComponent(qn)+'%20for%20a%20'+encodeURIComponent(boatLabel)+'%20and%20would%20like%20to%20place%20my%20order.">&#9993; Email us to place this order<\/a><\/div>'+
     '<div class="ftr">BoatCarpet.com &nbsp;&bull;&nbsp; 888.283.0704 &nbsp;&bull;&nbsp; <a href="mailto:info@boatcarpet.com">info@boatcarpet.com<\/a><\/div><\/div>'+
     '<\/body><\/html>';
-  const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");
+  if(SNAP){
+    /* v10.39 - quote sheet carries the Snap-In Boat Carpets name when embedded on snapinboatcarpets.com */
+    quoteHtml=quoteHtml
+      .replace('<img src="'+logoUrl+'" alt="BoatCarpet.com">','<div style="font-family:Georgia,serif;font-size:22px">Snap-In Boat Carpets<\/div>')
+      .replace(' or visit <a href="https:\/\/boatcarpet.com">boatcarpet.com<\/a>',' or email <a href="mailto:info@boatcarpet.com">info@boatcarpet.com<\/a>')
+      .replace('<div class="ftr">BoatCarpet.com','<div class="ftr">Snap-In Boat Carpets &nbsp;&bull;&nbsp; snapinboatcarpets.com')
+      .split("#1b3a6b").join("#0f2233");
+  }
+  let saved=[];
+  try{saved=JSON.parse(localStorage.getItem("bcQ")||"[]")||[];}catch(e){saved=[];}
   saved.unshift({num:qn,date:new Date().toLocaleDateString(),name:name,phone:phone,email:email,boat:boatLabel,color:(colorLabel+" "+matLabel).trim(),price:(typeof S.price==="number"?S.price.toFixed(2):"0"),html:quoteHtml});
   if(saved.length>50)saved.pop();
-  localStorage.setItem("bcQ",JSON.stringify(saved));
+  try{localStorage.setItem("bcQ",JSON.stringify(saved));}catch(e){}
+  if(SNAP){
+    sendSnapQuote({
+      quote_number:qn,name:name,email:email,phone:phone,boat:boatLabel,
+      color:(colorLabel+" "+matLabel).trim(),
+      price:(typeof S.price==="number"?S.price.toFixed(2):""),
+      zip:(g("zip")&&g("zip").value||"").trim(),
+      year_note:(S.isProbable?"Year is outside the confirmed range for this pattern. Verify fit before cutting.":""),
+      notes:notes,source:"snapinboatcarpets.com builder",
+      website:(g("qm-website")&&g("qm-website").value||"")
+    },quoteHtml);
+    return;
+  }
   const w=window.open("","_blank","width=820,height=900,scrollbars=yes,resizable=yes");
   if(w){w.document.write(quoteHtml);w.document.close();}else{toast("Pop-up blocked \u2014 please allow pop-ups and try again.");}
   const msg=g("qm-msg");
   if(msg){msg.innerHTML="&#10003; Quote #<strong>"+qn+"<\/strong> saved!<br><span style=\'font-size:12px;color:#334455;\'>Print the quote window or save it as a PDF. Reference this number when ordering.<\/span>";msg.style.display="block";}
   setTimeout(function(){closeQuoteModal();},5000);
+}
+/* v10.39 - snapinboatcarpets.com embed: send the quote request to the site. It is saved under
+   Quote Requests in the site admin and emailed to the shop. The customer sees a confirmation
+   with their quote number and a button to open the printable quote. */
+var SIB_QUOTE_URL="https://snapinboatcarpets.com/wp-json/sib/v1/quote-request";
+var SIB_FALLBACK="Please call 888.283.0704 or email info@boatcarpet.com.";
+var sibLastQuoteHtml="";
+function viewSnapQuote(){
+  if(!sibLastQuoteHtml)return;
+  const w=window.open("","_blank","width=820,height=900,scrollbars=yes,resizable=yes");
+  if(w){w.document.write(sibLastQuoteHtml);w.document.close();}else{toast("Please allow pop-ups to open your quote.");}
+}
+function sendSnapQuote(d,quoteHtml){
+  const msg=g("qm-msg"),btn=g("qm-submit");
+  function show(ok){
+    if(!msg)return;
+    msg.style.display="block";
+    msg.style.background=ok?"#f0f8f0":"#fff6ec";
+    msg.style.borderColor=ok?"#2a7a2a":"#c9772b";
+    msg.style.color=ok?"#1a5c1a":"#7a3d00";
+  }
+  function fail(text){
+    if(msg){msg.textContent=(text?text+" ":"We could not send your request. ")+SIB_FALLBACK;show(false);}
+    if(btn){btn.disabled=false;btn.style.opacity="1";btn.textContent=btn.getAttribute("data-label")||"Send my quote request";}
+  }
+  if(btn){btn.disabled=true;btn.style.opacity="0.6";btn.textContent="Sending...";}
+  if(msg){msg.textContent="Sending your request...";show(true);}
+  fetch(SIB_QUOTE_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(d)})
+    .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
+    .then(function(o){
+      if(o.s===200&&o.j&&o.j.ok){
+        sibLastQuoteHtml=quoteHtml;
+        if(msg){
+          msg.innerHTML="&#10003; <strong>Request received.<\/strong> Your quote number is <strong id='qm-qn'><\/strong>.<br>"+
+            "<span style='font-size:12px;color:#334455;'>We will follow up at <span id='qm-em'><\/span> to confirm the fit and arrange your order. Questions? Call 888.283.0704.<\/span><br>"+
+            "<button type='button' onclick='viewSnapQuote()' style='margin-top:10px;padding:9px 16px;background:#fff;color:#1a5c1a;border:1px solid #2a7a2a;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer'>View or print my quote<\/button>";
+          g("qm-qn").textContent=d.quote_number;
+          g("qm-em").textContent=d.email;
+          show(true);
+        }
+        if(btn)btn.style.display="none";
+      }else{
+        fail(o.s===400&&o.j&&o.j.message?o.j.message:"");
+      }
+    })
+    .catch(function(){fail("");});
 }
 function fallbackCopy(txt){
   const ta=document.createElement("textarea");
@@ -7055,7 +7126,7 @@ function fallbackCopy(txt){
   <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:420px;width:92%;box-shadow:0 8px 32px rgba(0,0,0,.25);position:relative;">
     <button onclick="closeQuoteModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#888;">&#x2715;</button>
     <div style="font-size:18px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">&#x1F4CB; Get a Quote</div>
-    <div style="font-size:13px;color:#556677;margin-bottom:18px;">Enter your contact info and we’ll open your formatted quote instantly.</div>
+    <div id="qm-sub" style="font-size:13px;color:#556677;margin-bottom:18px;">Enter your contact info and we’ll open your formatted quote instantly.</div>
     <div style="margin-bottom:12px;">
       <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Full Name *</label>
       <input id="qm-name" type="text" placeholder="e.g. James Smith" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
@@ -7072,13 +7143,16 @@ function fallbackCopy(txt){
       <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Comments / Questions</label>
       <textarea id="qm-notes" rows="2" placeholder="Any additional info..." style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;resize:vertical;"></textarea>
     </div>
-    <button onclick="submitQuoteModal()" style="width:100%;padding:12px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Generate My Quote</button>
+    <input id="qm-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <button id="qm-submit" onclick="submitQuoteModal()" style="width:100%;padding:12px;background:#2a7a2a;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Generate My Quote</button>
     <div id="qm-msg" style="display:none;margin-top:14px;padding:12px;background:#f0f8f0;border:1px solid #2a7a2a;border-radius:7px;font-size:13px;color:#1a5c1a;text-align:center;"></div>
   </div>
 </div>
   <script>
 /* ===== BoatCarpet Website Quote Capture — PHASE 1 (TEST MODE) ===== */
 (function () {
+  /* v10.39 - the snapinboatcarpets.com embed sends its own request (sendSnapQuote), so this test capture stays out of the way there */
+  if (/\bskin-snapin\b/.test(document.documentElement.className)) return;
   const TEST_MODE = true; // flip to false in Phase 2 to send to WooCommerce
   const WOO_ENDPOINT = 'https://boatcarpet.com/wp-admin/admin-ajax.php';
 
@@ -7159,6 +7233,8 @@ function fallbackCopy(txt){
   try{
     var h3=document.querySelector('#nopat h3'); if(h3) h3.textContent='Don’t see your boat? We may still have the pattern.';
     var nb=document.querySelector('#nopat .btn.bp'); if(nb) nb.textContent='Check for my pattern';
+    var qs=document.getElementById('qm-sub'); if(qs) qs.textContent='Tell us where to reach you. We will follow up by email to confirm the fit and arrange your order.';
+    var qb=document.getElementById('qm-submit'); if(qb){ qb.textContent='Send my quote request'; qb.setAttribute('data-label','Send my quote request'); }
   }catch(e){}
   if(window.parent===window) return;
   var last=0;
