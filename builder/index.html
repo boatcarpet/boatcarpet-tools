@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.39]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.40]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -317,6 +317,29 @@ select,input[type=text],input[type=email],input[type=tel],textarea{padding:7px 1
 .rv-edit-btn{font-size:11px;font-weight:600;color:var(--blue);background:none;border:1px solid var(--blue);padding:4px 12px;border-radius:5px;cursor:pointer;white-space:nowrap;}
 .rv-edit-btn:hover{background:var(--sel-bg);}
 </style>
+<style id="boat-search-css">
+/* v10.40 - boat search results */
+#bs-panel{margin:18px 0 6px}
+.bs-head{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.bs-sub{font-size:13px;color:var(--muted);margin-bottom:12px}
+.bs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.bs-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:inherit;min-width:0}
+.bs-card:hover,.bs-card:focus-visible{border-color:var(--navy);box-shadow:0 0 0 2px rgba(15,34,51,.14);outline:none}
+.bs-card.bs-on{border-color:var(--navy);box-shadow:0 0 0 2px rgba(15,34,51,.3)}
+.bs-card img,.bs-noimg{width:100%;height:120px;margin-bottom:8px;background:#fff}
+.bs-card img{object-fit:contain}
+.bs-noimg{display:flex;align-items:center;justify-content:center;background:#f3f3f1;color:#777;font-size:12px;border-radius:4px}
+.bs-name{font-weight:700;font-size:14px;color:var(--navy);line-height:1.3}
+.bs-yrs{font-size:12.5px;color:var(--muted);margin-top:2px}
+.bs-more{font-size:13px;color:var(--muted);margin-top:10px}
+.bs-picked{font-size:14px;color:var(--navy);font-weight:600;margin-bottom:10px}
+.bs-one{grid-template-columns:minmax(0,340px)}
+.bs-card.bs-big{cursor:default}
+.bs-card.bs-big:hover{border-color:var(--border);box-shadow:none}
+.bs-card.bs-big img,.bs-card.bs-big .bs-noimg{height:220px}
+.bs-link{background:none;border:0;padding:0;color:#1F6AA5;text-decoration:underline;cursor:pointer;font:inherit;font-weight:400}
+@media(max-width:520px){.bs-grid{grid-template-columns:1fr 1fr;gap:10px}.bs-card img,.bs-noimg{height:96px}.bs-grid.bs-one{grid-template-columns:1fr}.bs-card.bs-big img,.bs-card.bs-big .bs-noimg{height:200px}}
+</style>
 <style id="skin-snapin-css">
 /* ===== v10.36 SKIN: snapinboatcarpets.com embed (only when <html class="skin-snapin">) ===== */
 html.skin-snapin{--navy:#0f2233;--gold:#9a6b3f;--blue:#0f2233;--light:#fff;--border:#e3ddd3;--text:#1d2a36;--muted:#5b6670;--cream:#f6f2ec;--sel:#0f2233;--sel-bg:rgba(15,34,51,.07);--vp-top:0px;--vp-h:600px}
@@ -364,7 +387,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.39</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.40</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -432,6 +455,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
         <div id="yr-hint" style="display:none;font-size:10px;color:#b36f00;margin-top:4px;">&#9888; Years marked with &#9888; are outside our confirmed range — but that’s okay. Boat manufacturers often carry the same cockpit design across several model years, so this pattern may still fit your boat.</div>
       </div>
     </div>
+    <div id="bs-panel" style="display:none"></div>
     <!-- Trust message — hidden by default, expands when "see how to verify" link is clicked -->
     <div id="year-help-msg" style="display:none;background:#fff8e6;border:1.5px solid #f0c040;border-radius:10px;padding:18px 20px;margin-top:14px;margin-bottom:16px;">
       <div style="display:flex;align-items:flex-start;gap:12px;">
@@ -585,6 +609,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
     <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
+    <!-- v10.40 - boat search: a link can carry what the visitor typed (?q=four winns 298 vista). One match is selected; several are shown as cards with the pattern outline. -->
     <!-- v10.39 - Add to Cart hidden until checkout is live; Get a Quote is the main button. With ?skin=snapin the quote request is sent to snapinboatcarpets.com (saved in its admin and emailed to the shop). -->
     <!-- v10.38 - lead time wording changed from about 4 weeks to 1 to 3 weeks (matches the manufacturer) -->
     <!-- v10.37 - custom binding color option hidden: the +$55 upcharge confused customers
@@ -5198,6 +5223,215 @@ let S={make:"",year:"",model:"",sel:{},
   "Caravelle":{y:["1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"],m:["192 Interceptor","212 Interceptor"]},matType:"berber",color:"",colorHex:"",swatchSrc:null,pricePerSY:17.50,zip:"",price:0,isProbable:false,binding:{custom:false,color:"",hex:"",upcharge:0},addons:[],patternConfirmed:false,selectedVariantImg:null,selectedVariant:"",selectedVariantLabel:"",selectedVariantPieces:null,selectedVariantPieceDefs:null,pieceOptions:{}};
 let curDef=null;
 
+/* ===== v10.40 - BOAT SEARCH ====================================================
+   A page link can carry what the visitor typed: ?q=four winns 298 vista
+   (snapinboatcarpets.com sends its site search here). One match is selected
+   straight away. Several matches are shown as cards with the pattern outline;
+   a click selects that boat. Nothing here runs without ?q=.
+   ============================================================================ */
+var BS={q:"",year:"",make:"",makeOnly:false,res:[],total:0,picked:-1,open:true};
+function bsMax(){return (window.innerWidth||800)<700?12:24;}
+var BS_STOP={boat:1,boats:1,carpet:1,carpets:1,snap:1,snapin:1,"in":1,kit:1,kits:1,"for":1,the:1,a:1,my:1,replacement:1,marine:1,pattern:1,patterns:1,and:1,with:1};
+var BS_ALIAS={"cruisers":"Cruisers Yachts","cruiser yachts":"Cruisers Yachts","ranger":"Ranger Tugs","ranger tug":"Ranger Tugs","four winn":"Four Winns","fourwinn":"Four Winns","4 winns":"Four Winns","4 winn":"Four Winns","crown line":"Crownline","sea rey":"Sea Ray","chapparal":"Chaparral","chaparal":"Chaparral","chapparral":"Chaparral","bayliner boats":"Bayliner"};
+function bsTokens(s){
+  return String(s||"").toLowerCase().replace(/\([^)]*\)/g," ").replace(/([a-z])(\d)/g,"$1 $2").replace(/(\d)([a-z])/g,"$1 $2").replace(/[^a-z0-9]+/g," ").trim().split(" ").filter(Boolean);
+}
+function bsSquash(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"");}
+function bsFindMake(toks){
+  /* Returns {make, toks-without-make}. Matches "sea ray", "searay", "sea-ray", "master craft". */
+  var names=Object.keys(MD).map(function(m){return [bsSquash(m),m];});
+  Object.keys(BS_ALIAS).forEach(function(a){if(MD[BS_ALIAS[a]])names.push([bsSquash(a),BS_ALIAS[a]]);});
+  names.sort(function(a,b){return b[0].length-a[0].length;});
+  for(var n=0;n<names.length;n++){
+    for(var i=0;i<toks.length;i++){
+      var join="";
+      for(var j=i;j<toks.length&&j<i+4;j++){
+        join+=toks[j];
+        if(join===names[n][0])return {make:names[n][1],toks:toks.slice(0,i).concat(toks.slice(j+1))};
+        if(join.length>names[n][0].length)break;
+      }
+    }
+  }
+  return {make:"",toks:toks};
+}
+function bsTokMatch(t,w){
+  if(t===w)return true;
+  if(/^[a-z]+$/.test(t)&&t.length>=3&&w.indexOf(t)===0)return true;
+  return false;
+}
+function bsMatch(make,toks){
+  /* Every model of the make (or of all makes) scored by how many typed words it contains. */
+  var out=[];
+  var nums=toks.filter(function(t){return /^\d+$/.test(t);});
+  Object.keys(MD).forEach(function(mk){
+    if(make&&mk!==make)return;
+    MD[mk].m.forEach(function(md){
+      var mt=bsTokens(md),hit=0,numHit=0;
+      toks.forEach(function(t){
+        var ok=mt.some(function(w){return bsTokMatch(t,w);});
+        if(ok){hit++;if(/^\d+$/.test(t))numHit++;}
+      });
+      if(!hit)return;
+      if(numHit<nums.length)return;
+      out.push({make:mk,model:md,hit:hit,full:hit===toks.length});
+    });
+  });
+  var full=out.filter(function(r){return r.full;});
+  return {res:full.length?full:out,full:full.length>0};
+}
+function bsYears(k){
+  var r=(typeof CMC_YEARS!=="undefined")&&CMC_YEARS[k];
+  return (r&&r.length===2)?r:null;
+}
+function bsSearch(q){
+  var all=bsTokens(q).filter(function(t){return !BS_STOP[t];});
+  var fm=bsFindMake(all),toks=fm.toks,make=fm.make,year="";
+  var m=toks.length?bsMatch(make,toks):{res:[],full:false};
+  var makeOnly=false;
+  if(!m.full){
+    /* A typed year (2003) is not part of the model name: take it out and try again.
+       Model numbers that look like years (Maxum 2000 SR) were matched above. */
+    var yi=-1;
+    for(var i=0;i<toks.length;i++){if(/^(19[5-9]\d|20[0-3]\d)$/.test(toks[i])){yi=i;break;}}
+    if(yi>=0){
+      var t2=toks.slice(0,yi).concat(toks.slice(yi+1));
+      var m2=t2.length?bsMatch(make,t2):{res:[],full:false};
+      if(t2.length===0||m2.res.length){year=toks[yi];toks=t2;m=m2;}
+    }
+  }
+  if(make&&!toks.length){
+    /* Only a make was typed: list that make's kits. */
+    makeOnly=true;
+    m={res:MD[make].m.map(function(md){return {make:make,model:md,hit:0,full:true};}),full:true};
+  }
+  var res=m.res;
+  if(year&&res.length){
+    var inY=res.filter(function(r){var y=bsYears(r.make+"|"+r.model);return y&&Number(year)>=y[0]&&Number(year)<=y[1];});
+    if(inY.length)res=inY;
+    else if(makeOnly)year="";
+  }
+  res.forEach(function(r){
+    var k=r.make+"|"+r.model;
+    r.img=(typeof PATTERN_IMGS!=="undefined"&&PATTERN_IMGS[k])||"";
+    r.years=bsYears(k);
+    r.base=r.model.replace(/\s*\([^)]*\)\s*$/,"");
+  });
+  res.sort(function(a,b){
+    if(b.hit!==a.hit)return b.hit-a.hit;
+    if(!!b.img!==!!a.img)return b.img?1:-1;
+    if(a.make!==b.make)return a.make<b.make?-1:1;
+    if(a.base!==b.base)return a.base.localeCompare(b.base,undefined,{numeric:true});
+    return (a.years?a.years[0]:0)-(b.years?b.years[0]:0);
+  });
+  /* Two layouts of the same boat and years: number them so the cards can be told apart. */
+  var grp={};
+  res.forEach(function(r){var k=r.make+"|"+r.base+"|"+(r.years?r.years.join("-"):"");(grp[k]=grp[k]||[]).push(r);});
+  Object.keys(grp).forEach(function(k){if(grp[k].length>1)grp[k].forEach(function(r,i){r.lay=i+1;});});
+  return {q:q,make:make,year:year,toks:toks,res:res,makeOnly:makeOnly};
+}
+function bsLabel(r){
+  return r.make+" "+r.base+(r.years?" ("+(r.years[0]===r.years[1]?r.years[0]:r.years[0]+"–"+r.years[1])+")":"");
+}
+function bsAlert(text){
+  var al=g("af-alert");if(!al)return;
+  var t=al.querySelectorAll("span")[1];if(t)t.textContent=text;
+  al.style.display=text?"flex":"none";
+}
+function bsSelect(r){
+  var ms=g("make");ms.value=r.make;
+  updModels(BS.year||"",r.model);
+}
+function bsEl(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+function bsCard(r,i,big){
+  var c=bsEl(big?"div":"button","bs-card"+(big?" bs-big":"")+(!big&&i===BS.picked?" bs-on":""));
+  if(!big)c.type="button";
+  if(r.img){var im=document.createElement("img");im.src=r.img;im.alt="Carpet pattern outline for "+bsLabel(r);if(!big)im.loading="lazy";c.appendChild(im);}
+  else c.appendChild(bsEl("div","bs-noimg","Outline not shown yet"));
+  c.appendChild(bsEl("div","bs-name",r.make+" "+r.base));
+  c.appendChild(bsEl("div","bs-yrs",r.years?(r.years[0]===r.years[1]?String(r.years[0]):r.years[0]+"–"+r.years[1])+(r.lay?" · layout "+r.lay:""):"We verify the fit"));
+  if(!big)c.onclick=function(){BS.picked=i;BS.open=false;bsSelect(r);bsAlert("");bsRender();};
+  return c;
+}
+function bsRender(){
+  var p=g("bs-panel");if(!p)return;
+  p.innerHTML="";
+  if(!BS.res.length){p.style.display="none";return;}
+  p.style.display="block";
+  if(BS.picked>=0){
+    var r0=BS.res[BS.picked],hasYear=!!g("year").value;
+    if(typeof hasPattern==="function"&&!hasPattern(r0.make+"|"+r0.model)){
+      /* On our list but no confirmed pattern: the builder's "check for my pattern" form shows below. */
+      p.appendChild(bsEl("div","bs-picked","We may have the "+r0.make+" "+r0.base+". Send the short form below and we will check for your pattern."));
+      return;
+    }
+    var line=bsEl("div","bs-picked");
+    line.appendChild(bsEl("span",null,"✓ "+(BS.total===1?"Found it: ":"")+(hasYear?g("year").value+" ":"")+bsLabel(r0)+(BS.total===1?". ":" selected. ")+(hasYear?"Pick a color and enter your ZIP below. ":"Choose your year above. ")));
+    if(BS.total>1){
+      var back=bsEl("button","bs-link",BS.open?"Hide the other matches":(BS.total===2?"See the other match":"See the other "+(BS.total-1)+" matches"));
+      back.type="button";back.onclick=function(){BS.open=!BS.open;bsRender();};
+      line.appendChild(back);
+    }
+    p.appendChild(line);
+    if(!BS.open){
+      /* Until a year is chosen the builder shows no pattern yet, so show the outline here. */
+      if(!hasYear&&r0.img){var one=bsEl("div","bs-grid bs-one");one.appendChild(bsCard(r0,BS.picked,true));p.appendChild(one);}
+      return;
+    }
+  }else{
+    p.appendChild(bsEl("div","bs-head",BS.makeOnly?BS.make+": "+BS.total+" kits":BS.total+" kits match “"+BS.q+"”"));
+    p.appendChild(bsEl("div","bs-sub",(BS.makeOnly?"Choose your model above, or pick your boat here.":"Pick your boat.")+" The outline shows the carpet we cut for it."));
+  }
+  var grid=bsEl("div","bs-grid");
+  var max=bsMax();
+  BS.res.slice(0,max).forEach(function(r,i){grid.appendChild(bsCard(r,i,false));});
+  p.appendChild(grid);
+  if(BS.total>max)p.appendChild(bsEl("div","bs-more","Showing the first "+max+" of "+BS.total+". Add your model number to the search to narrow it down, or use the Model list above."));
+}
+function bsSync(){
+  /* The visitor changed the lists by hand: keep the search panel honest. */
+  if(!BS.res.length)return;
+  if(BS.picked>=0){
+    var r=BS.res[BS.picked];
+    if(g("make").value!==r.make||g("model").value!==r.model){
+      BS.picked=-1;BS.open=true;
+      if(BS.total===1){BS.res=[];}
+    }
+  }
+  bsRender();
+}
+function bsRun(q){
+  q=String(q||"").replace(/\s+/g," ").trim().slice(0,80);
+  if(!q)return false;
+  var s=bsSearch(q);
+  BS.q=q;BS.year=s.year;BS.make=s.make;BS.makeOnly=s.makeOnly;BS.res=s.res;BS.total=s.res.length;BS.picked=-1;BS.open=true;
+  if(!BS.bound){
+    BS.bound=true;
+    ["make","model","year"].forEach(function(id){var e=g(id);if(e)e.addEventListener("change",function(){setTimeout(bsSync,0);});});
+  }
+  if(s.res.length===1){
+    BS.picked=0;BS.open=false;
+    bsSelect(s.res[0]);
+    bsAlert("");
+    bsRender();
+    return true;
+  }
+  if(s.res.length>1){
+    if(s.make){g("make").value=s.make;updModels();}
+    bsAlert("");
+    bsRender();
+    return true;
+  }
+  bsRender();
+  if(s.make){
+    g("make").value=s.make;updModels();
+    bsAlert(s.toks.length?"We did not find “"+s.toks.join(" ")+"” under "+s.make+". Choose your model from the list below, or call 888.283.0704.":"Showing "+s.make+" patterns. Choose your model and year below.");
+  }else{
+    bsAlert("No pattern found for “"+q+"”. Choose your make below, or call 888.283.0704 and we will check for you.");
+  }
+  var al=g("af-alert");if(al){al.classList.remove("as");al.classList.add("ai");var ic=al.querySelector("span");if(ic)ic.textContent="ℹ";}
+  return true;
+}
+
 /* -- AUTO FILL -- */
 function autoFill(){
   var p=new URLSearchParams(window.location.search);
@@ -5223,6 +5457,17 @@ function autoFill(){
       }
     }
     updModels(year,model);f=true;
+    if(g("model").value&&!(name||email||phone)){
+      /* v10.40 - a link to one boat (make + model): show its outline until the year is chosen */
+      try{
+        var one={make:g("make").value,model:g("model").value,hit:0,full:true};
+        var ok=one.make+"|"+one.model;
+        one.img=(typeof PATTERN_IMGS!=="undefined"&&PATTERN_IMGS[ok])||"";one.years=bsYears(ok);one.base=one.model.replace(/\s*\([^)]*\)\s*$/,"");
+        BS.q="";BS.year="";BS.make=one.make;BS.makeOnly=false;BS.res=[one];BS.total=1;BS.picked=0;BS.open=false;
+        if(!BS.bound){BS.bound=true;["make","model","year"].forEach(function(id){var e=g(id);if(e)e.addEventListener("change",function(){setTimeout(bsSync,0);});});}
+        bsRender();f=false;
+      }catch(e){}
+    }
   }
   if(f){
     var al=g("af-alert"), mk=g("make").value;
@@ -5233,6 +5478,8 @@ function autoFill(){
     }
     if(f)al.style.display="flex";
   }
+  /* v10.40 - typed search from the site (?q=...). An explicit make link wins. */
+  if(!make){var bq=p.get("q");if(bq){try{bsRun(bq);}catch(e){if(window.console)console.warn("boat search",e);}}}
   buildVinylGrid();buildBindingGrid();loadSavedQuotes();
 }
 
