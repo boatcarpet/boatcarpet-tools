@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.42]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.43]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.42</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.43</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -625,6 +625,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
     <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
+    <!-- v10.43 - the jump to the next step now waits until the host page has made the embedded builder tall enough, so it lands on the pattern / color / ZIP row (v10.42 could stop at the top of the builder). The jump after picking a pattern uses the same wait. -->
     <!-- v10.42 - (1) a boat with more than one pattern on file shows all of them as soon as the model is chosen, before the year; (2) choosing the year brings the next step into view: the pattern / color / ZIP row, or the pattern picker when there are several patterns. -->
     <!-- v10.41 - "Type your boat" box (snapin skin): matching kits appear with their outlines as the visitor types; a click or Enter on a single match selects it. Results now sit under the box, above the lists. -->
     <!-- v10.40 - boat search: a link can carry what the visitor typed (?q=four winns 298 vista). One match is selected; several are shown as cards with the pattern outline. -->
@@ -5746,7 +5747,22 @@ function advanceAfterYear(){
   if(!g("year").value||typeof boatReady!=="function"||!boatReady())return;
   if(S.isProbable&&!S.patternConfirmed)return;
   var el=g("p1");if(!el||!el.classList.contains("active"))return;
-  try{el.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){try{el.scrollIntoView(true);}catch(e2){}}
+  bringIntoView(el);
+}
+/* v10.43 - scroll a section to the top of the screen. Embedded (snapinboatcarpets.com) the page that
+   holds the builder does the scrolling, and it first has to make the frame as tall as the new
+   content. Scrolling before that moves the builder inside its own frame instead, and the visitor
+   ends up at the top of the builder. So wait (up to ~2.5s) until the frame fits its content. */
+function bringIntoView(el){
+  if(!el)return;
+  var tries=0;
+  (function go(){
+    var de=document.documentElement;
+    var fits=window.parent===window||window.innerHeight>=de.scrollHeight-2;
+    if(!fits&&tries++<30){setTimeout(go,80);return;}
+    if(window.parent!==window&&(window.pageYOffset||de.scrollTop)){try{window.scrollTo(0,0);}catch(e){}}
+    try{el.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){try{el.scrollIntoView(true);}catch(e2){}}
+  })();
 }
 document.addEventListener("DOMContentLoaded",function(){
   var y=g("year");if(y)y.addEventListener("change",function(){setTimeout(advanceAfterYear,120);});
@@ -6831,7 +6847,7 @@ function pickPattern(id){
   S.sel={};autoSelectKit();
   showPattern();updSidebar();buildPatternPicker();reveal();
   try{bsRender();}catch(e){}
-  var col=g("p2");if(col){col.classList.add("active");col.scrollIntoView({behavior:"smooth",block:"start"});}
+  var col=g("p2");if(col){col.classList.add("active");bringIntoView(col);}
 }
 /* Reset everything downstream of the boat picker (color, binding, zip, price). */
 function resetDownstream(){
@@ -6991,7 +7007,7 @@ function probPatternYes(variantId, variantLabel, variantImg, variantPieces){
   g("prob-warn").style.display="none";
   /* single-flow: confirm pattern, auto-select the kit, reveal color */
   S.sel={};autoSelectKit();showPattern();updSidebar();reveal();
-  var col=g("p2");if(col){col.classList.add("active");col.scrollIntoView({behavior:"smooth",block:"start"});}
+  var col=g("p2");if(col){col.classList.add("active");bringIntoView(col);}
 }
 function probPatternNo(){
   var boatName=S.year+" "+S.make+" "+S.model;
