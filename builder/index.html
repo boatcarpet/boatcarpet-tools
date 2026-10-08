@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.43]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.44]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.43</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.44</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -625,6 +625,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
     <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
+    <!-- v10.44 - Bayliner 225: one pattern. The "standard" image and the "2009 pattern" variant were the same drawing (pattern 2257), so the variant is removed and the image is replaced with a cleaner scan; piece numbers repositioned for the new image. -->
     <!-- v10.43 - the jump to the next step now waits until the host page has made the embedded builder tall enough, so it lands on the pattern / color / ZIP row (v10.42 could stop at the top of the builder). The jump after picking a pattern uses the same wait. -->
     <!-- v10.42 - (1) a boat with more than one pattern on file shows all of them as soon as the model is chosen, before the year; (2) choosing the year brings the next step into view: the pattern / color / ZIP row, or the pattern picker when there are several patterns. -->
     <!-- v10.41 - "Type your boat" box (snapin skin): matching kits appear with their outlines as the visitor types; a click or Enter on a single match selects it. Results now sit under the box, above the lists. -->
@@ -1781,12 +1782,12 @@ const SVG_DEFS={/* v10.23 - brand year fixes pt2 modal for Business Tools button
     {id:"aft",svgId:"",name:"Aft Floor",desc:"Rear deck carpet",sf:9, numPos:{x:50,y:88}}
   ]},
   "Bayliner|225":{svg:'',pieces:[
-    {id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:14, numPos:{x:53,y:15}},
-    {id:"port_locker",svgId:"",name:"Port Locker",desc:"Port side locker area",sf:7, numPos:{x:23,y:20}},
-    {id:"console",svgId:"",name:"Console Surround",desc:"Console area",sf:6, numPos:{x:53,y:58}},
-    {id:"port_side",svgId:"",name:"Port Side",desc:"Port cockpit side",sf:9, numPos:{x:22,y:55}},
-    {id:"stbd_side",svgId:"",name:"Starboard Side",desc:"Starboard cockpit side",sf:9, numPos:{x:80,y:55}},
-    {id:"aft",svgId:"",name:"Aft Deck",desc:"Rear deck area",sf:14, numPos:{x:51,y:85}}
+    {id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:14, numPos:{x:50,y:14}},
+    {id:"port_locker",svgId:"",name:"Port Locker",desc:"Port side locker area",sf:7, numPos:{x:23,y:18}},
+    {id:"console",svgId:"",name:"Console Surround",desc:"Console area",sf:6, numPos:{x:44,y:56}},
+    {id:"port_side",svgId:"",name:"Port Side",desc:"Port cockpit side",sf:9, numPos:{x:22,y:45}},
+    {id:"stbd_side",svgId:"",name:"Starboard Side",desc:"Starboard cockpit side",sf:9, numPos:{x:78,y:45}},
+    {id:"aft",svgId:"",name:"Aft Deck",desc:"Rear deck area",sf:14, numPos:{x:50,y:82}}
   ]},
   "Four Winns|260 Horizon":{svg:'',pieces:[
     {id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow section",sf:17, numPos:{x:18,y:30}},
@@ -7160,14 +7161,6 @@ const PATTERN_VARIANTS={
       label: "2006 to 2007 pattern",
       yearNote: "Confirmed fit for 2006-2007",
       img: "patterns/variants/caravelle192-a.jpg"
-    }
-  ],
-  "Bayliner|225": [
-    {
-      id: "bayliner225-a",
-      label: "2009 pattern",
-      yearNote: "Confirmed fit for 2009",
-      img: "patterns/variants/bayliner225-a.jpg"
     }
   ],
   "Four Winns|260 Horizon": [
