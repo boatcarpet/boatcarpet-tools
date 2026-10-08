@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.41]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.42]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -342,6 +342,8 @@ html.skin-snapin .bs-or{display:block;font-size:12px;font-weight:600;letter-spac
 .bs-more{font-size:13px;color:var(--muted);margin-top:10px}
 .bs-picked{font-size:14px;color:var(--navy);font-weight:600;margin-bottom:10px}
 .bs-one{grid-template-columns:minmax(0,340px)}
+.bs-one.bs-multi{grid-template-columns:repeat(auto-fill,minmax(220px,300px))}
+#p1{scroll-margin-top:14px}
 .bs-card.bs-big{cursor:default}
 .bs-card.bs-big:hover{border-color:var(--border);box-shadow:none}
 .bs-card.bs-big img,.bs-card.bs-big .bs-noimg{height:220px}
@@ -395,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.41</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.42</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -623,6 +625,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
     <div class="vinyl-grid" id="vinylGrid" style="display:none"></div>
+    <!-- v10.42 - (1) a boat with more than one pattern on file shows all of them as soon as the model is chosen, before the year; (2) choosing the year brings the next step into view: the pattern / color / ZIP row, or the pattern picker when there are several patterns. -->
     <!-- v10.41 - "Type your boat" box (snapin skin): matching kits appear with their outlines as the visitor types; a click or Enter on a single match selects it. Results now sit under the box, above the lists. -->
     <!-- v10.40 - boat search: a link can carry what the visitor typed (?q=four winns 298 vista). One match is selected; several are shown as cards with the pattern outline. -->
     <!-- v10.39 - Add to Cart hidden until checkout is live; Get a Quote is the main button. With ?skin=snapin the quote request is sent to snapinboatcarpets.com (saved in its admin and emailed to the shop). -->
@@ -5374,13 +5377,25 @@ function bsSelect(r){
   updModels(BS.year||"",r.model);
 }
 function bsEl(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
-function bsCard(r,i,big){
+/* v10.42 - other patterns on file for the same boat (PATTERN_VARIANTS). */
+function bsAlts(r){
+  var v=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[r.make+"|"+r.model];
+  return (v||[]).filter(function(x){return !!x.img;});
+}
+function bsAltCard(r,v){
+  var c=bsEl("div","bs-card bs-big");
+  var im=document.createElement("img");im.src=v.img;im.alt="Carpet pattern outline for "+r.make+" "+r.base+", "+(v.label||"alternate pattern");c.appendChild(im);
+  c.appendChild(bsEl("div","bs-name",r.make+" "+r.base));
+  c.appendChild(bsEl("div","bs-yrs",v.label||"Alternate pattern"));
+  return c;
+}
+function bsCard(r,i,big,note){
   var c=bsEl(big?"div":"button","bs-card"+(big?" bs-big":"")+(!big&&i===BS.picked?" bs-on":""));
   if(!big)c.type="button";
   if(r.img){var im=document.createElement("img");im.src=r.img;im.alt="Carpet pattern outline for "+bsLabel(r);if(!big)im.loading="lazy";c.appendChild(im);}
   else c.appendChild(bsEl("div","bs-noimg","Outline not shown yet"));
   c.appendChild(bsEl("div","bs-name",r.make+" "+r.base));
-  c.appendChild(bsEl("div","bs-yrs",r.years?(r.years[0]===r.years[1]?String(r.years[0]):r.years[0]+"–"+r.years[1])+(r.lay?" · layout "+r.lay:""):"We verify the fit"));
+  c.appendChild(bsEl("div","bs-yrs",r.years?(r.years[0]===r.years[1]?String(r.years[0]):r.years[0]+"–"+r.years[1])+(r.lay?" · layout "+r.lay:"")+(note?" · "+note:""):(note||"We verify the fit")));
   if(!big)c.onclick=function(){bsPick(i);};
   return c;
 }
@@ -5408,7 +5423,11 @@ function bsRender(){
       return;
     }
     var line=bsEl("div","bs-picked");
-    line.appendChild(bsEl("span",null,"✓ "+(BS.total===1?"Found it: ":"")+(hasYear?g("year").value+" ":"")+bsLabel(r0)+(BS.total===1?". ":" selected. ")+(hasYear?"Pick a color and enter your ZIP below. ":"Choose your year above. ")));
+    /* v10.42 - a boat with several patterns says so, and shows them all before the year is chosen */
+    var alts=bsAlts(r0),nPat=(typeof patternCount==="function")?patternCount(r0.make+"|"+r0.model):1,multi=alts.length>0&&nPat>1;
+    var needPick=multi&&!(S.patternConfirmed||S.selectedVariantImg);
+    var next=hasYear?(needPick?"Pick the pattern that matches your boat below. ":"Pick a color and enter your ZIP below. "):(multi?"We have "+nPat+" patterns for this boat. Choose your year above, then pick the one that matches yours. ":"Choose your year above. ");
+    line.appendChild(bsEl("span",null,"✓ "+(BS.total===1?"Found it: ":"")+(hasYear?g("year").value+" ":"")+bsLabel(r0)+(BS.total===1?". ":" selected. ")+next));
     if(BS.total>1){
       var back=bsEl("button","bs-link",BS.open?"Hide the other matches":(BS.total===2?"See the other match":"See the other "+(BS.total-1)+" matches"));
       back.type="button";back.onclick=function(){BS.open=!BS.open;bsRender();};
@@ -5417,7 +5436,17 @@ function bsRender(){
     p.appendChild(line);
     if(!BS.open){
       /* Until a year is chosen the builder shows no pattern yet, so show the outline here. */
-      if(!hasYear&&r0.img){var one=bsEl("div","bs-grid bs-one");one.appendChild(bsCard(r0,BS.picked,true));p.appendChild(one);}
+      if(!hasYear&&r0.img){
+        var one=bsEl("div","bs-grid bs-one"+(multi?" bs-multi":""));
+        one.appendChild(bsCard(r0,BS.picked,true,multi?"standard pattern":""));
+        if(multi)alts.forEach(function(v){one.appendChild(bsAltCard(r0,v));});
+        p.appendChild(one);
+      }else if(!hasYear&&alts.length){
+        /* no standard outline on file, but an alternate one is: show that */
+        var alt=bsEl("div","bs-grid bs-one"+(alts.length>1?" bs-multi":""));
+        alts.forEach(function(v){alt.appendChild(bsAltCard(r0,v));});
+        p.appendChild(alt);
+      }
       return;
     }
   }else{
@@ -5710,6 +5739,18 @@ function showNotListed(mk){
     ymm.focus();
   }
 }
+/* v10.42 - once the visitor chooses the year the boat is settled: bring the next step into view.
+   One pattern: the pattern / color / ZIP row. Several patterns: the picker (same row).
+   Not when the year is outside the confirmed range - that question is answered first, up here. */
+function advanceAfterYear(){
+  if(!g("year").value||typeof boatReady!=="function"||!boatReady())return;
+  if(S.isProbable&&!S.patternConfirmed)return;
+  var el=g("p1");if(!el||!el.classList.contains("active"))return;
+  try{el.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){try{el.scrollIntoView(true);}catch(e2){}}
+}
+document.addEventListener("DOMContentLoaded",function(){
+  var y=g("year");if(y)y.addEventListener("change",function(){setTimeout(advanceAfterYear,120);});
+});
 function sniff(){
   /* If make/model/year changed, reset pattern confirmation AND everything below */
   if(S.make!==g("make").value||S.model!==g("model").value||S.year!==g("year").value){
@@ -6742,6 +6783,7 @@ function reopenPicker(){
   S.patternConfirmed=false;S.selectedVariant="";S.selectedVariantLabel="";S.selectedVariantImg=null;
   S.selectedVariantPieces=null;S.selectedVariantPieceDefs=null;
   S.sel={};showPattern();updSidebar();reveal();
+  try{bsRender();}catch(e){}
 }
 function buildPatternPicker(){
   var k=S.make+"|"+S.model;
@@ -6788,6 +6830,7 @@ function pickPattern(id){
   S.patternConfirmed=true;S.isProbable=false;
   S.sel={};autoSelectKit();
   showPattern();updSidebar();buildPatternPicker();reveal();
+  try{bsRender();}catch(e){}
   var col=g("p2");if(col){col.classList.add("active");col.scrollIntoView({behavior:"smooth",block:"start"});}
 }
 /* Reset everything downstream of the boat picker (color, binding, zip, price). */
