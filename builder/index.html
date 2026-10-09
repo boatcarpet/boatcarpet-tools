@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.44]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.45]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.44</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.45</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -6757,11 +6757,19 @@ function autoSelectKit(){
   if(typeof updateKitBadge==="function")updateKitBadge();
 }
 /* Number of distinct patterns on file for a boat: standard + any variants. */
-function patternCount(k){
-  var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:null;
-  var hasMain=(typeof PATTERN_IMGS!=="undefined")&&PATTERN_IMGS[k];
-  return (hasMain?1:0)+(variants?variants.length:0);
+/* v10.45: year-aware pattern candidates - only patterns whose years include the chosen year are offered; if exactly one fits, no picker is shown */
+function patYearOK(range,y){ if(!range||!range.length||!y)return true; var n=parseInt(y,10); if(isNaN(n))return true; return n>=range[0]&&n<=range[1]; }
+function patCandidates(k){
+  var y=S.year;
+  var v=(typeof PATTERN_VARIANTS!=="undefined"&&PATTERN_VARIANTS[k])?PATTERN_VARIANTS[k]:[];
+  var hasMain=(typeof PATTERN_IMGS!=="undefined")&&!!PATTERN_IMGS[k];
+  var my=(typeof PATTERN_MAIN_YEARS!=="undefined")?PATTERN_MAIN_YEARS[k]:null;
+  var vs=v.filter(function(x){return x.img&&patYearOK(x.years,y);});
+  var main=hasMain&&patYearOK(my,y);
+  if(!main&&!vs.length){ vs=v.filter(function(x){return x.img;}); main=hasMain; }
+  return {main:main,variants:vs};
 }
+function patternCount(k){ var c=patCandidates(k); return (c.main?1:0)+c.variants.length; }
 /* setPatternMessaging is the SOLE owner of #pattern-msg + the picker (showPattern
    and updSidebar no longer touch them). Three states:
    - multi + not yet chosen -> show the picker only (hide the single message + image)
@@ -6807,7 +6815,7 @@ function buildPatternPicker(){
   var host=g("pattern-picker");if(!host)return;
   var variants=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k]?PATTERN_VARIANTS[k]:[];
   var mainImg=(typeof PATTERN_IMGS!=="undefined")&&PATTERN_IMGS[k]?PATTERN_IMGS[k]:null;
-  var html="";
+  var __c=patCandidates(k); variants=__c.variants; if(!__c.main) mainImg=null; var html="";
   if(mainImg){
     var mainSel=(!S.selectedVariantImg && S.patternConfirmed)?" sel":"";
     html+='<div class="pat-pick-card'+mainSel+'" data-pid="__main__">'
@@ -7033,6 +7041,8 @@ function submitProbQuote(){
   if(sent)sent.style.display="block";
   toast("Request sent!");
 }
+/* v10.45: optional year range of the main (standard) pattern when a model also has year-specific variants */
+const PATTERN_MAIN_YEARS={"Sea Ray|220 Sundeck":[2014,2017]};
 const PATTERN_VARIANTS={
   "Sea Ray|380 Sundancer": [
     {
