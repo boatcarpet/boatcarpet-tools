@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.48]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.49]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.48</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.49</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -794,6 +794,42 @@ const S_CMC_DISC=0.25;                   // our dealer discount off CMC website 
 const S_CMC_UP={berber:1.18,vinyl:1.70}; // CMC's own upcharges: Berber +18%, Marine Weave (woven vinyl) +70%
 const PIECES_CONTACT="For individual pieces, call 888.283.0704 or email info@boatcarpet.com.";
 const CMC_BASE={
+  "Sea Ray|200 Sundeck":898, // 200 Sundeck 03-07; CMC website default (v10.49)
+  "Sea Ray|210 SLX":855, // 210 SLX 12-15; CMC website default (v10.49)
+  "Sea Ray|210 SPX":855, // 210 SPX 15-23; CMC website default (v10.49)
+  "Sea Ray|215 Weekender":878, // 215 Weekender 04-07; CMC website default (v10.49)
+  "Sea Ray|225 Weekender":835, // 225 Weekender 00-06; CMC website default (v10.49)
+  "Sea Ray|230 Bow Rider":885, // 230 Signature BR 2000; CMC website default (v10.49)
+  "Sea Ray|245 Weekender":875, // 245 Weekender 00-03; CMC website default (v10.49)
+  "Sea Ray|260 Bow Rider":878, // 260 BR 97; CMC website default (v10.49)
+  "Sea Ray|270 Amberjack":938, // 270 AJ 05-08; CMC website default (v10.49)
+  "Sea Ray|270 SDX":923, // 270 Sundeck (SDX) 15-23; CMC website default (v10.49)
+  "Sea Ray|270 SLX":912, // 270 SLX 2006-11; CMC website default (v10.49)
+  "Sea Ray|270 Special Edition":824, // 270 DA SE 98; CMC website default (v10.49)
+  "Sea Ray|280 SLX":919, // 280 SLX 17-24; CMC website default (v10.49)
+  "Sea Ray|280 SS":865, // 280 SunSport 1996-1999; CMC website default (v10.49)
+  "Sea Ray|280 Sundeck":898, // 280 Sundeck 09-14; CMC website default (v10.49)
+  "Sea Ray|290 Amberjack":958, // 290 AJ 00-07; CMC website default (v10.49)
+  "Sea Ray|290 Bow Rider":1128, // 290 BR 01-05; CMC website default (v10.49)
+  "Sea Ray|290 SS":887, // 290 SS 04-08; CMC website default (v10.49)
+  "Sea Ray|290 Sunsport":887, // 290 SS 04-08; CMC website default (v10.49)
+  "Sea Ray|300 SLX":975, // 300 SLX 10-13; CMC website default (v10.49)
+  "Sea Ray|300 Sundeck":904, // 300 Sundeck 11-13; CMC website default (v10.49)
+  "Sea Ray|330 Express Cruiser":1104, // 330 EC 99-00; CMC website default (v10.49)
+  "Sea Ray|370 Express Cruiser":1034, // 370 EC 92-95; CMC website default (v10.49)
+  "Sea Ray|480 Motor Yacht":1348, // 48 MY 02-05; CMC website default (v10.49)
+  "Sea Ray|500 Sundancer":1608.35, // 500 DA 96-98; CMC website default (v10.49)
+  "Sea Ray|540 Sundancer":1288.5, // 540 DA 10-16; CMC website default (v10.49)
+  "Sea Ray|230 Overnighter (1997)":798, // 230 OV 97; CMC website default (v10.49)
+  "Sea Ray|230 Overnighter (1999)":798, // 230 OV 97; CMC website default (v10.49)
+  "Sea Ray|230 Signature (1999-2000)":885, // 230 Signature BR 2000; CMC website default (v10.49)
+  "Sea Ray|230 SLX (2011)":885, // 230 SLX 12-17; CMC website default (v10.49)
+  "Sea Ray|230 SLX (2012-2016)":885, // 230 SLX 12-17; CMC website default (v10.49)
+  "Sea Ray|290 Sundeck (2008)":1108, // 290 Sundeck 08/09; CMC website default (v10.49)
+  "Sea Ray|290 Sundeck (2014-2017)":989, // 290 Sundeck SDX14-26; CMC website default (v10.49)
+  "Sea Ray|510 Sundancer (2013-2017)":910, // 510 DA 13-17; CMC website default (v10.49)
+  "Sea Ray|220 Select":855, // 220 Select 02-07; CMC website default (v10.49)
+
   "Sea Ray|210 Sundeck (1999)":858, // 210 SD 1999; CMC website default (not confirmed by John)
   "Sea Ray|215 Express Cruiser (1998-2001)":815, // 215 EC 98-01; CMC website default (not confirmed by John)
   "Sea Ray|250 Sundancer (1991)":782, // 250 DA 91; CMC website default (not confirmed by John)
@@ -6809,7 +6845,7 @@ function autoSelectKit(){
   if(typeof updateKitBadge==="function")updateKitBadge();
 }
 /* Number of distinct patterns on file for a boat: standard + any variants. */
-/* v10.48: year-aware pattern candidates - only patterns whose years include the chosen year are offered; if exactly one fits, no picker is shown */
+/* v10.49: year-aware pattern candidates - only patterns whose years include the chosen year are offered; if exactly one fits, no picker is shown */
 function patYearOK(range,y){ if(!range||!range.length||!y)return true; var n=parseInt(y,10); if(isNaN(n))return true; return n>=range[0]&&n<=range[1]; }
 function patCandidates(k){
   var y=S.year;
@@ -7093,7 +7129,7 @@ function submitProbQuote(){
   if(sent)sent.style.display="block";
   toast("Request sent!");
 }
-/* v10.48: optional year range of the main (standard) pattern when a model also has year-specific variants */
+/* v10.49: optional year range of the main (standard) pattern when a model also has year-specific variants */
 const PATTERN_MAIN_YEARS={"Sea Ray|220 Sundeck":[2014,2017],"Sea Ray|270 Sundancer (2000)":[2000,2002]};
 const PATTERN_VARIANTS={
   "Sea Ray|210 Sundeck (1999)": [
