@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.45]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.46]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.45</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.46</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -794,6 +794,15 @@ const S_CMC_DISC=0.25;                   // our dealer discount off CMC website 
 const S_CMC_UP={berber:1.18,vinyl:1.70}; // CMC's own upcharges: Berber +18%, Marine Weave (woven vinyl) +70%
 const PIECES_CONTACT="For individual pieces, call 888.283.0704 or email info@boatcarpet.com.";
 const CMC_BASE={
+  "Sea Ray|400 Sedan Bridge":1779.66, // John Oct 2026: cost 1575.00 (implied website default; no CMC web kit)
+  "Sea Ray|420 Sundancer (1990)":1872.88, // John cost 1657.50 (implied)
+  "Sea Ray|420 Sundancer (2002-2003)":898, // 420 DA 03/04; John cost 794.73
+  "Sea Ray|440 Sedan Bridge":1779.66, // John cost 1575.00 (implied)
+  "Sea Ray|450 Sundancer":1338, // 450 DA 95-98; John cost 1184.13
+  "Sea Ray|450 Sundancer (2010-2014)":958, // 450 DA 10-14; John cost 847.80 (model not yet in dropdown: needs pattern image)
+  "Sea Ray|500 Sundancer (2005)":1631.36, // John cost 1443.75 (implied)
+  "Sea Ray|510 Sundancer (1999-2003)":1412, // 510 DA 00/01; John cost 1249.62
+  "Sea Ray|540 Sundancer (2010-2016)":1288.5, // 540 DA 10-16; John cost 1140.00
   "Sea Ray|SeaRayder F-14":498,                     // Sea Rayder F-14 (1996 +-)
   "Four Winns|264 Funship":1452.5,                  // Four Winns 264 Funship carpet kit 03-07
   "Chaparral|H2O 21 Sport":898,                     // Chaparral H20 21 Sport 17-19 +-
@@ -6757,7 +6766,7 @@ function autoSelectKit(){
   if(typeof updateKitBadge==="function")updateKitBadge();
 }
 /* Number of distinct patterns on file for a boat: standard + any variants. */
-/* v10.45: year-aware pattern candidates - only patterns whose years include the chosen year are offered; if exactly one fits, no picker is shown */
+/* v10.46: year-aware pattern candidates - only patterns whose years include the chosen year are offered; if exactly one fits, no picker is shown */
 function patYearOK(range,y){ if(!range||!range.length||!y)return true; var n=parseInt(y,10); if(isNaN(n))return true; return n>=range[0]&&n<=range[1]; }
 function patCandidates(k){
   var y=S.year;
@@ -7041,7 +7050,7 @@ function submitProbQuote(){
   if(sent)sent.style.display="block";
   toast("Request sent!");
 }
-/* v10.45: optional year range of the main (standard) pattern when a model also has year-specific variants */
+/* v10.46: optional year range of the main (standard) pattern when a model also has year-specific variants */
 const PATTERN_MAIN_YEARS={"Sea Ray|220 Sundeck":[2014,2017]};
 const PATTERN_VARIANTS={
   "Sea Ray|380 Sundancer": [
