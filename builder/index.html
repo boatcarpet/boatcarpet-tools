@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.53]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.54]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -68,6 +68,13 @@ header{background:var(--navy);color:#fff;padding:0 24px;height:54px;display:flex
 .pat-pick-card .ppc-note{font-size:10px;color:#888;margin-bottom:8px;line-height:1.4}
 .pat-pick-card .ppc-btn{width:100%;background:#1e6e3c;color:#fff;border:none;border-radius:5px;padding:7px 4px;font-size:11px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
 .pat-pick-card.sel .ppc-btn{background:#155a2e}
+/* v10.54: while the customer is choosing between patterns, the pattern card spans the full row and the choices sit side by side */
+.cfg-grid > #p1.picking{grid-column:1/-1}
+#p1.picking .pat-pick-grid{grid-template-columns:repeat(auto-fit,minmax(140px,340px));align-items:stretch}
+@media(max-width:740px){#p1.picking .pat-pick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+#p1.picking .pat-pick-card{display:flex;flex-direction:column}
+#p1.picking .pat-pick-card .ppc-body{margin-top:auto;display:flex;flex-direction:column;flex:1}
+#p1.picking .pat-pick-card .ppc-btn{margin-top:auto}
 /* Reassurance + exception links */
 .reassure{margin:14px 0 4px;padding:12px 15px;background:#f0f7ff;border:1px solid #b8d8f8;border-radius:8px;font-size:13px;color:#2a4a68;line-height:1.6}
 .ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:6px}
@@ -397,7 +404,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.53</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.54</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -6898,10 +6905,12 @@ function setPatternMessaging(){
     if(msg)msg.style.display="none";
     if(pickHl)pickHl.textContent="We have "+n+" patterns for your "+boat+" — pick the one that matches your boat.";
     if(pickWrap)pickWrap.style.display="block";
+    if(g("p1"))g("p1").classList.add("picking");
     buildPatternPicker();
     if(imgWrap)imgWrap.style.display="none";
     if(imgLbl)imgLbl.style.display="none";
   }else{
+    if(g("p1"))g("p1").classList.remove("picking");
     if(pickWrap)pickWrap.style.display="none";
     if(imgWrap)imgWrap.style.display="";
     if(imgLbl)imgLbl.style.display="";
