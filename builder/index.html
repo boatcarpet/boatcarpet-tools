@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.55]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.56]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -404,7 +404,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.55</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.56</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1192,6 +1192,24 @@ const CMC_BASE={
   "Yamaha|AR 210 (2014-2022)":784, // Yamaha AR 210 14 -22+- (#511, $784)
   "Yamaha|AR 240/242":789, // Yamaha 240/242 10-15 +- (#489, $789)
   "Yamaha|AR210":759, // Yamaha AR 210 08 -11+- (#488, $759)
+  /* v10.56 (2026-10-10): 16 more models priced from the closest CMC kit, where the CMC kit name differs from the builder model.
+     Approved by Kevin 2026-10-10. Where CMC lists more than one candidate kit, the highest price is used. */
+  "Baja|29 Outlaw":741, // priced from: Baja 29 Outlaw Carpet Kit 1997-1998+- (#378, $498); Baja 29 Outlaw Carpet Kit 97/98+- (#7733, $741). CMC has two 29 Outlaw 97/98 kits at very different prices ($498 and $741)
+  "Chaparral|276 SSi":928, // priced from: Chaparral 276 SSX 07-09 +- (#338, $928). CMC kit is named 276 SSX (07-09)
+  "Chaparral|320 Signature":938, // priced from: Chaparral 330 Signature 03-08+- (#215, $938). CMC's 330 Signature 03-08 kit has SKU CHPL320/330SIG
+  "Cobalt|220":868, // priced from: Cobalt cockpit carpet kit 220 - 2005-2007+- (#475, $868); Cobalt cockpit carpet kit 220 - 2012-2014+- (#360, $838); Cobalt cockpit carpet kit 220SS - 2015-2023+- (#2694, $868). CMC has three 220 kits (05-07, 12-14, 220SS 15-23); builder entry has no years
+  "Cobalt|240 Sun Deck":935, // priced from: Cobalt 24 SD cockpit carpet kit 2013/17+- (#2685, $935). CMC kit is named 24 SD (2013/17); years match
+  "Cobalt|260 Sun Deck":912, // priced from: Cobalt cockpit carpet kit 26SD - 12-16+- (#2690, $912). CMC kit is named 26SD (12-16); years match
+  "Cobalt|262 (2010)":899, // priced from: Cobalt cockpit carpet kit 262 - 2005/07 +- (#326, $899). CMC's other 262 kit is 2005/07
+  "Crownline|255 CCR (2006)":798, // priced from: Crownline 255 CCR cockpit carpet kit 2008+- (#470, $798). CMC lists only the 2008 version of the 255 CCR
+  "Crownline|270":844, // priced from: Crownline 270 CR cockpit carpet kit 2004-2007+- (#468, $844). CMC kit is named 270 CR
+  "Formula|280 BR (2009-2014)":1112, // priced from: Formula cockpit carpet kit 290 BR 09-14+- (#450, $1112). CMC's 09-14 kit is named 290 BR; its 280 BR kit is 99-08
+  "Glastron|235 GLX":855.5, // priced from: Glastron GX 235 carpet kit 2006 (#532, $855.5). CMC kit is named GX 235 (2006)
+  "Maxum|SCR 2400":835, // priced from: Maxum 2400 SCR carpet kit 94-01+- (#262, $835). duplicate of 2400 SCR, which is already on CMC pricing
+  "Rinker|272 Captiva Cuddy":858, // priced from: Rinker cockpit carpet kit 272 Captiva BR 99-00 (#2677, $858). CMC kit is named 272 Captiva BR (99-00)
+  "Sea Ray|360 Sedan Bridge":1198, // priced from: SeaRay cockpit carpet kit 36 DB 07+- (#218, $1198). CMC kit is named 36 DB 07+-
+  "Yamaha|240 Limited":789, // priced from: Yamaha 240/242 10-15 +- (#489, $789). CMC has one 240/242 kit (10-15)
+  "Yamaha|AR 240 (2012)":789, // priced from: Yamaha 240/242 10-15 +- (#489, $789). CMC has one 240/242 kit (10-15)
 };
 function activeKitPieces(){
   var def=SVG_DEFS[S.make+"|"+S.model];
