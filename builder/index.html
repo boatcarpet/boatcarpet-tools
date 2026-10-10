@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.52]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.53]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.52</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.53</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -3708,7 +3708,7 @@ const SVG_DEFS={/* v10.23 - brand year fixes pt2 modal for Business Tools button
   "Four Winns|205 Sundowner (1996-2006)":{
     svg:'',
     pieces:[
-      {id:"cockpit", svgId:"", name:"Cockpit & Cabin Sole", desc:"Single-piece cockpit/cabin floor with post hole", sf:52, numPos:{x:50,y:50}}
+      {id:"cockpit", svgId:"", name:"Cockpit & Cabin Sole", desc:"Single-piece cockpit/cabin floor", sf:52, numPos:{x:50,y:50}}
     ]
   },
   "Sea Ray|200 Sport (2003-2005)":{
@@ -6930,8 +6930,8 @@ function buildPatternPicker(){
     var mainSel=(!S.selectedVariantImg && S.patternConfirmed)?" sel":"";
     html+='<div class="pat-pick-card'+mainSel+'" data-pid="__main__">'
       +'<img src="'+mainImg+'" alt="Current pattern">'
-      +'<div class="ppc-body"><div class="ppc-lbl">Current / standard pattern</div>'
-      +'<div class="ppc-note">The pattern most boats of this model use</div>'
+      +'<div class="ppc-body"><div class="ppc-lbl">'+((typeof PATTERN_MAIN_TEXT!=="undefined"&&PATTERN_MAIN_TEXT[k])?PATTERN_MAIN_TEXT[k].label:'Current / standard pattern')+'</div>'
+      +'<div class="ppc-note">'+((typeof PATTERN_MAIN_TEXT!=="undefined"&&PATTERN_MAIN_TEXT[k])?PATTERN_MAIN_TEXT[k].note:'The pattern most boats of this model use')+'</div>'
       +'<button type="button" class="ppc-btn" data-pid="__main__">This is my pattern</button></div></div>';
   }
   variants.forEach(function(v){
@@ -7152,6 +7152,10 @@ function submitProbQuote(){
   toast("Request sent!");
 }
 /* v10.49: optional year range of the main (standard) pattern when a model also has year-specific variants */
+/* v10.53: optional picker wording for a model's main pattern (default: "Current / standard pattern"). */
+const PATTERN_MAIN_TEXT={
+  "Four Winns|205 Sundowner (1996-2006)":{label:"Pattern without round post hole",note:"Side cutouts on both sides, no round hole"}
+};
 const PATTERN_MAIN_YEARS={"Sea Ray|220 Sundeck":[2014,2017],"Sea Ray|270 Sundancer (2000)":[2000,2002]};
 const PATTERN_VARIANTS={
   "Sea Ray|210 Sundeck (1999)": [
@@ -7298,6 +7302,15 @@ const PATTERN_VARIANTS={
       label: "2006 to 2007 pattern",
       yearNote: "Confirmed fit for 2006-2007",
       img: "patterns/variants/caravelle192-a.jpg"
+    }
+  ],
+  /* v10.53: second 205 Sundowner pattern. No year split on file, so both patterns are offered for every year and the customer picks by layout. */
+  "Four Winns|205 Sundowner (1996-2006)": [
+    {
+      id: "fw205-post",
+      label: "Pattern with round post hole",
+      yearNote: "Side cutout on one side only, with a round post hole",
+      img: "patterns/four-winns-205-sundowner-2002.webp"
     }
   ],
   "Four Winns|260 Horizon": [
