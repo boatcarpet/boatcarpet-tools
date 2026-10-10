@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.49]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.50]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.49</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.50</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -6669,12 +6669,16 @@ function calc(){
 }
 
 /* UPS Ground estimate by first digit of destination ZIP.
-   Box 48x13x13in, ~20 lb actual -> 59 lb dim weight (48*13*13/139). Updated 2026-09-29 per Kevin.
-   Additional Handling Surcharge applies to these boxes (confirmed by Kevin 2026-09-29).
-   PROVISIONAL: base = old 73-lb table scaled by 59/73 - replace with real charges from UPS/ShipStation. */
-const UPS_BY_ZIP1=[96,96,104,115,79,87,96,104,128,136];
-const UPS_AHS_BY_ZIP1=[36,36,36,38,28,31,36,38,38,38];
-function estUPS(zip,sy){var d=zip?parseInt(zip[0]):4;var base=UPS_BY_ZIP1[d];if(base==null)base=104;var ahs=UPS_AHS_BY_ZIP1[d];if(ahs==null)ahs=36;var extra=sy>15?20:0;return base+ahs+extra;}
+   v10.50 (2026-10-09) INTERIM per Kevin: flat $50 for ZIPs starting 0-7, $70 for ZIPs starting 8-9.
+   Source: actual UPS Ground label costs for 43 kit-sized shipments from Custom Marine Carpet (Niles MI)
+   in 2026 (ShipStation), checked against UPS invoice corrections; all but one shipment came in
+   under these amounts. Replaces the old list-rate table ($107-$174).
+   Box sizes vary, so keep reviewing against actual charges and adjust.
+   Additional handling is already inside the flat amounts, so UPS_AHS_BY_ZIP1 is 0.
+   Unchanged: +$20 for kits over 15 sq yd. */
+const UPS_BY_ZIP1=[50,50,50,50,50,50,50,50,70,70];
+const UPS_AHS_BY_ZIP1=[0,0,0,0,0,0,0,0,0,0];
+function estUPS(zip,sy){var d=zip?parseInt(zip[0]):4;var base=UPS_BY_ZIP1[d];if(base==null)base=50;var ahs=UPS_AHS_BY_ZIP1[d];if(ahs==null)ahs=0;var extra=sy>15?20:0;return base+ahs+extra;}
 function fillOrder(){
   if(g("cn").value){g("on").value=g("cn").value;g("onb").style.display="inline"}
   if(g("ce").value){g("oe").value=g("ce").value;g("oeb").style.display="inline"}
