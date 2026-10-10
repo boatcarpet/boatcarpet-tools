@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.51]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.52]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -397,7 +397,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.51</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.52</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -995,6 +995,9 @@ const CMC_BASE={
   "Sea Doo|210 Challenger SE":755, // Sea-Doo 210 Challenger SE 10-12+-; CMC website default (v10.51)
   "Sea Doo|210 Wake":689, // Sea-Doo 210 Wake 10-12+-; CMC website default (v10.51)
   "Sea Doo|230 Challenger SE":758, // priced from CMC "Sea-Doo 230 Wake 07-12+-" (CMC lists no 230 Challenger SE; not confirmed by John)
+  /* Carver - v10.52 (2026-10-09). Only these two have a CMC price; the other Carver models stay on the legacy formula. */
+  "Carver|370 AC":1442.37, // CMC retail Berber $1,702.00 per CMC (2026-10-09); base = 1702/1.18
+  "Carver|350 Mariner":1198, // Carver 350 Mariner Carpet Kit 97-01+-; CMC website default (v10.52)
 };
 function activeKitPieces(){
   var def=SVG_DEFS[S.make+"|"+S.model];
@@ -1007,14 +1010,24 @@ function isFullKit(){
   return ids.length>0&&ids.every(function(id){return !!S.sel[id];});
 }
 /* Full-kit DELIVERED price (kit + UPS estimate), before add-ons. */
+/* v10.52: flat shipping for kits that ship in long boxes, used in place of estUPS() for that model.
+   Carver 370 AC shipped in an 81x13x13 box at 68 lb (Oct 2026). */
+const SHIP_OVERRIDE={
+  "Carver|370 AC":260,
+  "Carver|350 Mariner":260
+};
+function kitShip(sy){
+  var o=SHIP_OVERRIDE[S.make+"|"+S.model];
+  return o!=null?o:estUPS(S.zip,sy);
+}
 function kitDelivered(totalSf){
   var base=CMC_BASE[S.make+"|"+S.model];
   if(base){
     var up=S_CMC_UP[S.matType]||S_CMC_UP.berber;
-    return base*up*S_PRICE_VS_CMC+estUPS(S.zip,totalSf/9);
+    return base*up*S_PRICE_VS_CMC+kitShip(totalSf/9);
   }
   var sy=totalSf/9;                                        // legacy sq-yd formula + UPS estimate
-  return (sy*S.pricePerSY+sy*S_LABOR_SY)*S_CMC_MULT*S_RET_MULT+estUPS(S.zip,sy);
+  return (sy*S.pricePerSY+sy*S_LABOR_SY)*S_CMC_MULT*S_RET_MULT+kitShip(sy);
 }
 function showPiecesContact(){
   var msg='<div style="font-size:14px;font-weight:600">Online pricing is for the complete kit.</div>'
