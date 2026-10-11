@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.58]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.59]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -404,7 +404,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.58</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.59</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -627,7 +627,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
     </div>
     <ul style="font-size:11px;color:#4a5a6a;margin:10px 0 0;padding-left:16px;line-height:1.7">
       <li>Made in the USA &middot; UV resistant</li>
-      <li>Action-back &middot; Snap-in fit</li>
+      <li>Action-back &middot; Snap in fit</li>
       <li>Bound with matching binding (included)</li>
     </ul>
     <!-- Marine Vinyl hidden (Berber only). Grid kept in DOM for buildVinylGrid null-safety. -->
@@ -7814,7 +7814,7 @@ function submitQuoteModal(){
   const validUntil=new Date(Date.now()+30*24*60*60*1000).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
   const boatLabel=S.year+" "+S.make+" "+S.model;
   const k=S.make+"|"+S.model;
-  const matLabel=S.matType==="berber"?"Snap-In Berber Carpet":S.matType==="vinyl"?"DuraVinyl Marine Flooring":"Snap-In Marine Carpet";
+  const matLabel=S.matType==="berber"?"Snap In Berber Carpet":S.matType==="vinyl"?"DuraVinyl Marine Flooring":"Snap In Marine Carpet";
   const colorLabel=S.color||"";
   const patFallback=typeof PATTERN_FALLBACK!=="undefined"&&PATTERN_FALLBACK[k]?PATTERN_FALLBACK[k]:null;
   const patImgSrc=typeof PATTERN_IMGS!=="undefined"?(PATTERN_IMGS[k]||(patFallback?PATTERN_IMGS[patFallback]:null)):null;
@@ -7866,7 +7866,7 @@ function submitQuoteModal(){
     '<button class="pbtn" onclick="window.print()">&#128438; Print / Save as PDF<\/button>'+
     '<div class="page">'+
     '<div class="hdr"><img src="'+logoUrl+'" alt="BoatCarpet.com">'+
-    '<div class="hdr-title"><h2>&#9875; Marine Carpet Quote<\/h2><p>Snap-In Boat Carpet Replacement<\/p><\/div><\/div>'+
+    '<div class="hdr-title"><h2>&#9875; Marine Carpet Quote<\/h2><p>Snap In Boat Carpet Replacement<\/p><\/div><\/div>'+
     '<div class="meta"><span>Quote Date: '+today+'<\/span><span>Quote #: <strong>'+qn+'<\/strong><\/span><span>Valid: 30 Days (expires '+validUntil+')<\/span><\/div>'+
     '<div class="section"><h3>Customer Information<\/h3>'+
     '<div class="g2">'+
@@ -7898,9 +7898,9 @@ function submitQuoteModal(){
   if(SNAP){
     /* v10.39 - quote sheet carries the Snap-In Boat Carpets name when embedded on snapinboatcarpets.com */
     quoteHtml=quoteHtml
-      .replace('<img src="'+logoUrl+'" alt="BoatCarpet.com">','<div style="font-family:Georgia,serif;font-size:22px">Snap-In Boat Carpets<\/div>')
+      .replace('<img src="'+logoUrl+'" alt="BoatCarpet.com">','<div style="font-family:Georgia,serif;font-size:22px">Snap In Boat Carpets<\/div>')
       .replace(' or visit <a href="https:\/\/boatcarpet.com">boatcarpet.com<\/a>',' or email <a href="mailto:info@boatcarpet.com">info@boatcarpet.com<\/a>')
-      .replace('<div class="ftr">BoatCarpet.com','<div class="ftr">Snap-In Boat Carpets &nbsp;&bull;&nbsp; snapinboatcarpets.com')
+      .replace('<div class="ftr">BoatCarpet.com','<div class="ftr">Snap In Boat Carpets &nbsp;&bull;&nbsp; snapinboatcarpets.com')
       .split("#1b3a6b").join("#0f2233");
   }
   let saved=[];
