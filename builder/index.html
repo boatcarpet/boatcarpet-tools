@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.56]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.57]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -404,7 +404,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.56</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap-In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.57</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1226,7 +1226,125 @@ function isFullKit(){
    Carver 370 AC shipped in an 81x13x13 box at 68 lb (Oct 2026). */
 const SHIP_OVERRIDE={
   "Carver|370 AC":260,
-  "Carver|350 Mariner":260
+  "Carver|350 Mariner":260,
+  /* v10.57 (2026-10-10): $260 flat shipping on every CMC-priced cruiser (96 sq ft or more in the builder), per Kevin,
+     until real shipping costs are known. Change or remove a line as actual UPS charges come in.
+     Left on the normal $50/$70 by Kevin: Baja Hammer, Baja 30 Outlaw, Baja 302, Formula 353 (low-priced kits). */
+  /* Bayliner */
+  "Bayliner|300 SB":260,
+  "Bayliner|3055 Ciera":260,
+  "Bayliner|325":260,
+  "Bayliner|340":260,
+  /* Chaparral */
+  "Chaparral|300 Signature":260,
+  "Chaparral|307 SSX":260,
+  "Chaparral|310 Signature":260,
+  "Chaparral|320 Signature":260,
+  "Chaparral|327 SSX":260,
+  "Chaparral|330 Signature":260,
+  "Chaparral|350 Signature":260,
+  /* Cobalt */
+  "Cobalt|302":260,
+  "Cobalt|360":260,
+  /* Formula */
+  "Formula|31 PC (2002)":260,
+  "Formula|31 PC (2003)":260,
+  "Formula|31 PC (2006)":260,
+  "Formula|310 SS":260,
+  "Formula|34 PC (1997-2002)":260,
+  "Formula|34 PC (2004-2015)":260,
+  "Formula|350 SS":260,
+  "Formula|37 PC":260,
+  "Formula|370 SS":260,
+  "Formula|40 PC":260,
+  "Formula|400 Super Sport":260,
+  "Formula|41 PC":260,
+  "Formula|41 PC (alt)":260,
+  "Formula|48 Yacht":260,
+  /* Four Winns */
+  "Four Winns|310 Horizon":260,
+  "Four Winns|318 Vista":260,
+  "Four Winns|338 Vista":260,
+  "Four Winns|348 Vista":260,
+  /* MasterCraft */
+  "MasterCraft|X-35":260,
+  /* Maxum */
+  "Maxum|3000 SCR":260,
+  "Maxum|3100 SE":260,
+  "Maxum|3300 SCR":260,
+  "Maxum|3500 SCR":260,
+  "Maxum|3700 SCR":260,
+  "Maxum|4100 SCA":260,
+  /* Regal */
+  "Regal|3060 Express":260,
+  "Regal|3260":260,
+  "Regal|3360 Express":260,
+  "Regal|35 Sport Coupe":260,
+  "Regal|3560":260,
+  "Regal|3860":260,
+  "Regal|4260":260,
+  "Regal|4460 Sport Yacht":260,
+  "Regal|46 Sport Coupe":260,
+  /* Rinker */
+  "Rinker|300 FV EC":260,
+  "Rinker|310 FV":260,
+  "Rinker|312 FV":260,
+  "Rinker|320 FV":260,
+  "Rinker|340 FV":260,
+  "Rinker|342 FV":260,
+  "Rinker|350 FV":260,
+  "Rinker|360 FV":260,
+  "Rinker|370 EC":260,
+  "Rinker|370 EX":260,
+  "Rinker|400 EC":260,
+  "Rinker|410 FV":260,
+  /* Sea Ray */
+  "Sea Ray|300 SLX":260,
+  "Sea Ray|300 Sundancer (1987-1989)":260,
+  "Sea Ray|300 Sundancer (1995)":260,
+  "Sea Ray|300 Sundancer (2002-2007)":260,
+  "Sea Ray|300 Sundeck":260,
+  "Sea Ray|310 Sundancer (1990)":260,
+  "Sea Ray|310 Sundancer (1998-2002)":260,
+  "Sea Ray|310 Sundancer (2007)":260,
+  "Sea Ray|310 Sundancer (2010-2017)":260,
+  "Sea Ray|320 Sundancer":260,
+  "Sea Ray|330 Express Cruiser":260,
+  "Sea Ray|330 Sundancer (1994)":260,
+  "Sea Ray|330 Sundancer (2008-2014)":260,
+  "Sea Ray|340 Sundancer (1999-2002)":260,
+  "Sea Ray|350 Sundancer (1991)":260,
+  "Sea Ray|350 Sundancer (2009)":260,
+  "Sea Ray|350 Sundancer (2014-2016)":260,
+  "Sea Ray|360 Sedan Bridge":260,
+  "Sea Ray|360 Sundancer":260,
+  "Sea Ray|370 Express Cruiser":260,
+  "Sea Ray|370 Sundancer (1996)":260,
+  "Sea Ray|370 Sundancer (1998)":260,
+  "Sea Ray|370 Sundancer (2012)":260,
+  "Sea Ray|380 Sundancer":260,
+  "Sea Ray|390 Express Cruiser (1986-1991)":260,
+  "Sea Ray|390 Sundancer":260,
+  "Sea Ray|400 Express Cruiser":260,
+  "Sea Ray|400 Sedan Bridge":260,
+  "Sea Ray|400 Sundancer":260,
+  "Sea Ray|410 Sundancer":260,
+  "Sea Ray|420 Sundancer (1990)":260,
+  "Sea Ray|420 Sundancer (2002-2003)":260,
+  "Sea Ray|43/47 Sundancer (2009-2012)":260,
+  "Sea Ray|440 Sedan Bridge":260,
+  "Sea Ray|450 Sundancer":260,
+  "Sea Ray|450 Sundancer (2010-2014)":260,
+  "Sea Ray|460 Sundancer":260,
+  "Sea Ray|480 Motor Yacht":260,
+  "Sea Ray|500 Sundancer":260,
+  "Sea Ray|500 Sundancer (2005)":260,
+  "Sea Ray|510 Sundancer (1999-2003)":260,
+  "Sea Ray|510 Sundancer (2013-2017)":260,
+  "Sea Ray|52 Sundancer (2006-2008)":260,
+  "Sea Ray|540 Sundancer":260,
+  "Sea Ray|540 Sundancer (2010-2016)":260,
+  "Sea Ray|58 Sundancer (2008-2014)":260
 };
 function kitShip(sy){
   var o=SHIP_OVERRIDE[S.make+"|"+S.model];
