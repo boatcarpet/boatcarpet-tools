@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.61]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.62]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -404,7 +404,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.61</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.62</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -1207,9 +1207,29 @@ const CMC_BASE={
   "Glastron|235 GLX":855.5, // priced from: Glastron GX 235 carpet kit 2006 (#532, $855.5). CMC kit is named GX 235 (2006)
   "Maxum|SCR 2400":835, // priced from: Maxum 2400 SCR carpet kit 94-01+- (#262, $835). duplicate of 2400 SCR, which is already on CMC pricing
   "Rinker|272 Captiva Cuddy":858, // priced from: Rinker cockpit carpet kit 272 Captiva BR 99-00 (#2677, $858). CMC kit is named 272 Captiva BR (99-00)
-  "Sea Ray|360 Sedan Bridge":1198, // priced from: SeaRay cockpit carpet kit 36 DB 07+- (#218, $1198). CMC kit is named 36 DB 07+-
+  "Sea Ray|360 Sedan Bridge":1198, // priced from: SeaRay cockpit carpet kit 36 DB 07+- (#218, $1198). CMC kit is named 36 DB 07+-; confirmed by John cost 1060.23 (10/9/26)
   "Yamaha|240 Limited":789, // priced from: Yamaha 240/242 10-15 +- (#489, $789). CMC has one 240/242 kit (10-15)
   "Yamaha|AR 240 (2012)":789, // priced from: Yamaha 240/242 10-15 +- (#489, $789). CMC has one 240/242 kit (10-15)
+  /* v10.62 (2026-10-11): Sea Ray prices from John Peterson (Custom Marine Carpet), email of 10/9/26. John gave Kevin's cost;
+     base = cost / 0.885, because cost is 75% of the Berber price (base x 1.18). Not priced: 185 Fish & Ski (John has no pattern)
+     and 480 Sundancer (John's $750.48 is for the aft deck only; held until Kevin decides how to sell it). */
+  "Sea Ray|190 Sundeck":898, // John cost 794.73
+  "Sea Ray|220 Signature":919.28, // John cost 813.56
+  "Sea Ray|230 Select":888.58, // John cost 786.39
+  "Sea Ray|230 Signature (1996)":1013.06, // John cost 896.56
+  "Sea Ray|240 Overnighter (1995)":845.27, // John cost 748.06
+  "Sea Ray|240 Overnighter (1997)":845.27, // John cost 748.06
+  "Sea Ray|290 SLX":989.03, // John cost 875.29
+  "Sea Ray|310 Sunsport":898.09, // John cost 794.81
+  "Sea Ray|340 Amberjack":1391.53, // John cost 1231.50
+  "Sea Ray|370 Aft Cabin":1279.08, // John cost 1131.99
+  "Sea Ray|420 AC":1275.74, // John cost 1129.03
+  "Sea Ray|420 Sedan Bridge":1338, // John cost 1184.13
+  "Sea Ray|440 Sundancer":1216.28, // John cost 1076.41
+  "Sea Ray|470 Sedan Bridge":1411.02, // John cost 1248.75
+  "Sea Ray|480 Sedan Bridge":1313.77, // John cost 1162.69
+  "Sea Ray|560 Sedan Bridge":1377.33, // John cost 1218.94
+  "Sea Ray|540 Sundancer (2000)":1673.18, // John cost 1480.76
 };
 function activeKitPieces(){
   var def=SVG_DEFS[S.make+"|"+S.model];
@@ -1343,7 +1363,18 @@ const SHIP_OVERRIDE={
   "Sea Ray|52 Sundancer (2006-2008)":260,
   "Sea Ray|540 Sundancer":260,
   "Sea Ray|540 Sundancer (2010-2016)":260,
-  "Sea Ray|58 Sundancer (2008-2014)":260
+  "Sea Ray|58 Sundancer (2008-2014)":260,
+  /* v10.62: cruisers newly priced from John's costs (96 sq ft or more) get the same $260 flat shipping. */
+  "Sea Ray|310 Sunsport":260,
+  "Sea Ray|340 Amberjack":260,
+  "Sea Ray|370 Aft Cabin":260,
+  "Sea Ray|420 AC":260,
+  "Sea Ray|420 Sedan Bridge":260,
+  "Sea Ray|440 Sundancer":260,
+  "Sea Ray|470 Sedan Bridge":260,
+  "Sea Ray|480 Sedan Bridge":260,
+  "Sea Ray|560 Sedan Bridge":260,
+  "Sea Ray|540 Sundancer (2000)":260
 };
 function kitShip(sy){
   var o=SHIP_OVERRIDE[S.make+"|"+S.model];
