@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.60]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.61]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -404,7 +404,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.60</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.61</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -5853,7 +5853,7 @@ function bsRender(){
   if(BS.picked>=0){
     /* A boat is selected: the result line sits under the lists, next to the year. */
     p.style.display="block";box=p;
-    var r0=BS.res[BS.picked],hasYear=!!g("year").value;
+    var r0=BS.res[BS.picked],yv=g("year").value,hasYear=!!yv||(typeof yearLater==="function"&&yearLater()); /* v10.61: year-later counts as ready */
     if(typeof hasPattern==="function"&&!hasPattern(r0.make+"|"+r0.model)){
       /* On our list but no confirmed pattern: the builder's "check for my pattern" form shows below. */
       p.appendChild(bsEl("div","bs-picked","We may have the "+r0.make+" "+r0.base+". Send the short form below and we will check for your pattern."));
@@ -5864,7 +5864,7 @@ function bsRender(){
     var alts=bsAlts(r0),nPat=(typeof patternCount==="function")?patternCount(r0.make+"|"+r0.model):1,multi=alts.length>0&&nPat>1;
     var needPick=multi&&!(S.patternConfirmed||S.selectedVariantImg);
     var next=hasYear?(needPick?"Pick the pattern that matches your boat below. ":"Pick a color and enter your ZIP below. "):(multi?"We have "+nPat+" patterns for this boat. Choose your year above, then pick the one that matches yours. ":"Choose your year above. ");
-    line.appendChild(bsEl("span",null,"✓ "+(BS.total===1?"Found it: ":"")+(hasYear?g("year").value+" ":"")+bsLabel(r0)+(BS.total===1?". ":" selected. ")+next));
+    line.appendChild(bsEl("span",null,"✓ "+(BS.total===1?"Found it: ":"")+(yv?yv+" ":"")+bsLabel(r0)+(BS.total===1?". ":" selected. ")+next));
     if(BS.total>1){
       var back=bsEl("button","bs-link",BS.open?"Hide the other matches":(BS.total===2?"See the other match":"See the other "+(BS.total-1)+" matches"));
       back.type="button";back.onclick=function(){BS.open=!BS.open;bsRender();};
@@ -6000,6 +6000,16 @@ function autoFill(){
       }
     }
     updModels(year,model);f=true;
+    /* v10.61 - ?year=later (links from the model pages): this one boat skips the year question */
+    if(/^later$/i.test(year)&&g("model").value&&!(name||email||phone)){
+      try{
+        var lk=g("make").value+"|"+g("model").value;
+        if(hasPattern(lk)&&bsYears(lk)){
+          S.yearLaterKey=lk;sniff();
+          setTimeout(function(){try{var el=g("p1");if(yearLater()&&el&&el.classList.contains("active"))bringIntoView(el);}catch(e){}},600);
+        }
+      }catch(e){}
+    }
     if(g("model").value&&!(name||email||phone)){
       /* v10.40 - a link to one boat (make + model): show its outline until the year is chosen */
       try{
@@ -6333,13 +6343,13 @@ function showPattern(){
     }
     /* Use flex-direction:column so img container and legend stack properly */
     wrap.style.flexDirection='column';
-    wrap.innerHTML='<div class="pat-img-container"><img src="'+displayImg+'" style="display:block;border-radius:6px" alt="'+year+' '+make+' '+model+'">'+overlayHtml+'</div>'
+    wrap.innerHTML='<div class="pat-img-container"><img src="'+displayImg+'" style="display:block;border-radius:6px" alt="'+(year?year+' ':'')+make+' '+model+'">'+overlayHtml+'</div>'
       +(hasPositions?'':'');
     if(isFallback){
-      if(label)label.textContent=year+' '+make+' '+model;
+      if(label)label.textContent=boatText();
       wrap.style.opacity="1";
     } else {
-      if(label)label.textContent=year+' '+make+' '+model;
+      if(label)label.textContent=boatText();
       wrap.style.opacity="1";
     }
     /* pattern-msg content is owned by setPatternMessaging() in the single-flow build */
@@ -6351,7 +6361,7 @@ function showPattern(){
     curDef.pieces.forEach(function(pd){
       if(S.sel[pd.id]){const el=document.getElementById(pd.svgId);if(el){el.classList.add("sel");applyColor(el);}}
     });
-    if(label)label.textContent=year+" "+make+" "+model;
+    if(label)label.textContent=boatText();
     /* pattern-msg content is owned by setPatternMessaging() in the single-flow build */
   }else{
     /* No confirmed pattern  -  show helpful message instead of misleading diagram */
@@ -6567,8 +6577,8 @@ function selBinding(id,name,hex){
 }
 
 function updSidebar(){
-  const boat=S.year&&S.make&&S.model?S.year+" "+S.make+" "+S.model:"Select your boat above";
-  g("sb-boat").textContent=boat;g("sb-model").textContent=S.make&&S.model?(S.year+" "+S.make+" "+S.model):" - ";
+  const boat=(S.year||yearLater())&&S.make&&S.model?boatText():"Select your boat above";
+  g("sb-boat").textContent=boat;g("sb-model").textContent=S.make&&S.model?boatText():" - ";
   if(S.make&&S.model){const hC=CMC_SET.has(S.make+"|"+S.model);g("sb-avail").innerHTML=hC?'<span class="avail-pill"><span class="avail-dot"></span>Pattern Available</span>':'<span class="avail-pill none"><span class="avail-dot"></span>No Pattern on File</span>';}
   else g("sb-avail").innerHTML='<span style="font-size:12px;color:var(--muted)">Select a model to check</span>';
   const sp=ALL.filter(function(id){return !!S.sel[id];});
@@ -6624,7 +6634,7 @@ function updSidebar(){
     const displayImg2=S.selectedVariantImg||autoVariantImg2||(typeof PATTERN_IMGS!=="undefined"?(PATTERN_IMGS[k2]||(fallbackKey2?PATTERN_IMGS[fallbackKey2]:null)):null);
     if(displayImg2){
       const isFb2=!PATTERN_IMGS[k2]&&!!displayImg2;
-      if(sbpl)sbpl.textContent=isFb2?"Representative pattern  -  exact cuts may vary":S.year+" "+S.make+" "+S.model;
+      if(sbpl)sbpl.textContent=isFb2?"Representative pattern  -  exact cuts may vary":boatText();
       sbpw.style.display="block";
       /* Load image and render to canvas (per-piece or whole-pattern, auto) */
       renderPatternColored(sbpc);
@@ -6973,7 +6983,7 @@ function drawBoat(){
       ctx.fillText((S.matType==="vinyl"?"Vinyl":"Berber")+"  -  "+S.color,w/2,h-18);
       ctx.font="11px Segoe UI,Arial,sans-serif";
       ctx.fillStyle="rgba(255,255,255,0.7)";
-      ctx.fillText(S.year+" "+S.make+" "+S.model,w/2,h-4);
+      ctx.fillText(boatText(),w/2,h-4);
     }else{
       ctx.fillText("Select a color in Step 3 to preview",w/2,h-11);
     }
@@ -7182,8 +7192,28 @@ function hasPattern(k){
   var vr=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[k];
   return !!(img||fb||svg||vr);
 }
+/* v10.61 - "year later": a link from a model page (?year=later) already names one pattern, so the
+   year is not asked up front. The pattern's years are listed instead, and the customer gives the
+   boat year with the quote request. Applies only while the linked make + model stay selected and
+   no year has been chosen; the builder used directly is unchanged. */
+function yearLater(){
+  return !!(S.yearLaterKey && !S.year && S.yearLaterKey===S.make+"|"+S.model);
+}
+function fitsYears(){
+  var r=(typeof CMC_YEARS!=="undefined")&&CMC_YEARS[S.make+"|"+S.model];
+  if(!r||r.length!==2)return "";
+  return r[0]===r[1]?String(r[0]):r[0]+"\u2013"+r[1];
+}
+/* Boat label for the screen: with a year, as before; in year-later mode, the model and the years the pattern fits. */
+function boatText(){
+  if(!S.year&&yearLater()){
+    var f=fitsYears();
+    return S.make+" "+S.model.replace(/\s*\([^)]*\)\s*$/,"")+(f?" \u00b7 fits "+f:"");
+  }
+  return S.year+" "+S.make+" "+S.model;
+}
 function boatReady(){
-  return !!(S.make && S.model && S.year && hasPattern(S.make+"|"+S.model));
+  return !!(S.make && S.model && (S.year||yearLater()) && hasPattern(S.make+"|"+S.model));
 }
 /* Silent "select the complete kit" — identical piece set to clicking the old
    "Complete Kit — All Pieces" button, so pricing matches today's full-kit total. */
@@ -7784,7 +7814,18 @@ function pricingEdit(step){
 }
 /* -- Quote Modal (v10.18) --- */
 function openQuoteModal(){
-  if(!S.year||!S.make||!S.model){toast("Please complete all steps first.");return;}
+  if(!(S.year||yearLater())||!S.make||!S.model){toast("Please complete all steps first.");return;}
+  /* v10.61 - year-later: ask the boat year here, from the years this pattern fits */
+  var yrRow=g("qm-year-row"),yrSel=g("qm-year");
+  if(yrRow&&yrSel){
+    if(yearLater()){
+      var keepYr=yrSel.value;
+      yrSel.innerHTML='<option value="">- Choose your boat\u2019s year -</option>';
+      Array.from(g("year").options).forEach(function(o){if(o.value){var n=document.createElement("option");n.value=o.value;n.textContent=o.value;yrSel.appendChild(n);}});
+      yrSel.value=keepYr||"";
+      yrRow.style.display="block";
+    }else{yrRow.style.display="none";}
+  }
   const modal=g("quote-modal");
   modal.style.display="flex";
   const pName=g("on")?g("on").value:"";
@@ -7808,6 +7849,14 @@ function submitQuoteModal(){
   const notes=(g("qm-notes")&&g("qm-notes").value||"").trim();
   if(!name){toast("Please enter your name.");g("qm-name").focus();return;}
   if(!email||!email.includes("@")){toast("Please enter a valid email.");g("qm-email").focus();return;}
+  if(yearLater()){
+    /* v10.61 - set the year quietly (no change event) so the color, ZIP and price stay as chosen */
+    var qy=(g("qm-year")&&g("qm-year").value)||"";
+    if(!qy){toast("Please choose your boat\u2019s year.");if(g("qm-year"))g("qm-year").focus();return;}
+    S.year=qy;g("year").value=qy;
+    try{var pl61=g("pattern-img-label");if(pl61)pl61.textContent=boatText();updSidebar();bsRender();}catch(e){}
+    if(g("qm-year-row"))g("qm-year-row").style.display="none";
+  }
   const SNAP=/\bskin-snapin\b/.test(document.documentElement.className);
   const qn=qNum();
   const today=new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
@@ -7986,6 +8035,10 @@ function fallbackCopy(txt){
     <button onclick="closeQuoteModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#888;">&#x2715;</button>
     <div style="font-size:18px;font-weight:700;color:#1a3a5c;margin-bottom:4px;">&#x1F4CB; Get a Quote</div>
     <div id="qm-sub" style="font-size:13px;color:#556677;margin-bottom:18px;">Enter your contact info and we’ll open your formatted quote instantly.</div>
+    <div id="qm-year-row" style="display:none;margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Boat Year *</label>
+      <select id="qm-year" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;"></select>
+    </div>
     <div style="margin-bottom:12px;">
       <label style="font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px;">Full Name *</label>
       <input id="qm-name" type="text" placeholder="e.g. James Smith" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;">
