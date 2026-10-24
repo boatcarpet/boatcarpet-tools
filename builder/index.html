@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.67]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.68]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -351,8 +351,9 @@ html.skin-snapin .bs-or{display:block;font-size:12px;font-weight:600;letter-spac
 .bs-one{grid-template-columns:minmax(0,340px)}
 .bs-one.bs-multi{grid-template-columns:repeat(auto-fill,minmax(220px,300px))}
 #p1{scroll-margin-top:14px}
-.bs-card.bs-big{cursor:default}
-.bs-card.bs-big:hover{border-color:var(--border);box-shadow:none}
+/* v10.68: the big pattern cards shown before a year is chosen are clickable - a click picks that pattern */
+.bs-cta{margin-top:10px;background:var(--navy);color:#fff;border-radius:6px;padding:9px 12px;font-size:13.5px;font-weight:700;text-align:center}
+.bs-card.bs-big:hover .bs-cta,.bs-card.bs-big:focus-visible .bs-cta{filter:brightness(1.25)}
 .bs-card.bs-big img,.bs-card.bs-big .bs-noimg{height:220px}
 .bs-link{background:none;border:0;padding:0;color:#1F6AA5;text-decoration:underline;cursor:pointer;font:inherit;font-weight:400}
 @media(max-width:520px){.bs-grid{grid-template-columns:1fr 1fr;gap:10px}.bs-card img,.bs-noimg{height:96px}.bs-grid.bs-one{grid-template-columns:1fr}.bs-card.bs-big img,.bs-card.bs-big .bs-noimg{height:200px}}
@@ -404,7 +405,7 @@ html.skin-snapin .nopat .btn.bp{width:100%!important}
 <header>
   <div class="logo">
     <div class="logo-mark">⛳</div>
-    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.67</span></p></div>
+    <div class="logo-text"><h1>BoatCarpet.com</h1><p>Custom Snap In Marine Carpet <span style="font-size:9px;color:#888;opacity:0.6">v10.68</span></p></div>
   </div>
   <div class="hdr-contact"><a href="tel:8882830704">888.283.0704</a><br><a href="mailto:info@boatcarpet.com">info@boatcarpet.com</a></div>
 </header>
@@ -5919,21 +5920,40 @@ function bsAlts(r){
   return (v||[]).filter(function(x){return !!x.img;});
 }
 function bsAltCard(r,v){
-  var c=bsEl("div","bs-card bs-big");
+  var c=bsEl("button","bs-card bs-big");c.type="button";
   var im=document.createElement("img");im.src=v.img;im.alt="Carpet pattern outline for "+r.make+" "+r.base+", "+(v.label||"alternate pattern");c.appendChild(im);
   c.appendChild(bsEl("div","bs-name",r.make+" "+r.base));
   c.appendChild(bsEl("div","bs-yrs",v.label||"Alternate pattern"));
+  c.appendChild(bsEl("div","bs-cta","This is my pattern"));
+  c.onclick=function(){bsChoosePattern(v.id);};
   return c;
 }
 function bsCard(r,i,big,note){
-  var c=bsEl(big?"div":"button","bs-card"+(big?" bs-big":"")+(!big&&i===BS.picked?" bs-on":""));
-  if(!big)c.type="button";
+  var c=bsEl("button","bs-card"+(big?" bs-big":"")+(!big&&i===BS.picked?" bs-on":""));
+  c.type="button";
   if(r.img){var im=document.createElement("img");im.src=r.img;im.alt="Carpet pattern outline for "+bsLabel(r);if(!big)im.loading="lazy";c.appendChild(im);}
   else c.appendChild(bsEl("div","bs-noimg","Outline not shown yet"));
   c.appendChild(bsEl("div","bs-name",r.make+" "+r.base));
   c.appendChild(bsEl("div","bs-yrs",r.years?(r.years[0]===r.years[1]?String(r.years[0]):r.years[0]+"–"+r.years[1])+(r.lay?" · layout "+r.lay:"")+(note?" · "+note:""):(note||"We verify the fit")));
-  if(!big)c.onclick=function(){bsPick(i);};
+  if(big){c.appendChild(bsEl("div","bs-cta","This is my pattern"));c.onclick=function(){bsChoosePattern("__main__");};}
+  else c.onclick=function(){bsPick(i);};
   return c;
+}
+/* v10.68 - a click on a big pattern card (shown before the year is chosen) picks that pattern and goes
+   straight to color + ZIP. The year is then asked with the quote/order, same as the model-page links
+   (year-later mode, v10.61). */
+function bsChoosePattern(pid){
+  var mk=g("make").value,md=g("model").value,lk=mk+"|"+md;
+  if(!mk||!md||g("year").value||typeof hasPattern!=="function"||!hasPattern(lk))return;
+  S.yearLaterKey=lk;sniff();
+  var vr=(typeof PATTERN_VARIANTS!=="undefined")&&PATTERN_VARIANTS[lk];
+  if(vr&&vr.length&&patternCount(lk)>1){pickPattern(pid);return;}
+  if(pid!=="__main__"){
+    var v=(vr||[]).filter(function(x){return x.id===pid;})[0];
+    if(v){S.selectedVariant=v.id;S.selectedVariantLabel=v.label||"";S.selectedVariantImg=v.img||null;S.selectedVariantPieces=v.pieces||null;S.selectedVariantPieceDefs=(v.pieceDefs&&v.pieceDefs.length>0)?v.pieceDefs:null;S.patternConfirmed=true;S.sel={};autoSelectKit();showPattern();updSidebar();reveal();}
+  }
+  try{bsRender();}catch(e){}
+  var col=g("p2")&&g("p2").classList.contains("active")?g("p2"):g("p1");if(col)bringIntoView(col);
 }
 function bsPick(i){
   var r=BS.res[i];if(!r)return;
@@ -7300,6 +7320,8 @@ function yearLater(){
 }
 function fitsYears(){
   var r=(typeof CMC_YEARS!=="undefined")&&CMC_YEARS[S.make+"|"+S.model];
+  /* v10.68: a chosen alternate pattern shows its own years */
+  if(S.selectedVariant&&typeof PATTERN_VARIANTS!=="undefined"){var vv=(PATTERN_VARIANTS[S.make+"|"+S.model]||[]).filter(function(x){return x.id===S.selectedVariant;})[0];if(vv&&vv.years&&vv.years.length===2)r=vv.years;}
   if(!r||r.length!==2)return "";
   return r[0]===r[1]?String(r[0]):r[0]+"\u2013"+r[1];
 }
