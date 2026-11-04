@@ -2206,7 +2206,7 @@ const PIECES={
 const ALL=Object.keys(PIECES);
 
 /* -- SVG DEFS  -  Sea Ray style, pure vector, no photo -- */
-const SVG_DEFS={/* v10.23 - brand year fixes pt2 modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
+const SVG_DEFS={/* v10.69 - Snap In skin: "Order now" posts the kit to snapinboatcarpets.com checkout; quote becomes second choice *//* v10.23 - brand year fixes pt2 modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
   /* v10.14 - remove overlay; label below image always shows year/make/model */
   /* v9.64 - Sea Ray CMC pieces pilot (37) - 14 HIGH from corrected same-series defs, 23 LOW estimates */
   "Sea Ray|190 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:15,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:22,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:9,numPos:{x:50,y:88}}]},
@@ -7185,6 +7185,7 @@ function quoteBody(){
 }
 function submitOrder(){if(!g("on").value||!g("oe").value){toast("Please enter customer name and email.");return}saveQ(true);g("sc-msg").textContent="Order submitted for "+g("on").value+"  -  $"+S.price.toFixed(2);g("sc").style.display="flex";toast("Order submitted!")}
 function addToCart(){
+  if(sibIsSnap()){sibOrderSubmit();return;}
   /* WooCommerce Product ID for "Custom Snap-In Boat Carpet Kit"
      Developer: replace PLACEHOLDER_PRODUCT_ID with the real product ID after creating the product */
   var PRODUCT_ID = 'PLACEHOLDER_PRODUCT_ID';
@@ -7929,6 +7930,65 @@ function calcAndShow(){
   var cartPriceEl = g("cart-price-display");
   if(cartBar) cartBar.style.display = "block";
   if(cartPriceEl) cartPriceEl.textContent = "$"+bcPrice.toFixed(2);
+  sibOrderButtons();
+}
+/* v10.69 - Snap In online ordering. On the snapinboatcarpets.com skin the main button is
+   "Order now", which posts the kit to the Snap In site (top window) and goes to checkout.
+   "Get a quote" stays as a smaller second choice. BoatCarpet.com (no skin) is unchanged. */
+var SIB_ORDER_URL="https://snapinboatcarpets.com/";
+function sibIsSnap(){return /\bskin-snapin\b/.test(document.documentElement.className);}
+function sibOrderButtons(){
+  if(!sibIsSnap())return;
+  var ob=g("add-to-cart-btn"),qb=g("get-quote-btn");
+  if(ob){ob.style.display="block";ob.style.background="var(--navy)";ob.style.borderRadius="4px";
+    ob.innerHTML='Order now &nbsp;&mdash;&nbsp; <span id="cart-price-display">$'+(S.price||0).toFixed(2)+'</span>';}
+  if(qb){qb.style.background="#fff";qb.style.color="var(--navy)";qb.style.border="1px solid var(--navy)";
+    qb.style.borderRadius="4px";qb.style.fontSize="14px";qb.style.padding="10px";qb.innerHTML="Get a quote first";}
+}
+function sibOrderYearPick(){
+  /* year-later mode: ask the boat year before checkout */
+  var m=g("sib-yr-modal"),sel=g("sib-yr");
+  if(!m||!sel)return;
+  sel.innerHTML='<option value="">- Choose your boat\u2019s year -</option>';
+  Array.from(g("year").options).forEach(function(o){if(o.value){var n=document.createElement("option");n.value=o.value;n.textContent=o.value;sel.appendChild(n);}});
+  m.style.display="flex";
+}
+function sibOrderYearGo(){
+  var v=(g("sib-yr")&&g("sib-yr").value)||"";
+  if(!v){toast("Please choose your boat\u2019s year.");return;}
+  S.year=v;g("year").value=v;
+  try{var pl=g("pattern-img-label");if(pl)pl.textContent=boatText();updSidebar();bsRender();}catch(e){}
+  g("sib-yr-modal").style.display="none";
+  sibOrderSubmit();
+}
+function sibOrderSubmit(){
+  if(!S.make||!S.model||!S.color||!(S.price>0)||!S.zip||S.zip.length<5){toast("Please finish your color and ZIP code first.");return;}
+  if(!S.year&&yearLater()){sibOrderYearPick();return;}
+  if(!S.year){toast("Please choose your boat\u2019s year.");return;}
+  var k=S.make+"|"+S.model;
+  var def=typeof SVG_DEFS!=="undefined"?SVG_DEFS[k]:null;
+  var active=(S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+  var pcs=active?active.filter(function(p){return S.sel&&S.sel[p.id];}).length:Object.keys(S.sel||{}).filter(function(x){return S.sel[x];}).length;
+  var addons=(S.addons||[]).map(function(a){return a.id+(a.qty?" x"+a.qty:"");}).join(", ");
+  var f={
+    sib_order_kit:"1",
+    kit_year:S.year, kit_make:S.make, kit_model:S.model,
+    kit_pattern:S.selectedVariantLabel||"",
+    kit_material:S.matType==="vinyl"?"Woven vinyl":"Berber carpet",
+    kit_color:S.color,
+    kit_binding:(S.binding&&S.binding.custom)?S.binding.color:"Matching",
+    kit_addons:addons,
+    kit_pieces:String(pcs),
+    kit_zip:S.zip,
+    kit_price:S.price.toFixed(2),
+    kit_ver:"v10.69"
+  };
+  var form=document.createElement("form");
+  form.method="POST";form.action=SIB_ORDER_URL;form.target="_top";
+  Object.keys(f).forEach(function(n){var i=document.createElement("input");i.type="hidden";i.name=n;i.value=f[n];form.appendChild(i);});
+  document.body.appendChild(form);
+  var ob=g("add-to-cart-btn");if(ob){ob.style.opacity="0.6";ob.innerHTML="Going to checkout...";}
+  form.submit();
 }
 function pricingEdit(step){
   go(step);
@@ -8151,6 +8211,15 @@ function fallbackCopy(txt){
 }
 </script>
 <!-- QUOTE REQUEST MODAL -->
+<div id="sib-yr-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9001;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:8px;padding:22px 22px 18px;width:92%;max-width:380px;font-family:inherit">
+    <div style="font-size:17px;font-weight:700;color:var(--navy);margin-bottom:6px">What year is your boat?</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">We check the fit for your year before your kit is cut.</div>
+    <select id="sib-yr" style="width:100%;box-sizing:border-box;padding:10px 11px;border:1px solid #c0cad4;border-radius:6px;font-size:16px;margin-bottom:14px"></select>
+    <button type="button" onclick="sibOrderYearGo()" style="width:100%;padding:12px;background:var(--navy);color:#fff;border:none;border-radius:4px;font-size:15px;font-weight:700;cursor:pointer">Continue to checkout</button>
+    <button type="button" onclick="g('sib-yr-modal').style.display='none'" style="width:100%;margin-top:8px;padding:8px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer">Cancel</button>
+  </div>
+</div>
 <div id="quote-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:420px;width:92%;box-shadow:0 8px 32px rgba(0,0,0,.25);position:relative;">
     <button onclick="closeQuoteModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#888;">&#x2715;</button>
