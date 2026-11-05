@@ -2206,7 +2206,7 @@ const PIECES={
 const ALL=Object.keys(PIECES);
 
 /* -- SVG DEFS  -  Sea Ray style, pure vector, no photo -- */
-const SVG_DEFS={/* v10.70 - Order now also sends pattern id, material and custom-binding flag so the Snap In site can check the price against builder/prices.json *//* v10.69 - Snap In skin: "Order now" posts the kit to snapinboatcarpets.com checkout; quote becomes second choice *//* v10.23 - brand year fixes pt2 modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
+const SVG_DEFS={/* v10.71 - Snap In skin: builder tells the Snap In page when a price is shown, Order now is clicked or a quote is sent, for Google Analytics *//* v10.70 - Order now also sends pattern id, material and custom-binding flag so the Snap In site can check the price against builder/prices.json *//* v10.69 - Snap In skin: "Order now" posts the kit to snapinboatcarpets.com checkout; quote becomes second choice *//* v10.23 - brand year fixes pt2 modal for Business Tools button from customer checkout bar *//* v10.16 - hide Sales Tool tab from customer; update shipping text *//* v10.15 - checkout flow: Add to Cart, checkout bar on p3, Sales Tool rename, addToCart() fn */
   /* v10.14 - remove overlay; label below image always shows year/make/model */
   /* v9.64 - Sea Ray CMC pieces pilot (37) - 14 HIGH from corrected same-series defs, 23 LOW estimates */
   "Sea Ray|190 Sundeck":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Carpet",desc:"Forward bow area",sf:15,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit floor",sf:22,numPos:{x:50,y:56}},{id:"swim",svgId:"",name:"Swim Platform",desc:"Exterior platform",sf:9,numPos:{x:50,y:88}}]},
@@ -7931,12 +7931,25 @@ function calcAndShow(){
   if(cartBar) cartBar.style.display = "block";
   if(cartPriceEl) cartPriceEl.textContent = "$"+bcPrice.toFixed(2);
   sibOrderButtons();
+  sibTrack("kit_price_view",sibKitParams(),[S.make,S.model,S.color,S.zip].join("|"));
 }
 /* v10.69 - Snap In online ordering. On the snapinboatcarpets.com skin the main button is
    "Order now", which posts the kit to the Snap In site (top window) and goes to checkout.
    "Get a quote" stays as a smaller second choice. BoatCarpet.com (no skin) is unchanged. */
 var SIB_ORDER_URL="https://snapinboatcarpets.com/";
 function sibIsSnap(){return /\bskin-snapin\b/.test(document.documentElement.className);}
+/* v10.71 - Snap In analytics: tell the Snap In page about key steps so it can log them in Google Analytics. */
+var sibTracked={};
+function sibTrack(name,params,once){
+  try{
+    if(!sibIsSnap()||window.parent===window)return;
+    if(once){if(sibTracked[once])return;sibTracked[once]=1;}
+    window.parent.postMessage({sibBuilder:1,event:name,params:params||{}},"https://snapinboatcarpets.com");
+  }catch(e){}
+}
+function sibKitParams(){
+  return {kit_make:S.make||"",kit_model:S.model||"",kit_color:S.color||"",value:(typeof S.price==="number"?S.price:0),currency:"USD"};
+}
 function sibOrderButtons(){
   if(!sibIsSnap())return;
   var ob=g("add-to-cart-btn"),qb=g("get-quote-btn");
@@ -7991,7 +8004,8 @@ function sibOrderSubmit(){
   Object.keys(f).forEach(function(n){var i=document.createElement("input");i.type="hidden";i.name=n;i.value=f[n];form.appendChild(i);});
   document.body.appendChild(form);
   var ob=g("add-to-cart-btn");if(ob){ob.style.opacity="0.6";ob.innerHTML="Going to checkout...";}
-  form.submit();
+  sibTrack("kit_order_click",sibKitParams());
+  setTimeout(function(){form.submit();},300);
 }
 function pricingEdit(step){
   go(step);
@@ -8190,6 +8204,7 @@ function sendSnapQuote(d,quoteHtml){
     .then(function(o){
       if(o.s===200&&o.j&&o.j.ok){
         sibLastQuoteHtml=quoteHtml;
+        sibTrack("kit_quote_request",sibKitParams());
         if(msg){
           msg.innerHTML="&#10003; <strong>Request received.<\/strong> Your quote number is <strong id='qm-qn'><\/strong>.<br>"+
             "<span style='font-size:12px;color:#334455;'>We will follow up at <span id='qm-em'><\/span> to confirm the fit and arrange your order. Questions? Call 888.283.0704.<\/span><br>"+
