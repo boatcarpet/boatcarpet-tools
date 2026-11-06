@@ -7956,7 +7956,7 @@ function sibOrderButtons(){
   if(ob){ob.style.display="block";ob.style.background="var(--navy)";ob.style.borderRadius="4px";
     ob.innerHTML='Order now &nbsp;&mdash;&nbsp; <span id="cart-price-display">$'+(S.price||0).toFixed(2)+'</span>';}
   if(qb){qb.style.background="#fff";qb.style.color="var(--navy)";qb.style.border="1px solid var(--navy)";
-    qb.style.borderRadius="4px";qb.style.fontSize="14px";qb.style.padding="10px";qb.innerHTML="Get a quote first";}
+    qb.style.borderRadius="4px";qb.style.fontSize="14px";qb.style.padding="10px";qb.innerHTML="Email me this quote";}
 }
 function sibOrderYearPick(){
   /* year-later mode: ask the boat year before checkout */
@@ -8210,8 +8210,8 @@ function sendSnapQuote(d,quoteHtml){
         sibLastQuoteHtml=quoteHtml;
         sibTrack("kit_quote_request",sibKitParams());
         if(msg){
-          msg.innerHTML="&#10003; <strong>Request received.<\/strong> Your quote number is <strong id='qm-qn'><\/strong>.<br>"+
-            "<span style='font-size:12px;color:#334455;'>We will follow up at <span id='qm-em'><\/span> to confirm the fit and arrange your order. Questions? Call 888.283.0704.<\/span><br>"+
+          msg.innerHTML="&#10003; <strong>Your quote is on its way.<\/strong> Your quote number is <strong id='qm-qn'><\/strong>.<br>"+
+            "<span style='font-size:12px;color:#334455;'>We emailed it to <span id='qm-em'><\/span>. Not there in a few minutes? Check your spam folder. Questions? Call 888.283.0704.<\/span><br>"+
             "<button type='button' onclick='viewSnapQuote()' style='margin-top:10px;padding:9px 16px;background:#fff;color:#1a5c1a;border:1px solid #2a7a2a;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer'>View or print my quote<\/button>";
           g("qm-qn").textContent=d.quote_number;
           g("qm-em").textContent=d.email;
@@ -8357,8 +8357,10 @@ function fallbackCopy(txt){
   try{
     var h3=document.querySelector('#nopat h3'); if(h3) h3.textContent='Don’t see your boat? We may still have the pattern.';
     var nb=document.querySelector('#nopat .btn.bp'); if(nb) nb.textContent='Check for my pattern';
-    var qs=document.getElementById('qm-sub'); if(qs) qs.textContent='Tell us where to reach you. We will follow up by email to confirm the fit and arrange your order.';
-    var qb=document.getElementById('qm-submit'); if(qb){ qb.textContent='Send my quote request'; qb.setAttribute('data-label','Send my quote request'); }
+    var qs=document.getElementById('qm-sub'); if(qs) qs.textContent='We\u2019ll email you this quote \u2014 the same pattern, color and price you see now.';
+    /* Nov 6 2026 - Snap In: the price is already shown, so this form emails the quote rather than asking for one */
+    var qh=Array.prototype.slice.call(document.querySelectorAll('#quote-modal div')).filter(function(d){return d.children.length===0&&/Get a Quote/.test(d.textContent);})[0]; if(qh) qh.innerHTML='&#x1F4CB; Email Me This Quote';
+    var qb=document.getElementById('qm-submit'); if(qb){ qb.textContent='Email my quote'; qb.setAttribute('data-label','Email my quote'); }
   }catch(e){}
   if(window.parent===window) return;
   var last=0;
