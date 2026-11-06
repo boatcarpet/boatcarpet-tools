@@ -8148,7 +8148,9 @@ function submitQuoteModal(){
       .replace('<img src="'+logoUrl+'" alt="BoatCarpet.com">','<div style="font-family:Georgia,serif;font-size:22px">Snap In Boat Carpets<\/div>')
       .replace(' or visit <a href="https:\/\/boatcarpet.com">boatcarpet.com<\/a>',' or email <a href="mailto:info@boatcarpet.com">info@boatcarpet.com<\/a>')
       .replace('<div class="ftr">BoatCarpet.com','<div class="ftr">Snap In Boat Carpets &nbsp;&bull;&nbsp; snapinboatcarpets.com')
-      .split("#1b3a6b").join("#0f2233");
+      .split("#1b3a6b").join("#0f2233")
+/* Nov 6 2026 - Snap In quotes use the Snap In store email */
+.split("info@boatcarpet.com").join("orders@snapinboatcarpets.com");
   }
   let saved=[];
   try{saved=JSON.parse(localStorage.getItem("bcQ")||"[]")||[];}catch(e){saved=[];}
@@ -8160,6 +8162,8 @@ function submitQuoteModal(){
       quote_number:qn,name:name,email:email,phone:phone,boat:boatLabel,
       color:(colorLabel+" "+matLabel).trim(),
       price:(typeof S.price==="number"?S.price.toFixed(2):""),
+      /* Nov 6 2026 - pattern drawing, swatch and piece list for the emailed quote */
+      pattern_img:patImgUrl||"",swatch_img:swatchFull||"",pieces:activePieces.map(function(p){return p.name;}).join("|"),
       zip:(g("zip")&&g("zip").value||"").trim(),
       year_note:(S.isProbable?"Year is outside the confirmed range for this pattern. Verify fit before cutting.":""),
       notes:notes,source:"snapinboatcarpets.com builder",
