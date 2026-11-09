@@ -7276,7 +7276,9 @@ function emailMe(){
   toast("Opening email client...");
 }
 function emailPatternReq(){window.location.href="mailto:info@boatcarpet.com?subject="+encodeURIComponent("Pattern Request: "+S.year+" "+S.make+" "+S.model)+"&body="+encodeURIComponent("Hi, please send the carpet pattern images for my "+S.year+" "+S.make+" "+S.model+". Thank you!")}
-function submitNoPat(){const n=g("np-name").value,e=g("np-email").value;if(!n||!e){toast("Please enter name and email.");return;}const ph=g("np-phone").value,ymm=g("np-ymm").value||S.year+" "+S.make+" "+S.model;window.open("mailto:info@boatcarpet.com?subject=Pattern+Request&body="+encodeURIComponent("Name: "+n+"\nEmail: "+e+"\nPhone: "+ph+"\nBoat: "+ymm+"\nBuilder State: "+S.year+" "+S.make+" "+S.model));g("np-confirm").style.display="flex"}
+/* v10.72 (Nov 9 2026) - on the Snap In skin, "Check for my pattern" is sent to the Snap In site (Quote Requests, emailed to the shop)
+   instead of opening the customer's email app, which often never sent anything. BoatCarpet.com (no skin) is unchanged. */
+function submitNoPat(){const n=g("np-name").value,e=g("np-email").value;if(!n||!e){toast("Please enter name and email.");return;}if(/\bskin-snapin\b/.test(document.documentElement.className)){sibNoPatSend(n,e);return;}const ph=g("np-phone").value,ymm=g("np-ymm").value||S.year+" "+S.make+" "+S.model;window.open("mailto:info@boatcarpet.com?subject=Pattern+Request&body="+encodeURIComponent("Name: "+n+"\nEmail: "+e+"\nPhone: "+ph+"\nBoat: "+ymm+"\nBuilder State: "+S.year+" "+S.make+" "+S.model));g("np-confirm").style.display="flex"}
 function saveQ(silent){const q=quoteBody();const name=g("on").value||g("cn").value||"Unknown";const rec={num:q.num,date:new Date().toLocaleDateString(),name,boat:S.year+" "+S.make+" "+S.model,color:S.color,price:S.price.toFixed(2),txt:q.txt};const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");saved.unshift(rec);if(saved.length>50)saved.pop();localStorage.setItem("bcQ",JSON.stringify(saved));if(!silent)toast("Quote saved!");loadSavedQuotes()}
 function loadSavedQuotes(){const saved=JSON.parse(localStorage.getItem("bcQ")||"[]");const sec=g("savedSection"),list=g("savedList");if(!saved.length){sec.style.display="none";return}sec.style.display="block";list.innerHTML=saved.slice(0,15).map(function(q){return '<div style="display:flex;align-items:center;gap:8px;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:var(--blue)">'+q.num+'</span><span style="font-size:11px;color:var(--muted);flex:1">'+q.date+' \u00b7 '+q.name+' \u00b7 '+q.boat+'</span><span style="font-size:12px;font-weight:700">$'+q.price+'</span></div>';}).join("")}
 function copyQ(){
@@ -8233,6 +8235,24 @@ function openSnapRequest(type){
   g("sx-msg").style.display="none";
   m.style.display="flex";
   sibTrack("kit_custom_request_open",{request_type:type||""});
+}
+function sibNoPatSend(n,e){
+  var ph=(g("np-phone").value||"").trim();
+  var ymm=(g("np-ymm").value||((S.year||"")+" "+(S.make||"")+" "+(S.model||""))).replace(/\s+/g," ").trim();
+  if(!ymm){toast("Please enter your boat’s year, make and model.");g("np-ymm").focus();return;}
+  if(e.indexOf("@")<1){toast("Please enter a valid email.");g("np-email").focus();return;}
+  var b=document.querySelector("#nopat .btn.bp"),lbl=b?b.textContent:"";
+  if(b){b.disabled=true;b.style.opacity="0.6";b.textContent="Sending...";}
+  var d={quote_number:qNum(),name:n.trim(),email:e.trim(),phone:ph,boat:ymm,color:"Custom request: Boat not listed - check for pattern",price:"",
+    notes:"Boat not listed - please check for a pattern.",source:"snapinboatcarpets.com builder - custom request",website:""};
+  fetch(SIB_QUOTE_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(d)})
+    .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
+    .then(function(o){
+      if(b){b.disabled=false;b.style.opacity="1";b.textContent=lbl;}
+      if(o.s===200&&o.j&&o.j.ok){g("np-confirm").style.display="flex";if(b)b.style.display="none";sibTrack("kit_custom_request",{request_type:"not_listed"});}
+      else{toast(((o.j&&o.j.message)?o.j.message+" ":"We could not send your request. ")+SIB_FALLBACK);}
+    })
+    .catch(function(){if(b){b.disabled=false;b.style.opacity="1";b.textContent=lbl;}toast("We could not send your request. "+SIB_FALLBACK);});
 }
 function closeSnapRequest(){var m=g("sib-ex-modal");if(m)m.style.display="none";}
 function submitSnapRequest(){
