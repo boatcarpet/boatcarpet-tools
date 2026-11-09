@@ -6497,7 +6497,7 @@ function showPattern(){
     const pl=g("piece-list");
     if(pl)pl.innerHTML='<div style="padding:20px 0;text-align:center;color:#6b8298;font-size:13px;">'
       +'<div style="text-align:center;margin-top:12px;">'
-      +'<a href="https://boatcarpet.com/product/snap-in-boat-carpet-diy-template-kit/" target="_blank" style="display:inline-block;background:#1a2e4a;color:#fff;font-size:12px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;margin-bottom:8px;">Order DIY Template Kit</a>'
+      +'<a href="'+(/\bskin-snapin\b/.test(document.documentElement.className)?'https://snapinboatcarpets.com/product/snap-in-boat-carpet-template-kit/" target="_top"':'https://boatcarpet.com/product/snap-in-boat-carpet-diy-template-kit/" target="_blank"')+' style="display:inline-block;background:#1a2e4a;color:#fff;font-size:12px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;margin-bottom:8px;">Order DIY Template Kit</a>'
       +'<div style="font-size:11px;color:#888;margin-top:6px;">Or fill in the form below and we will research it for you</div>'
       +'</div></div>';
     const kb=g("kit-bdg");if(kb)kb.style.display="none";
@@ -7303,7 +7303,9 @@ function copyQ(){
 /* Gravity Forms "Carpet Builder Quote" landing page. The three exception links
    open this page with the boat + request type in the URL so the form can be
    pre-filled (Gravity field pre-population). PROGRAMMER: set the exact page slug. */
-var QUOTE_PAGE_URL = 'https://boatcarpet.com/carpet-builder-quote/';
+/* v10.72 (Nov 9 2026) - /carpet-builder-quote/ never existed (404). BoatCarpet.com uses its working custom quote page;
+   the Snap In skin keeps the customer on the Snap In site instead (openSnapRequest below). */
+var QUOTE_PAGE_URL = 'https://boatcarpet.com/custom-quote-for-snap-in-boat-carpet/';
 
 function hasPattern(k){
   var img=(typeof PATTERN_IMGS!=="undefined")&&PATTERN_IMGS[k];
@@ -7500,6 +7502,7 @@ function reveal(){
 }
 /* Open the Gravity quote page pre-filled for the current boat + request type. */
 function openException(type){
+  if(typeof sibIsSnap==='function'&&sibIsSnap()){openSnapRequest(type);return;}
   var ymm=((S.year||"")+" "+(S.make||"")+" "+(S.model||"")).replace(/\s+/g," ").trim();
   var params=[
     'type='+encodeURIComponent(type),
@@ -8181,8 +8184,88 @@ function submitQuoteModal(){
    Quote Requests in the site admin and emailed to the shop. The customer sees a confirmation
    with their quote number and a button to open the printable quote. */
 var SIB_QUOTE_URL="https://snapinboatcarpets.com/wp-json/sib/v1/quote-request";
-var SIB_FALLBACK="Please call 888.283.0704 or email info@boatcarpet.com.";
+var SIB_FALLBACK="Please call 888.283.0704 or email orders@snapinboatcarpets.com.";
 var sibLastQuoteHtml="";
+/* v10.72 (Nov 9 2026) - Snap In: "I only need certain pieces", "I want a different material" and
+   "I don't see my exact pattern" open this small request form instead of leaving the site.
+   It posts to the same Snap In endpoint as quotes (saved under Quote Requests, emailed to the shop).
+   No price is sent, so the site does not send an automatic quote email or follow-ups for it. */
+var SIB_EX_TYPES={
+  pieces:{t:"I only need certain pieces",ask:"Which pieces do you need?"},
+  material:{t:"I want a different material",ask:"Which material and color would you like?"},
+  pattern:{t:"My boat’s layout is different",ask:"What is different about your boat’s layout? Photos help — we’ll reply by email so you can send them."}
+};
+function openSnapRequest(type){
+  var info=SIB_EX_TYPES[type]||{t:"Custom request",ask:"Tell us what you need."};
+  var m=g("sib-ex-modal");
+  if(!m){
+    var st=document.createElement("style");
+    st.textContent='html.skin-snapin #sib-ex-modal{position:absolute!important;inset:auto!important;left:0!important;right:0!important;top:var(--vp-top)!important;height:var(--vp-h)!important}'
+      +'#sib-ex-modal label{font-size:12px;font-weight:600;color:#334455;display:block;margin-bottom:4px}'
+      +'#sib-ex-modal input,#sib-ex-modal textarea{width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #c0cad4;border-radius:7px;font-size:14px;font-family:inherit}'
+      +'#sib-ex-modal .f{margin-bottom:12px}';
+    document.head.appendChild(st);
+    m=document.createElement("div");
+    m.id="sib-ex-modal";
+    m.style.cssText="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9002;align-items:center;justify-content:center;";
+    m.innerHTML='<div style="background:#fff;border-radius:12px;padding:26px 22px;max-width:420px;width:92%;box-shadow:0 8px 32px rgba(0,0,0,.25);position:relative;max-height:94%;overflow:auto">'
+      +'<button type="button" onclick="closeSnapRequest()" aria-label="Close" style="position:absolute;top:10px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#888">&#x2715;</button>'
+      +'<div id="sx-title" style="font-size:18px;font-weight:700;color:#0f2233;margin-bottom:4px"></div>'
+      +'<div style="font-size:13px;color:#556677;margin-bottom:14px">Tell us what you need and we’ll email you a price.</div>'
+      +'<div class="f"><label>Your boat *</label><input id="sx-boat" type="text" placeholder="Year, make and model"></div>'
+      +'<div class="f"><label id="sx-ask"></label><textarea id="sx-notes" rows="3"></textarea></div>'
+      +'<div class="f"><label>Full name *</label><input id="sx-name" type="text" autocomplete="name"></div>'
+      +'<div class="f"><label>Email *</label><input id="sx-email" type="email" autocomplete="email"></div>'
+      +'<div class="f"><label>Phone</label><input id="sx-phone" type="tel" autocomplete="tel"></div>'
+      +'<input id="sx-website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">'
+      +'<button type="button" id="sx-submit" onclick="submitSnapRequest()" style="width:100%;padding:12px;background:#0f2233;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer">Send my request</button>'
+      +'<div id="sx-msg" style="display:none;margin-top:14px;padding:12px;border:1px solid;border-radius:7px;font-size:13px;text-align:center"></div>'
+      +'</div>';
+    document.body.appendChild(m);
+  }
+  m.setAttribute("data-type",type||"");
+  g("sx-title").textContent=info.t;
+  g("sx-ask").textContent=info.ask;
+  var ymm=((S.year||"")+" "+(S.make||"")+" "+(S.model||"")).replace(/\s+/g," ").trim();
+  if(ymm&&!g("sx-boat").value)g("sx-boat").value=ymm;
+  ["name","email","phone"].forEach(function(k){var src=g({name:"on",email:"oe",phone:"op"}[k])||g("qm-"+k);var dst=g("sx-"+k);if(src&&src.value&&!dst.value)dst.value=src.value;});
+  var b=g("sx-submit");b.style.display="";b.disabled=false;b.style.opacity="1";b.textContent="Send my request";
+  g("sx-msg").style.display="none";
+  m.style.display="flex";
+  sibTrack("kit_custom_request_open",{request_type:type||""});
+}
+function closeSnapRequest(){var m=g("sib-ex-modal");if(m)m.style.display="none";}
+function submitSnapRequest(){
+  var m=g("sib-ex-modal"),type=m?m.getAttribute("data-type"):"";
+  var info=SIB_EX_TYPES[type]||{t:"Custom request"};
+  var boat=(g("sx-boat").value||"").trim(),name=(g("sx-name").value||"").trim(),email=(g("sx-email").value||"").trim();
+  var phone=(g("sx-phone").value||"").trim(),notes=(g("sx-notes").value||"").trim();
+  if(!boat){toast("Please enter your boat.");g("sx-boat").focus();return;}
+  if(name.length<2){toast("Please enter your name.");g("sx-name").focus();return;}
+  if(!email||email.indexOf("@")<1){toast("Please enter a valid email.");g("sx-email").focus();return;}
+  var msg=g("sx-msg"),btn=g("sx-submit");
+  function show(ok,html){msg.innerHTML=html;msg.style.display="block";msg.style.background=ok?"#f0f8f0":"#fff6ec";msg.style.borderColor=ok?"#2a7a2a":"#c9772b";msg.style.color=ok?"#1a5c1a":"#7a3d00";}
+  btn.disabled=true;btn.style.opacity="0.6";btn.textContent="Sending...";
+  var d={quote_number:qNum(),name:name,email:email,phone:phone,boat:boat,
+    color:"Custom request: "+info.t+(S.color?" (looking at "+S.color+")":""),price:"",
+    zip:(g("zip")&&g("zip").value||"").trim(),
+    notes:info.t+(notes?"\n"+notes:""),
+    source:"snapinboatcarpets.com builder - custom request",
+    website:(g("sx-website").value||"")};
+  fetch(SIB_QUOTE_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(d)})
+    .then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});})
+    .then(function(o){
+      if(o.s===200&&o.j&&o.j.ok){
+        btn.style.display="none";
+        show(true,"&#10003; <strong>Thanks, we got your request.<\/strong><br><span style='font-size:12px;color:#334455'>We’ll email you at "+email.replace(/</g,"&lt;")+" with a price. Questions? Call 888.283.0704.<\/span>");
+        sibTrack("kit_custom_request",{request_type:type||""});
+      }else{
+        btn.disabled=false;btn.style.opacity="1";btn.textContent="Send my request";
+        show(false,((o.s===400||o.s===429)&&o.j&&o.j.message?o.j.message+" ":"We could not send your request. ")+SIB_FALLBACK);
+      }
+    })
+    .catch(function(){btn.disabled=false;btn.style.opacity="1";btn.textContent="Send my request";show(false,"We could not send your request. "+SIB_FALLBACK);});
+}
 function viewSnapQuote(){
   if(!sibLastQuoteHtml)return;
   const w=window.open("","_blank","width=820,height=900,scrollbars=yes,resizable=yes");
