@@ -7979,6 +7979,15 @@ function sibOrderYearGo(){
   g("sib-yr-modal").style.display="none";
   sibOrderSubmit();
 }
+/* Nov 11 2026 - full web address of this boat's pattern drawing (cart picture on Snap In checkout) */
+function sibPatternUrl(){
+  try{
+    var k=S.make+"|"+S.model;
+    var fb=typeof PATTERN_FALLBACK!=="undefined"&&PATTERN_FALLBACK[k]?PATTERN_FALLBACK[k]:null;
+    var src=typeof PATTERN_IMGS!=="undefined"?(PATTERN_IMGS[k]||(fb?PATTERN_IMGS[fb]:null)):null;
+    return src?new URL(src,window.location.href).href:"";
+  }catch(e){return "";}
+}
 /* Nov 11 2026 - kit details saved with each Snap In quote, so the quote email's "Order your kit online" button can put this exact kit in the cart */
 function sibKitFields(){
   try{
@@ -8028,7 +8037,8 @@ function sibOrderSubmit(){
     kit_variant:(S.selectedVariant&&S.selectedVariant!=="single")?S.selectedVariant:"",
     kit_mat:S.matType==="vinyl"?"vinyl":"berber",
     kit_binding_custom:(S.binding&&S.binding.custom)?"1":"0",
-    kit_ver:"v10.70"
+    kit_img:sibPatternUrl(),
+    kit_ver:"v10.71"
   };
   var form=document.createElement("form");
   form.method="POST";form.action=SIB_ORDER_URL;form.target="_top";
