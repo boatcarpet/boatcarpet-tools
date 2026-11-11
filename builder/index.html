@@ -7979,6 +7979,32 @@ function sibOrderYearGo(){
   g("sib-yr-modal").style.display="none";
   sibOrderSubmit();
 }
+/* Nov 11 2026 - kit details saved with each Snap In quote, so the quote email's "Order your kit online" button can put this exact kit in the cart */
+function sibKitFields(){
+  try{
+    if(!S.make||!S.model||!S.color||!(S.price>0))return null;
+    var k=S.make+"|"+S.model;
+    var def=typeof SVG_DEFS!=="undefined"?SVG_DEFS[k]:null;
+    var active=(S.selectedVariantPieceDefs&&S.selectedVariantPieceDefs.length>0)?S.selectedVariantPieceDefs:(def?def.pieces:null);
+    var pcs=active?active.filter(function(p){return S.sel&&S.sel[p.id];}).length:Object.keys(S.sel||{}).filter(function(x){return S.sel[x];}).length;
+    var yr=S.year||(g("qm-year")&&g("qm-year").value)||"";
+    return {
+      kit_year:yr, kit_make:S.make, kit_model:S.model,
+      kit_pattern:S.selectedVariantLabel||"",
+      kit_material:S.matType==="vinyl"?"Woven vinyl":"Berber carpet",
+      kit_color:S.color,
+      kit_binding:(S.binding&&S.binding.custom)?S.binding.color:"Matching",
+      kit_addons:(S.addons||[]).map(function(a){return a.id+(a.qty?" x"+a.qty:"");}).join(", "),
+      kit_pieces:String(pcs),
+      kit_zip:((g("zip")&&g("zip").value)||S.zip||"").trim(),
+      kit_price:S.price.toFixed(2),
+      kit_variant:(S.selectedVariant&&S.selectedVariant!=="single")?S.selectedVariant:"",
+      kit_mat:S.matType==="vinyl"?"vinyl":"berber",
+      kit_binding_custom:(S.binding&&S.binding.custom)?"1":"0",
+      kit_ver:"v10.71"
+    };
+  }catch(e){return null;}
+}
 function sibOrderSubmit(){
   if(!S.make||!S.model||!S.color||!(S.price>0)||!S.zip||S.zip.length<5){toast("Please finish your color and ZIP code first.");return;}
   if(!S.year&&yearLater()){sibOrderYearPick();return;}
@@ -8172,6 +8198,7 @@ function submitQuoteModal(){
       zip:(g("zip")&&g("zip").value||"").trim(),
       year_note:(S.isProbable?"Year is outside the confirmed range for this pattern. Verify fit before cutting.":""),
       notes:notes,source:"snapinboatcarpets.com builder",
+      kit:(function(){var kf=sibKitFields();return kf?JSON.stringify(kf):"";})(),
       website:(g("qm-website")&&g("qm-website").value||"")
     },quoteHtml);
     return;
