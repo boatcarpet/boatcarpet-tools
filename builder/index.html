@@ -14,7 +14,7 @@
   }
 }catch(e){}})();
 </script>
-<title>BoatCarpet.com — Custom Carpet Builder [v10.68]</title>
+<title>BoatCarpet.com — Custom Carpet Builder [v10.73]</title>
 <style>
 :root{
   --navy:#1a2e4a;--gold:#c9a84c;--blue:#1a7abf;--green:#2d8a4e;
@@ -6456,7 +6456,7 @@ function showPattern(){
       pieces.forEach(function(pd,idx){
         if(pd.numPos&&typeof pd.numPos.x==='number'&&typeof pd.numPos.y==='number'){
           hasPositions=true;
-          overlayHtml+='<div class="pat-num-badge" id="badge-'+pd.id+'" style="left:'+pd.numPos.x+'%;top:'+pd.numPos.y+'%;">'+(idx+1)+'</div>';
+          /* v10.73 (Nov 12 2026) - numbered piece badges removed: kits are sold whole, so the pattern shows with no numbers. */
         }
       });
     }
