@@ -1010,7 +1010,7 @@ const CMC_BASE={
   "Sea Doo|230 Challenger SE":758, // priced from CMC "Sea-Doo 230 Wake 07-12+-" (CMC lists no 230 Challenger SE; not confirmed by John)
   /* Carver - v10.52 (2026-10-09). Only these two have a CMC price; the other Carver models stay on the legacy formula. */
   "Carver|370 AC":1442.37, // CMC retail Berber $1,702.00 per CMC (2026-10-09); base = 1702/1.18
-  "Carver|350 Mariner":1198, // Carver 350 Mariner Carpet Kit 97-01+-; CMC website default (v10.52)
+  "Carver|350 Mariner":1859.32, // Carver 350 Mariner; base = John's berber retail $2194 / 1.18 (Nov 2026)
   /* v10.55 (2026-10-10): 172 more models moved from the legacy formula to CMC website pricing.
      Each price is the snapincarpet.com price before a material is chosen, read from the kit page on 2026-10-10.
      Only models whose name matches a CMC kit name are included. Where CMC has more than one year version, the highest is used. */
@@ -1253,7 +1253,7 @@ function isFullKit(){
    Carver 370 AC shipped in an 81x13x13 box at 68 lb (Oct 2026). */
 const SHIP_OVERRIDE={
   "Carver|370 AC":260,
-  "Carver|350 Mariner":260,
+  // "Carver|350 Mariner":260, // removed Nov 2026 — using normal estUPS; revisit when actual UPS charges come in
   /* v10.57 (2026-10-10): $260 flat shipping on every CMC-priced cruiser (96 sq ft or more in the builder), per Kevin,
      until real shipping costs are known. Change or remove a line as actual UPS charges come in.
      Left on the normal $50/$70 by Kevin: Baja Hammer, Baja 30 Outlaw, Baja 302, Formula 353 (low-priced kits), MasterCraft X-35 (v10.58). */
@@ -3982,7 +3982,7 @@ const SVG_DEFS={/* v10.71 - Snap In skin: builder tells the Snap In page when a 
   "Carver|325 MY":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:28,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:51,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:23,numPos:{x:65,y:74}}]},
   "Carver|33 Mariner":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:30,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:53,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:23,numPos:{x:65,y:74}}]},
   "Carver|330 Mariner":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:30,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:53,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:23,numPos:{x:65,y:74}}]},
-  "Carver|350 Mariner":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:31,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:55,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:26,numPos:{x:65,y:74}}]},
+  "Carver|350 Mariner":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:60,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:106,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:50,numPos:{x:65,y:74}}]},
   "Carver|355 AC":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:31,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:55,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:26,numPos:{x:65,y:74}}]},
   "Carver|360 Sport Sedan":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:32,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:58,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:25,numPos:{x:65,y:74}}]},
   "Carver|370 AC":{svg:'',pieces:[{id:"bow",svgId:"",name:"Bow Cabin Carpet",desc:"Forward cabin carpet area",sf:33,numPos:{x:50,y:14}},{id:"cockpit",svgId:"",name:"Cockpit Floor",desc:"Main cockpit carpet area",sf:58,numPos:{x:50,y:56}},{id:"helm",svgId:"",name:"Helm Station",desc:"Helm and driver station carpet",sf:27,numPos:{x:65,y:74}}]},
